@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowBackground">@color/lightgrey</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+    
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/darkred</item>
+        <item name="android:alpha">0.3</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
+    </style>
+    
+    <style name="PagerTitleStrip">
+        <item name="android:background">@color/grey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingTop">@dimen/pager_title_strip_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/pager_title_strip_vertical_padding</item>
+    </style>
+    
+    <style name="NavigationDrawerListView">
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:background">@color/grey</item>
+        <item name="android:divider">@color/darkgrey</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+    
+    <style name="ScoreListView">
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:background">@color/grey</item>
+        <item name="android:divider">@color/darkgrey</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+    
+    <style name="DrawerOptionItemTextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:paddingTop">@dimen/list_item_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/list_item_vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/list_item_horizontal_padding</item>
+    </style>
+    
+    <style name="BreathingScoreTextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:paddingTop">@dimen/list_item_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/list_item_vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/list_item_horizontal_padding</item>
+    </style>
+    
+    <style name="HomeTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:drawablePadding">@dimen/activity_horizontal_margin</item>
+    </style>
+    
+    <style name="LargeButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawablePadding">@dimen/list_item_horizontal_padding</item>
+        <item name="android:paddingRight">24dp</item>
+    </style>
+
+</resources>
