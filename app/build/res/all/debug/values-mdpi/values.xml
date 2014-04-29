@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values-mdpi/values.xml -->
+    <eat-comment />
+
+    <dimen name="com_facebook_picker_divider_width">1px</dimen>
+
+</resources>
