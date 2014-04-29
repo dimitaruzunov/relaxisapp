@@ -81,10 +81,12 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
     private void setupActionBar(Activity activity) {
     	final Activity activityConst = activity;
     	ActionBar actionBar = activity.getActionBar();
-    	
-    	actionBar.setDisplayHomeAsUpEnabled(true);
-    	
-    	drawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, R.drawable.ic_drawer,
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        drawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, R.drawable.ic_drawer,
     			R.string.open_drawer_message, R.string.close_drawer_message) {
     		@Override
     		public void onDrawerOpened(View drawerView) {

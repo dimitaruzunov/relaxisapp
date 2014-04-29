@@ -2,10 +2,10 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="/home/zdravko/Development/relaxisapp/facebook/src/main/assets" />
+        <source path="/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/facebook/src/main/assets" />
     </dataSet>
     <dataSet config="release" >
-        <source path="/home/zdravko/Development/relaxisapp/facebook/src/release/assets" />
+        <source path="/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/facebook/src/release/assets" />
     </dataSet>
 
 </merger>

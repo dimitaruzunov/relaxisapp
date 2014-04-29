@@ -5,4 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/BreathingScoreTextView" />
-<!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/layout/score_result_list_item.xml -->
+<!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/layout/score_result_list_item.xml -->

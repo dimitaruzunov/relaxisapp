@@ -1,4 +1,5 @@
-<!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.relaxisapp.relaxis">
+<!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/AndroidManifest.xml -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.relaxisapp.relaxis">
 
     <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="19"/>
 

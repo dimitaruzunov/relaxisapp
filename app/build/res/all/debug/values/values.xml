@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/section_arrays.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/section_arrays.xml -->
     <eat-comment />
 
     <array name="navigation_drawer_icons">
@@ -23,7 +23,7 @@
         <item>@string/breathing_app_title</item>
         <item>@string/stress_app_title</item>
     </string-array>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
     <eat-comment />
 
     <attr name="actionBarDivider" format="reference" />
@@ -100,7 +100,7 @@
     <color name="abc_search_url_text_normal">#7fa87f</color>
     <color name="abc_search_url_text_pressed">@android:color/black</color>
     <color name="abc_search_url_text_selected">@android:color/black</color>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
     <eat-comment />
 
     <color name="com_facebook_blue">#3B5998</color>
@@ -110,7 +110,7 @@
     <color name="com_facebook_usersettingsfragment_connected_shadow_color">#000000</color>
     <color name="com_facebook_usersettingsfragment_connected_text_color">#FFFFFF</color>
     <color name="com_facebook_usersettingsfragment_not_connected_text_color">#A6AED7</color>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/colors.xml -->
     <eat-comment />
 
     <color name="darkgrey">#222</color>
@@ -122,7 +122,7 @@
     <color name="lightred">#ff7a7a</color>
     <color name="red">#ff6060</color>
     <color name="white">#fff</color>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
     <eat-comment />
 
     <declare-styleable name="ActionBar">
@@ -536,7 +536,7 @@
         -->
         <attr name="android:focusable" />
     </declare-styleable>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
     <eat-comment />
 
     <declare-styleable name="com_facebook_friend_picker_fragment">
@@ -573,7 +573,7 @@
         </attr>
         <attr name="is_cropped" format="boolean" />
     </declare-styleable>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
     <eat-comment />
 
     <dimen name="abc_action_bar_default_height">48dip</dimen>
@@ -593,12 +593,12 @@
     <dimen name="abc_panel_menu_list_width">296dp</dimen>
     <dimen name="abc_search_view_preferred_width">320dip</dimen>
     <dimen name="abc_search_view_text_min_width">160dip</dimen>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/dimens.xml -->
     <eat-comment />
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
     <eat-comment />
 
     <dimen name="com_facebook_loginview_compound_drawable_padding">12dp</dimen>
@@ -613,24 +613,24 @@
     <dimen name="com_facebook_profilepictureview_preset_size_small">50dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_height">64dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
     <eat-comment />
 
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
     <item name="dialog_fixed_width_major" type="dimen">320dp</item>
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/dimens.xml -->
     <eat-comment />
 
     <dimen name="list_item_horizontal_padding">8dp</dimen>
     <dimen name="list_item_vertical_padding">8dp</dimen>
     <dimen name="pager_title_strip_vertical_padding">4dp</dimen>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
     <eat-comment />
 
     <drawable name="com_facebook_picker_default_separator_color">#33464c59</drawable>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
     <eat-comment />
 
     <item name="action_bar_activity_content" type="id"/>
@@ -655,7 +655,7 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/strings.xml -->
     <eat-comment />
 
     <string name="action_bluetooth_connect">Connect</string>
@@ -664,17 +664,17 @@
     <string name="app_id">1414231085481831</string>
     <string name="app_name">Relaxis</string>
     <string name="breathing">Breathing</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/section_strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/section_strings.xml -->
     <eat-comment />
 
     <string name="breathing_app_title">Breathing</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/strings.xml -->
     <eat-comment />
 
     <string name="breathing_score_list_desc">Your breathing scores:</string>
     <string name="cancel">Cancel</string>
     <string name="close_drawer_message">Close navigation menu</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
     <eat-comment />
 
     <string name="com_facebook_choose_friends">Choose Friends</string>
@@ -702,25 +702,25 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log in…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged in</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not logged in</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/strings.xml -->
     <eat-comment />
 
     <string name="heartRate">Heart Rate</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/section_strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/section_strings.xml -->
     <eat-comment />
 
     <string name="home_title">Home</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/strings.xml -->
     <eat-comment />
 
     <string name="instantHeartRate">Instant Heart Rate</string>
     <string name="instantSpeed">Instant Speed</string>
     <string name="list_item_icon_desc">Icon</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/section_strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/section_strings.xml -->
     <eat-comment />
 
     <string name="login_title">Login</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/strings.xml -->
     <eat-comment />
 
     <string name="music">Play music</string>
@@ -733,17 +733,17 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="stress">Relaxation</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/section_strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/section_strings.xml -->
     <eat-comment />
 
     <string name="stress_app_title">Relaxation</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/strings.xml -->
     <eat-comment />
 
     <string name="stress_level_desc">Your relaxation level is:</string>
     <string name="stress_score_list_desc">Your relaxation scores:</string>
     <string name="time_left_desc">Time left:</string>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/src/main/res/values/styles.xml -->
     <eat-comment />
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
@@ -823,7 +823,7 @@
         <item name="android:divider">@color/darkgrey</item>
         <item name="android:dividerHeight">1dp</item>
     </style>
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/res/values/values.xml -->
     <eat-comment />
 
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">
@@ -1537,7 +1537,7 @@
     <style name="Widget.AppCompat.ProgressBar.Horizontal" parent="Widget.AppCompat.Base.ProgressBar.Horizontal" />
 
     <style name="Widget.AppCompat.Spinner.DropDown.ActionBar" parent="Widget.AppCompat.Base.Spinner" />
-    <!-- From: file:/home/zdravko/Development/relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
+    <!-- From: file:/Users/dimitaruzunov/Documents/AndroidProjects/Relaxisapp/app/build/exploded-aar/relaxisapp/facebook/unspecified/res/values/values.xml -->
     <eat-comment />
 
     <style name="com_facebook_loginview_default_style" parent="@android:style/Widget.Button">
