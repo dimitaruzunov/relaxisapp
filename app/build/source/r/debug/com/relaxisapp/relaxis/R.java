@@ -1408,13 +1408,7 @@ containing a value of this type.
         public static final int time_left_desc=0x7f0b0043;
     }
     public static final class style {
-        /** 
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        
-         */
-        public static final int AppBaseTheme=0x7f0c0000;
+        public static final int ActionBar=0x7f0c0000;
         public static final int AppTheme=0x7f0c0001;
         public static final int BreathingScoreTextView=0x7f0c0002;
         public static final int Divider=0x7f0c0003;
