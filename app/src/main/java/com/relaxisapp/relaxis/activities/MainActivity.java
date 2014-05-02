@@ -13,13 +13,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +43,7 @@ import com.relaxisapp.relaxis.models.User;
 import com.relaxisapp.relaxis.utils.BtConnection;
 import com.relaxisapp.relaxis.utils.Const;
 
-public class MainActivity extends FragmentActivity implements ListView.OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements ListView.OnItemClickListener {
 
 	private NavigationDrawerListAdapter navigationDrawerListAdapter;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -344,7 +344,6 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 			}
 		}
 
-		@Override
 		protected void onCancelled(AsyncTaskResults results) {
 			setPreviousOnButtonClickListener(results.item);
 			

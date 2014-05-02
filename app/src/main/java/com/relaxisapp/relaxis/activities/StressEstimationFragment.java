@@ -153,7 +153,7 @@ public class StressEstimationFragment extends Fragment {
 				Toast.makeText(getActivity(), "Stress level saved: " +
 				StressEstimationFragment.stressLevel * 10, Toast.LENGTH_SHORT).show();
 			}
-			startStressEstimationButton.callOnClick();		
+			startStressEstimationButton.callOnClick();
 			return;
 		}
 		timeLeft--;

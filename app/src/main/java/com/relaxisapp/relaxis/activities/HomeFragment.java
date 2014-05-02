@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.relaxisapp.relaxis.HintHelper;
 import com.relaxisapp.relaxis.OnBtConnectionChangeListener;
 import com.relaxisapp.relaxis.R;
 
@@ -94,9 +92,8 @@ public class HomeFragment extends Fragment implements OnBtConnectionChangeListen
 	}
 	
 	void handleMusicButtonClick(Button button, Context activity) {
-		    Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
-		    Intent.CATEGORY_APP_MUSIC);
-		    startActivity(intent);
+		    //Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_MUSIC);
+		    //startActivity(intent);
 	}
 	
 	@Override

@@ -2,13 +2,12 @@ package com.relaxisapp.relaxis;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import android.support.v7.app.ActionBar;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +54,7 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(ActionBarActivity.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.drawer_option_item, null);
         }
 
@@ -69,7 +68,7 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
         return convertView;
 	}
 
-    public void setup(Activity activity, ListView.OnItemClickListener listener) {
+    public void setup(ActionBarActivity activity, ListView.OnItemClickListener listener) {
         drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawerListView = (ListView) activity.findViewById(R.id.left_drawer);
         
@@ -80,9 +79,9 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
         setupActionBar(activity);
     }
     
-    private void setupActionBar(Activity activity) {
-    	final Activity activityConst = activity;
-    	ActionBar actionBar = activity.getActionBar();
+    private void setupActionBar(ActionBarActivity activity) {
+    	final ActionBarActivity activityConst = activity;
+    	ActionBar actionBar = activity.getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -93,13 +92,13 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
     			R.string.open_drawer_message, R.string.close_drawer_message) {
     		@Override
     		public void onDrawerOpened(View drawerView) {
-    			activityConst.invalidateOptionsMenu();
+    			activityConst.supportInvalidateOptionsMenu();
     			super.onDrawerOpened(drawerView);
     		}
     		
     		@Override
     		public void onDrawerClosed(View drawerView) {
-    			activityConst.invalidateOptionsMenu();
+    			activityConst.supportInvalidateOptionsMenu();
     			super.onDrawerClosed(drawerView);
     		}
     	};
