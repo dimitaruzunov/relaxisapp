@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,10 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
+import com.relaxisapp.relaxis.ApiConnection;
+import com.relaxisapp.relaxis.BreathingScoreResultsListAdapter;
+import com.relaxisapp.relaxis.R;
+import com.relaxisapp.relaxis.StressScoreResultsListAdapter;
 
 public class LoginFragment extends Fragment {
 

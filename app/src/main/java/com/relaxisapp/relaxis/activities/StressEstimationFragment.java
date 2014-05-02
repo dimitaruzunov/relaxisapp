@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.activities;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -14,6 +14,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.relaxisapp.relaxis.ApiConnection;
+import com.relaxisapp.relaxis.R;
+import com.relaxisapp.relaxis.SectionsPagerAdapter;
+import com.relaxisapp.relaxis.utils.BtConnection;
+import com.relaxisapp.relaxis.utils.Const;
+
 public class StressEstimationFragment extends Fragment {
 
 	public final static String SECTION_TITLE = "section title";
@@ -25,7 +31,7 @@ public class StressEstimationFragment extends Fragment {
 	
 	static int timeLeft = Const.TIME_STRESS_SECONDS;
 
-	static double stressLevel;
+	public static double stressLevel;
 	static Boolean updateScore = false;
 	
 	static TextView stressLevelTextView;
@@ -112,13 +118,13 @@ public class StressEstimationFragment extends Fragment {
 	}
 	
 	private void showStressLevel() {
-		stressLevelDescTextView.setVisibility(0);
-		stressLevelTextView.setVisibility(0);
+		stressLevelDescTextView.setVisibility(View.VISIBLE);
+		stressLevelTextView.setVisibility(View.VISIBLE);
 	}
 	
 	private void hideStressLevel() {
-		stressLevelDescTextView.setVisibility(4);
-		stressLevelTextView.setVisibility(4);
+		stressLevelDescTextView.setVisibility(View.INVISIBLE);
+		stressLevelTextView.setVisibility(View.INVISIBLE);
 	}
 	
 	private class TimeUpdateTimerTask extends TimerTask {
@@ -131,7 +137,7 @@ public class StressEstimationFragment extends Fragment {
 					StressEstimationFragment.stressLevelTextView
 					.setText(String.valueOf(new DecimalFormat("#0.00").format(stressLevel*100)));
 					updateTimeLeft();
-					System.out.println("test"+BtConnection.nnCount);
+					System.out.println("test"+ BtConnection.nnCount);
 				}
 			});
 		}

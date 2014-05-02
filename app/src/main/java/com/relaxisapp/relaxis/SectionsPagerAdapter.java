@@ -9,6 +9,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 
+import com.relaxisapp.relaxis.activities.BreathingFragment;
+import com.relaxisapp.relaxis.activities.HomeFragment;
+import com.relaxisapp.relaxis.activities.LoginFragment;
+import com.relaxisapp.relaxis.activities.StressEstimationFragment;
+
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	
 	public final static int LOGIN_FRAGMENT = 0;

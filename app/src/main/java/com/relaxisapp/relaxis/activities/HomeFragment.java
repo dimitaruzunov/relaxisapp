@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.relaxisapp.relaxis.HintHelper;
+import com.relaxisapp.relaxis.OnBtConnectionChangeListener;
+import com.relaxisapp.relaxis.R;
+
 public class HomeFragment extends Fragment implements OnBtConnectionChangeListener {
 
 	public final static String SECTION_TITLE = "section title";
-
-	static TextView heartRateTextView;
-	static TextView instantSpeedTextView;
-	static TextView rRIntervalTextView;
-	static TextView instantHeartRateTextView;
-	static TextView testTextView;
 	
 	public static int connectionState = 0;
 	Button connectButton;
@@ -84,38 +82,6 @@ public class HomeFragment extends Fragment implements OnBtConnectionChangeListen
 				handleMusicButtonClick((Button) view, getActivity());
 			}
 		});
-
-		heartRateTextView = (TextView) view.findViewById(R.id.heartRateTextView);
-		heartRateTextView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				handleHeartRateTextViewClick((TextView) view);
-			}
-		});
-
-		rRIntervalTextView = (TextView) view.findViewById(R.id.rRIntervalTextView);
-		rRIntervalTextView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				handleRRIntervalTextViewClick((TextView) view);
-			}
-		});
-
-		instantHeartRateTextView = (TextView) view.findViewById(R.id.instantHeartRateTextView);
-		instantHeartRateTextView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				handleInstantHeartRateTextViewClick((TextView) view);
-			}
-		});
-		
-		instantSpeedTextView = (TextView) view.findViewById(R.id.instantSpeedTextView);
-		instantSpeedTextView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				handleInstantSpeedTextViewClick((TextView) view);
-			}
-		});
 	}
 	
 	static void handleConnectButtonClick(Button button, Context activity) {
@@ -131,22 +97,6 @@ public class HomeFragment extends Fragment implements OnBtConnectionChangeListen
 		    Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
 		    Intent.CATEGORY_APP_MUSIC);
 		    startActivity(intent);
-	}
-
-	void handleHeartRateTextViewClick(TextView textView) {
-		HintHelper.createAndPositionHint(getActivity(), R.string.heartRate, textView).show();
-	}
-
-	void handleInstantHeartRateTextViewClick(TextView textView) {
-		HintHelper.createAndPositionHint(getActivity(), R.string.instantHeartRate, textView).show();
-	}
-
-	void handleRRIntervalTextViewClick(TextView textView) {
-		HintHelper.createAndPositionHint(getActivity(), R.string.rRInterval, textView).show();
-	}
-	
-	void handleInstantSpeedTextViewClick(TextView textView) {
-		HintHelper.createAndPositionHint(getActivity(), R.string.instantSpeed, textView).show();
 	}
 	
 	@Override
