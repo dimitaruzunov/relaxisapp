@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.activities;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,6 +19,11 @@ import com.jjoe64.graphview.CustomLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.LineGraphView;
+import com.relaxisapp.relaxis.ApiConnection;
+import com.relaxisapp.relaxis.R;
+import com.relaxisapp.relaxis.SectionsPagerAdapter;
+import com.relaxisapp.relaxis.utils.BtConnection;
+import com.relaxisapp.relaxis.utils.Const;
 
 public class BreathingFragment extends Fragment {
 
@@ -45,7 +50,7 @@ public class BreathingFragment extends Fragment {
 	static double tIdealHR;
 
 	static Boolean updateScore = false;
-	static int score = 0;
+	public static int score = 0;
 	static int consecutivePoints = 0;
 	static int multiplier = 1;
 
@@ -173,13 +178,13 @@ public class BreathingFragment extends Fragment {
 	}
 
 	private void showScore() {
-		scoreDescTextView.setVisibility(0);
-		scoreTextView.setVisibility(0);
+		scoreDescTextView.setVisibility(View.VISIBLE);
+		scoreTextView.setVisibility(View.VISIBLE);
 	}
 
 	private void hideScore() {
-		scoreDescTextView.setVisibility(4);
-		scoreTextView.setVisibility(4);
+		scoreDescTextView.setVisibility(View.INVISIBLE);
+		scoreTextView.setVisibility(View.INVISIBLE);
 	}
 
 	private void changeButtonIconStart(Button button) {

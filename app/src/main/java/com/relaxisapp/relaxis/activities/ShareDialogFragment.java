@@ -1,10 +1,12 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+
+import com.relaxisapp.relaxis.R;
 
 public class ShareDialogFragment extends DialogFragment {
 	

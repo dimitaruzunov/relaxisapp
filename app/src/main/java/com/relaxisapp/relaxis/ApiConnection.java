@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.relaxisapp.relaxis.activities.BreathingFragment;
+import com.relaxisapp.relaxis.activities.StressEstimationFragment;
 import com.relaxisapp.relaxis.models.BreathingScore;
 import com.relaxisapp.relaxis.models.StressScore;
 import com.relaxisapp.relaxis.models.User;
@@ -113,7 +115,7 @@ public class ApiConnection {
 				Calendar cal = Calendar.getInstance();
 				
 				BreathingScore body = new BreathingScore(ApiConnection.UserId, 
-						BreathingFragment.score, 
+						BreathingFragment.score,
 						SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));
 				HttpEntity<BreathingScore> httpEntity = new HttpEntity<BreathingScore>(body, requestHeaders);
 				RestTemplate restTemplate = new RestTemplate();
@@ -151,7 +153,7 @@ public class ApiConnection {
 				Calendar cal = Calendar.getInstance();
 				
 				StressScore body = new StressScore(ApiConnection.UserId, 
-						StressEstimationFragment.stressLevel * 10, 
+						StressEstimationFragment.stressLevel * 10,
 						SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));
 				HttpEntity<StressScore> httpEntity = new HttpEntity<StressScore>(body, requestHeaders);
 				RestTemplate restTemplate = new RestTemplate();

@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.activities;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -30,7 +30,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.relaxisapp.relaxis.BTBondReceiver;
+import com.relaxisapp.relaxis.BTBroadcastReceiver;
+import com.relaxisapp.relaxis.NavigationDrawerItem;
+import com.relaxisapp.relaxis.NavigationDrawerListAdapter;
+import com.relaxisapp.relaxis.NewConnectedListener;
+import com.relaxisapp.relaxis.OnBtConnectionChangeListener;
+import com.relaxisapp.relaxis.R;
+import com.relaxisapp.relaxis.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.models.User;
+import com.relaxisapp.relaxis.utils.BtConnection;
+import com.relaxisapp.relaxis.utils.Const;
 
 public class MainActivity extends FragmentActivity implements ListView.OnItemClickListener {
 
@@ -378,18 +388,18 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 			switch (msg.what) {
 			case Const.HEART_RATE:
 				String HeartRatetext = msg.getData().getString("HeartRate");
-				HomeFragment.heartRateTextView.setText(HeartRatetext);
+//				HomeFragment.heartRateTextView.setText(HeartRatetext);
 				break;
 
 			case Const.INSTANT_SPEED:
 				String InstantSpeedtext = msg.getData().getString(
 						"InstantSpeed");
-				HomeFragment.instantSpeedTextView.setText(InstantSpeedtext);
+//				HomeFragment.instantSpeedTextView.setText(InstantSpeedtext);
 				break;
 
 			case Const.RR_INTERVAL:
 				String RRInterval = msg.getData().getString("RRInterval");
-				HomeFragment.rRIntervalTextView.setText(RRInterval);
+//				HomeFragment.rRIntervalTextView.setText(RRInterval);
 				break;
 
 			case Const.INSTANT_HR:
@@ -397,7 +407,7 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 				int instantHR = Integer.parseInt(instantHRString);
 
 				// update HomeFragment
-				HomeFragment.instantHeartRateTextView.setText(instantHRString);
+//				HomeFragment.instantHeartRateTextView.setText(instantHRString);
 
 				// update BreathingFragment
 				BtConnection.instantHRSeries.appendData(new GraphViewData(

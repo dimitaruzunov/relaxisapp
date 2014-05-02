@@ -3,6 +3,11 @@ package com.relaxisapp.relaxis;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import com.relaxisapp.relaxis.utils.BtConnection;
+import com.relaxisapp.relaxis.utils.Const;
+import com.relaxisapp.relaxis.utils.CustomUtilities;
+
 import zephyr.android.HxMBT.*;
 
 public class NewConnectedListener extends ConnectListenerImpl {
@@ -48,7 +53,7 @@ public class NewConnectedListener extends ConnectListenerImpl {
 
 					int[] recentTimestamps = {
 							CustomUtilities.TwoBytesToUnsignedInt(
-									DataArray[11], DataArray[12]),
+                                    DataArray[11], DataArray[12]),
 							CustomUtilities.TwoBytesToUnsignedInt(
 									DataArray[13], DataArray[14]),
 							CustomUtilities.TwoBytesToUnsignedInt(
