@@ -8,15 +8,16 @@
   	
     <ImageView
         android:id="@+id/icon"
-    	android:layout_width="32dp"
-    	android:layout_height="wrap_content"
-    	android:layout_marginLeft="@dimen/list_item_horizontal_padding"
+    	android:layout_width="48dp"
+    	android:layout_height="48dp"
+        android:padding="12dp"
+        android:scaleType="centerInside"
     	android:contentDescription="@string/list_item_icon_desc" />
 
 	<TextView
 	    android:id="@+id/title"
     	android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="48dp"
     	style="@style/DrawerOptionItemTextView" />
     
 </LinearLayout>

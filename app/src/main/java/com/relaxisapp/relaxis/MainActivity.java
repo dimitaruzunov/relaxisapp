@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,8 +36,7 @@ import com.relaxisapp.relaxis.models.User;
 public class MainActivity extends FragmentActivity implements ListView.OnItemClickListener {
 
 	private NavigationDrawerListAdapter navigationDrawerListAdapter;
-	private ListView drawerListView;
-	private SectionsPagerAdapter sectionsPagerAdapter;
+    private SectionsPagerAdapter sectionsPagerAdapter;
 	static ViewPager viewPager;
 	private OnBtConnectionChangeListener btConnectionChangeListener = null;
 	private Button savedButton;
@@ -49,35 +49,31 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		// Navigation drawer setup
-		String[] navigationMenuTitles = getResources().getStringArray(
-				R.array.navigation_drawer_options);
-		TypedArray navigationMenuIcons = getResources().obtainTypedArray(
-				R.array.navigation_drawer_icons);
+		String[] navigationMenuTitles = getResources().getStringArray(R.array.navigation_drawer_options);
+        int[] navigationMenuColors = getResources().getIntArray(R.array.navigation_drawer_colors);
+		TypedArray navigationMenuIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
 
 		ArrayList<NavigationDrawerItem> navigationDrawerItems = new ArrayList<NavigationDrawerItem>();
 
 		for (int i = 0, len = navigationMenuTitles.length; i < len; i++) {
-			navigationDrawerItems.add(new NavigationDrawerItem(
-					navigationMenuTitles[i], navigationMenuIcons.getResourceId(
-							i, -1)));
+			navigationDrawerItems.add(new NavigationDrawerItem(navigationMenuTitles[i],
+                    navigationMenuColors[i],
+                    navigationMenuIcons.getResourceId(i, -1)));
 		}
 
-		// Recycle the typed array
+		// Recycle the typed arrays
 		navigationMenuIcons.recycle();
 
-		navigationDrawerListAdapter = new NavigationDrawerListAdapter(
-				getApplicationContext(), navigationDrawerItems);
+		navigationDrawerListAdapter = new NavigationDrawerListAdapter(getApplicationContext(), navigationDrawerItems);
 
-		drawerListView = (ListView) findViewById(R.id.left_drawer);
+        ListView drawerListView = (ListView) findViewById(R.id.left_drawer);
 		drawerListView.setAdapter(navigationDrawerListAdapter);
 
 		navigationDrawerListAdapter.setup(this, this);
-		navigationDrawerListAdapter
-				.setSelection(NavigationDrawerListAdapter.HOME_OPTION_ITEM);
+		navigationDrawerListAdapter.setSelection(NavigationDrawerListAdapter.HOME_OPTION_ITEM);
 
 		// Sections pager setup
-		sectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager(), this);
+		sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(sectionsPagerAdapter);
@@ -89,8 +85,7 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 			}
 
 			@Override
-			public void onPageScrolled(int position, float positionOffset,
-					int positionOffsetPixels) {
+			public void onPageScrolled(int position, float positionOffset,int positionOffsetPixels) {
 			}
 
 			@Override
@@ -365,8 +360,7 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int option,
-			long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int option, long id) {
 		sectionsPagerAdapter.setFragment(option, viewPager);
 		navigationDrawerListAdapter.closeDrawer();
 	}

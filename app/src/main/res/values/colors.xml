@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Navigation drawer colors -->
+    <color name="drawer_gray_70">#B3333333</color>
+    <color name="drawer_red_70">#B3ff4444</color>
+    <color name="drawer_green_70">#B399cc00</color>
+    <color name="drawer_blue_70">#B33a5897</color>
+
+    <!-- List colors -->
+    <color name="list_divider">#1A000000</color>
+    <color name="list_item_active">#1Aaaaaaa</color>
+    <color name="list_item_pressed">#33aaaaaa</color>
+
     <color name="red">#ff6060</color>
     <color name="lightred">#ff7a7a</color>
     <color name="darkred">#b33131</color>
-    <color name="lightgrey">#ddd</color>
+    <color name="lightgrey">#eee</color>
     <color name="grey">#333</color>
     <color name="darkgrey">#222</color>
     <color name="white">#fff</color>

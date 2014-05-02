@@ -16,13 +16,21 @@
         <item>@string/stress_app_title</item>
         <item>@string/login_title</item>
     </string-array>
+
+    <!-- Navigation drawer colors -->
+    <array name="navigation_drawer_colors">
+        <item>@color/drawer_gray_70</item>
+        <item>@color/drawer_green_70</item>
+        <item>@color/drawer_red_70</item>
+        <item>@color/drawer_blue_70</item>
+    </array>
     
     <!-- Navigation drawer icons -->
     <array name="navigation_drawer_icons">
-        <item>@drawable/ic_home</item>
-        <item>@drawable/ic_breathing</item>
-        <item>@drawable/ic_stress</item>
-        <item>@drawable/ic_fb</item>
+        <item>@drawable/ic_drawer_home</item>
+        <item>@drawable/ic_drawer_breathing</item>
+        <item>@drawable/ic_drawer_relax</item>
+        <item>@drawable/ic_drawer_fb</item>
     </array>
 
 </resources>

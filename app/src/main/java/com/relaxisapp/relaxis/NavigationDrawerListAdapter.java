@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -57,12 +58,13 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.drawer_option_item, null);
         }
-		
-        ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
+
         TextView title = (TextView) convertView.findViewById(R.id.title);
-          
-        icon.setImageResource(navigationDrawerItems.get(position).getIcon());
+        ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
+
         title.setText(navigationDrawerItems.get(position).getTitle());
+        icon.setBackgroundColor(navigationDrawerItems.get(position).getColor());
+        icon.setImageResource(navigationDrawerItems.get(position).getIcon());
          
         return convertView;
 	}
@@ -84,9 +86,10 @@ public class NavigationDrawerListAdapter extends BaseAdapter {
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
         }
 
-        drawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, R.drawable.ic_drawer,
+        drawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, R.drawable.ic_navigation_drawer,
     			R.string.open_drawer_message, R.string.close_drawer_message) {
     		@Override
     		public void onDrawerOpened(View drawerView) {
