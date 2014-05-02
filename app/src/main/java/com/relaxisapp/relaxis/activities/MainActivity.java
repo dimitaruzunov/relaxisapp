@@ -36,23 +36,30 @@ import com.relaxisapp.relaxis.BTBroadcastReceiver;
 import com.relaxisapp.relaxis.NavigationDrawerItem;
 import com.relaxisapp.relaxis.NavigationDrawerListAdapter;
 import com.relaxisapp.relaxis.NewConnectedListener;
-import com.relaxisapp.relaxis.OnBtConnectionChangeListener;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.SectionsPagerAdapter;
+import com.relaxisapp.relaxis.models.HomeModel;
 import com.relaxisapp.relaxis.models.User;
 import com.relaxisapp.relaxis.utils.BtConnection;
 import com.relaxisapp.relaxis.utils.Const;
+import com.relaxisapp.relaxis.views.HomeView;
 
 public class MainActivity extends FragmentActivity implements ListView.OnItemClickListener {
+
+    private HomeModel model;
+    private HomeView view;
 
 	private NavigationDrawerListAdapter navigationDrawerListAdapter;
     private SectionsPagerAdapter sectionsPagerAdapter;
 	static ViewPager viewPager;
-	private OnBtConnectionChangeListener btConnectionChangeListener = null;
 	private Button savedButton;
+    private BluetoothConnectTask connectTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+        model = HomeModel.getInstance();
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -178,31 +185,28 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 		if (resultCode == RESULT_OK) {
 			Toast.makeText(this, "Bluetooth is now enabled", Toast.LENGTH_LONG).show();
 		} else {
-			setPreviousOnButtonClickListener(savedButton);
+//			setPreviousOnButtonClickListener(savedButton);
 			Toast.makeText(this, "User cancelled the bluetooth enable intent", Toast.LENGTH_LONG).show();
-			btConnectionChangeListener.onBtConnectionChange(0, savedButton);
+			model.setConnectionState(0);
 			savedButton = null;
 		}
 	}
 
-	void executeConnect(Button button) {
-		if (btConnectionChangeListener == null) {
-			btConnectionChangeListener = (OnBtConnectionChangeListener)
-					sectionsPagerAdapter.getFragment(SectionsPagerAdapter.HOME_FRAGMENT);
-		}
-		btConnectionChangeListener.onBtConnectionChange(1, button);
+	void executeConnect() {
+        model.setConnectionState(1);
 
-		new BluetoothConnectTask().execute(button);
+		connectTask = new BluetoothConnectTask();
+        connectTask.execute();
 	}
 	
-	private void setPreviousOnButtonClickListener(Button button) {
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				HomeFragment.handleConnectButtonClick((Button) view, MainActivity.this);
-			}
-		});
-	}
+//	private void setPreviousOnButtonClickListener(Button button) {
+//		button.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				HomeFragment.handleConnectButtonClick((Button) view, MainActivity.this);
+//			}
+//		});
+//	}
 
 	private class AsyncTaskResults {
 		public int result;
@@ -210,7 +214,7 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 	}
 
 	private class BluetoothConnectTask extends
-			AsyncTask<Button, Void, AsyncTaskResults> {
+			AsyncTask<Void, Void, AsyncTaskResults> {
 
 		private final int CODE_CANCELLED = 3;
 		private final int CODE_NO_BT = 2;
@@ -218,20 +222,14 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 		private final int CODE_SUCCESS = 0;
 
 		@Override
-		protected AsyncTaskResults doInBackground(Button... buttons) {
+		protected AsyncTaskResults doInBackground(Void... voids) {
 			// Setting the results to be returned
 			AsyncTaskResults results = new AsyncTaskResults();
-			results.item = buttons[0];
 			
 			// do the work unless user cancel
 			while (!isCancelled()) {
-				// Setting up an event listener listening for cancel intent
-				results.item.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						cancel(true);
-					}
-				});
+                // connection state - connecting
+                //model.setConnectionState(1);
 
 				// Getting the Bluetooth adapter
 				BtConnection.adapter = BluetoothAdapter.getDefaultAdapter();
@@ -296,24 +294,21 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 
 		@Override
 		protected void onPostExecute(AsyncTaskResults results) {
-			setPreviousOnButtonClickListener(results.item);
+//			setPreviousOnButtonClickListener(results.item);
 			
 			switch (results.result) {
 			case CODE_NO_BT:
-				btConnectionChangeListener
-						.onBtConnectionChange(0, results.item);
+				model.setConnectionState(0);
 				Toast.makeText(MainActivity.this, "Bluetooth is not supported",
 						Toast.LENGTH_LONG).show();
 				break;
 			case CODE_FAILURE:
-				btConnectionChangeListener
-						.onBtConnectionChange(0, results.item);
+                model.setConnectionState(0);
 				Toast.makeText(MainActivity.this, "Unable to connect",
 						Toast.LENGTH_LONG).show();
 				break;
 			case CODE_SUCCESS:
-				btConnectionChangeListener
-						.onBtConnectionChange(2, results.item);
+                model.setConnectionState(2);
 				Toast.makeText(MainActivity.this,
 						"Connected to HxM " + BtConnection.deviceName,
 						Toast.LENGTH_LONG).show();
@@ -346,16 +341,20 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 
 		@Override
 		protected void onCancelled(AsyncTaskResults results) {
-			setPreviousOnButtonClickListener(results.item);
-			
-			btConnectionChangeListener.onBtConnectionChange(0, results.item);
+//			setPreviousOnButtonClickListener(results.item);
+
+            model.setConnectionState(0);
 			Toast.makeText(MainActivity.this, "Connecting cancelled", Toast.LENGTH_LONG).show();
 		}
 
 	}
 
-	void executeDisconnect(Button button) {
-		btConnectionChangeListener.onBtConnectionChange(0, button);
+    void cancelConnecting() {
+        connectTask.cancel(true);
+    }
+
+	void executeDisconnect() {
+        model.setConnectionState(0);
 
 		Toast.makeText(this, "Disconnected from HxM", Toast.LENGTH_LONG).show();
 
@@ -375,30 +374,38 @@ public class MainActivity extends FragmentActivity implements ListView.OnItemCli
 		navigationDrawerListAdapter.closeDrawer();
 	}
 
-	final static Handler SensorDataHandler = new Handler() {
+	final Handler SensorDataHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case Const.HEART_RATE:
-				String HeartRatetext = msg.getData().getString("HeartRate");
-//				HomeFragment.heartRateTextView.setText(HeartRatetext);
+                int heartRate = Integer.parseInt(msg.getData().getString("HeartRate"));
+                if (heartRate > 0) {
+                    model.setHeartRate(heartRate);
+                }
 				break;
 
 			case Const.INSTANT_SPEED:
-				String InstantSpeedtext = msg.getData().getString(
-						"InstantSpeed");
-//				HomeFragment.instantSpeedTextView.setText(InstantSpeedtext);
+                double instantSpeed = Double.parseDouble(msg.getData().getString("InstantSpeed"));
+                if (instantSpeed > 0) {
+                    model.setInstantSpeed(instantSpeed);
+                }
 				break;
 
 			case Const.RR_INTERVAL:
-				String RRInterval = msg.getData().getString("RRInterval");
-//				HomeFragment.rRIntervalTextView.setText(RRInterval);
-				break;
+                int rrInterval = Integer.parseInt(msg.getData().getString("RRInterval"));
+                if (rrInterval > 0) {
+                    model.setRrInterval(rrInterval);
+                }
+                break;
 
 			case Const.INSTANT_HR:
 				String instantHRString = msg.getData().getString("InstantHR");
 				int instantHR = Integer.parseInt(instantHRString);
+                if (instantHR > 0) {
+                    model.setInstantHeartRate(instantHR);
+                }
 
 				// update HomeFragment
 //				HomeFragment.instantHeartRateTextView.setText(instantHRString);
