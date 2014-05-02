@@ -2,42 +2,42 @@ package com.relaxisapp.relaxis.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.relaxisapp.relaxis.HintHelper;
 import com.relaxisapp.relaxis.R;
-import com.relaxisapp.relaxis.activities.HomeFragment;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
-import com.relaxisapp.relaxis.models.AppModel;
+import com.relaxisapp.relaxis.models.HomeModel;
 
 /**
  * Created by zdravko on 14-5-2.
  */
-public class HomeView extends RelativeLayout {
+public class HomeView extends ScrollView {
 
     /**
      * The interface to send events from the view to the controller
      */
     public static interface ViewListener {
-        public void onToggleTimer();
-        public void onAddTime(long amountToAdd);
+        public void onConnectButtonClick();
+        public void onMusicButtonClick();
     }
 
     private static boolean DEBUG = false;
-    //private static final String TAG = MainView.class.getSimpleName();
-    private static final long AMOUNT_TO_ADD = 1234 * 60 * 2;
+    private static final String TAG = HomeView.class.getSimpleName();
 
     private static TextView heartRateTextView;
-    private static TextView instantSpeedTextView;
-    private static TextView rRIntervalTextView;
+    private static TextView rrIntervalTextView;
     private static TextView instantHeartRateTextView;
+    private static TextView instantSpeedTextView;
 
-    private Button toggleBtn, addBtn;
-    private AppModel model;
+    Button connectButton, musicButton;
+    private HomeModel model;
 
     /**
      * The listener reference for sending events
@@ -52,43 +52,79 @@ public class HomeView extends RelativeLayout {
      */
     public HomeView (Context context, AttributeSet attrs) {
         super(context, attrs);
-        model = AppModel.getInstance();
+        model = HomeModel.getInstance();
     }
 
-    /**
-     * Exposed method so the controller can set the button state.
-     */
-    public void setPausedState(boolean isTimerRunning) {
-//        String txt = (isTimerRunning) ? getContext().getString(R.string.stop) : getContext().getString(R.string.start);
-//        toggleBtn.setText(txt);
+    public void updateConnectButton() {
+        switch (model.getConnectionState()) {
+            case 0:
+                connectButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bluetooth, 0, 0, 0);
+                connectButton.setText(R.string.action_bluetooth_connect);
+                break;
+            case 1:
+                connectButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bluetooth_searching, 0, 0, 0);
+                connectButton.setText(R.string.action_bluetooth_connecting);
+                break;
+            case 2:
+                connectButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bluetooth_connected, 0, 0, 0);
+                connectButton.setText(R.string.action_bluetooth_disconnect);
+                break;
+        }
+    }
+
+    public void showMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     /**
      * Remove the listener from the model
      */
     public void destroy() {
-        //model.removeListener(AppModel.ChangeEvent.ELAPSED_TIME_CHANGED, elapsedTimeListener);
+        //model.removeListener(HomeModel.ChangeEvent.ELAPSED_TIME_CHANGED, elapsedTimeListener);
     }
 
     /**
      * Does the work to update the view when the model changes.
      */
-    private void bind() {
-        int milli = (int)Math.floor((model.getElapsedTime() % 1000));
-        int secs = (int)Math.floor((model.getElapsedTime() / 1000) % 60);
-        int mins = (int)Math.floor((model.getElapsedTime() / 1000 / 60) % 60);
+    private void bindHeartRate() {
+        int heartRate = model.getHeartRate();
 
         if (DEBUG) {
-//            Log.i(TAG, "elapsed: " + model.getElapsedTime());
-//            Log.i(TAG, "secs: " + secs);
-//            Log.i(TAG, "mins: " + mins);
+            Log.i(TAG, "Heart rate: " + model.getHeartRate());
         }
 
-//        d1.showTime((int)Math.floor(mins/10));
-//        d2.showTime(mins % 10);
-//        d3.showTime((int)Math.floor(secs/10));
-//        d4.showTime(secs % 10);
-//        d5.showTime((int)Math.floor(milli/100));
+        String text = (heartRate > 0) ? String.valueOf(heartRate) : getResources().getString(R.string.heartRate);
+        heartRateTextView.setText(text);
+    }
+    private void bindRrInterval() {
+        int rrInterval = model.getRrInterval();
+
+        if (DEBUG) {
+            Log.i(TAG, "R-R interval: " + model.getRrInterval());
+        }
+
+        String text = (rrInterval > 0) ? String.valueOf(rrInterval) : getResources().getString(R.string.rRInterval);
+        rrIntervalTextView.setText(text);
+    }
+    private void bindInstantHeartRate() {
+        int instantHeartRate = model.getInstantHeartRate();
+
+        if (DEBUG) {
+            Log.i(TAG, "Instant heart rate: " + model.getInstantHeartRate());
+        }
+
+        String text = (instantHeartRate > 0) ? String.valueOf(instantHeartRate) : getResources().getString(R.string.instantHeartRate);
+        instantHeartRateTextView.setText(text);
+    }
+    private void bindInstantSpeed() {
+        double instantSpeed = model.getInstantSpeed();
+
+        if (DEBUG) {
+            Log.i(TAG, "Instant speed: " + model.getInstantSpeed());
+        }
+
+        String text = (instantSpeed > 0) ? String.valueOf(instantSpeed) : getResources().getString(R.string.instantSpeed);
+        instantSpeedTextView.setText(text);
     }
 
     /**
@@ -106,8 +142,8 @@ public class HomeView extends RelativeLayout {
             }
         });
 
-        rRIntervalTextView = (TextView) findViewById(R.id.rRIntervalTextView);
-        rRIntervalTextView.setOnClickListener(new View.OnClickListener() {
+        rrIntervalTextView = (TextView) findViewById(R.id.rRIntervalTextView);
+        rrIntervalTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handleRRIntervalTextViewClick((TextView) view);
@@ -131,21 +167,64 @@ public class HomeView extends RelativeLayout {
         });
 
 
-        toggleBtn.setOnClickListener(new View.OnClickListener() {
+        connectButton = (Button) findViewById(R.id.connectButton);
+        connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                viewListener.onToggleTimer();
+            public void onClick(View view) {
+                viewListener.onConnectButtonClick();
             }
         });
-        addBtn.setOnClickListener(new View.OnClickListener() {
+
+        musicButton = (Button) findViewById(R.id.musicButton);
+        musicButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                viewListener.onAddTime(AMOUNT_TO_ADD);
+            public void onClick(View view) {
+                viewListener.onMusicButtonClick();
             }
         });
-        model.addListener(AppModel.ChangeEvent.ELAPSED_TIME_CHANGED, elapsedTimeListener);
-        bind();
+
+        model.addListener(HomeModel.ChangeEvent.CONNECTION_STATE_CHANGED, connectionStateListener);
+        model.addListener(HomeModel.ChangeEvent.HEART_RATE_CHANGED, heartRateListener);
+        model.addListener(HomeModel.ChangeEvent.RR_INTERVAL_CHANGED, rrIntervalListener);
+        model.addListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
+        model.addListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
+        updateConnectButton();
+        bindHeartRate();
+        bindRrInterval();
+        bindInstantHeartRate();
+        bindInstantSpeed();
     }
+
+    private EventListener connectionStateListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            updateConnectButton();
+        }
+    };
+    private EventListener heartRateListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            bindHeartRate();
+        }
+    };
+    private EventListener rrIntervalListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            bindRrInterval();
+        }
+    };
+    private EventListener instantHeartRateListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            bindInstantHeartRate();
+        }
+    };
+    private EventListener instantSpeedListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            bindInstantSpeed();
+        }
+    };
 
     void handleHeartRateTextViewClick(TextView textView) {
         HintHelper.createAndPositionHint(getContext(), R.string.heartRate, textView).show();
@@ -163,13 +242,4 @@ public class HomeView extends RelativeLayout {
         HintHelper.createAndPositionHint(getContext(), R.string.instantSpeed, textView).show();
     }
 
-    /**
-     * The listener for when the elapsed time property changes on the model
-     */
-    private EventListener elapsedTimeListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-            bind();
-        }
-    };
 }

@@ -198,7 +198,7 @@ public class NewConnectedListener extends ConnectListenerImpl {
 					b1.putString("InstantSpeed", String.valueOf(InstantSpeed));
 					text1.setData(b1);
 					_aNewHandler.sendMessage(text1);
-					System.out.println("Instant Speed is " + InstantSpeed);
+//					System.out.println("Instant Speed is " + InstantSpeed);
 
 					// *********** Add R-R interval to the message
 					// ****************
@@ -214,14 +214,14 @@ public class NewConnectedListener extends ConnectListenerImpl {
 					b1.putString("InstantHR", String.valueOf(instantHR));
 					text1.setData(b1);
 					_aNewHandler.sendMessage(text1);
-					System.out.println("Instant HR is " + instantHR);
+//					System.out.println("Instant HR is " + instantHR);
 
 					// *********** Add pNN50 to the message ****************
 					text1 = _aNewHandler.obtainMessage(Const.PNN50);
 					b1.putString("pNN50", String.valueOf(pNN50));
 					text1.setData(b1);
 					_aNewHandler.sendMessage(text1);
-					System.out.println("pNN50 is " + pNN50);
+//					System.out.println("pNN50 is " + pNN50);
 				}
 			}
 		});

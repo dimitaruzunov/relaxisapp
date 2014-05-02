@@ -266,7 +266,7 @@ public class BreathingFragment extends Fragment {
 				Toast.makeText(getActivity(), "Breathing score saved: " +
 						BreathingFragment.score, Toast.LENGTH_SHORT).show();
 			}
-			startBreathingButton.callOnClick();
+			// startBreathingButton.callOnClick(); TODO find alternative method
 			return;
 		}
 		timeLeft--;
