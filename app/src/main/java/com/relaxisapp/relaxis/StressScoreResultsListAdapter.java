@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.relaxisapp.relaxis.models.StressScore;
+
 public class StressScoreResultsListAdapter extends BaseAdapter {
 
 	private Context context;

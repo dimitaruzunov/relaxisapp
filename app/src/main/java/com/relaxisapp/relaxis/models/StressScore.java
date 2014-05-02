@@ -1,16 +1,16 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class BreathingScore {
-		
-	public BreathingScore() {
+public class StressScore {
+
+	public StressScore() {
 		
 	}
 	
-	public BreathingScore(int userId, double score, String timestamp) {
+	public StressScore(int userId, double score, String timestamp) {
 		this.userId = userId;
 		this.score = score;
 		this.timestamp = timestamp;
@@ -19,7 +19,7 @@ public class BreathingScore {
 	private int userId;
 	private double score;
 	private String timestamp;
-
+	
 
     @JsonProperty(value="UserId")
     public int getUserId() {
@@ -35,7 +35,7 @@ public class BreathingScore {
     public String getTimestamp() {
         return this.timestamp;
     }
-
+    
     public void setUserId(int userId) {
         this.userId = userId;
     }

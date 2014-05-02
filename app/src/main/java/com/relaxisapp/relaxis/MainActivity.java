@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.relaxisapp.relaxis.models.User;
 
 public class MainActivity extends FragmentActivity implements ListView.OnItemClickListener {
 
