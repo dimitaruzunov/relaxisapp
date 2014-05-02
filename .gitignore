@@ -3,3 +3,7 @@
 /.idea/workspace.xml
 .DS_Store
 /.idea/libraries/
+/.idea/misc.xml
+/.idea/modules.xml
+/app/app.iml
+/facebook/facebook.iml
