@@ -14,6 +14,10 @@ import org.springframework.web.client.RestTemplate;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.relaxisapp.relaxis.models.BreathingScore;
+import com.relaxisapp.relaxis.models.StressScore;
+import com.relaxisapp.relaxis.models.User;
+
 public class ApiConnection {
 	public static String FbUserId;
 	public static String FbUserName;
@@ -199,8 +203,7 @@ public class ApiConnection {
 		protected void onPostExecute(BreathingScore[] scores) {
 			if (scores != null) {
 				Log.i("Scores", scores.toString());
-				currentUserBreathingScores = new ArrayList<BreathingScore>();
-				for (int i = 0; i < scores.length; i++) {
+				currentUserBreathingScores = new ArrayList<BreathingScore>();				for (int i = 0; i < scores.length; i++) {
 					currentUserBreathingScores.add(scores[i]);
 				}
 			}

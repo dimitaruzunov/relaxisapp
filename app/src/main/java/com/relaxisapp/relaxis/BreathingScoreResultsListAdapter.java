@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.relaxisapp.relaxis.models.BreathingScore;
+
 public class BreathingScoreResultsListAdapter extends BaseAdapter {
 
 	private Context context;
