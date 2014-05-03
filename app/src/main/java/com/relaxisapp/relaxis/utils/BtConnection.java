@@ -3,7 +3,7 @@ package com.relaxisapp.relaxis.utils;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
-import com.relaxisapp.relaxis.NewConnectedListener;
+import com.relaxisapp.relaxis.ConnectionListener;
 
 import zephyr.android.HxMBT.BTClient;
 import zephyr.android.HxMBT.ZephyrProtocol;
@@ -15,9 +15,9 @@ public class BtConnection {
     public static BluetoothAdapter adapter = null;
     public static BTClient _bt;
     public static ZephyrProtocol _protocol;
-    public static NewConnectedListener _NConnListener;
-    public static NewConnectedListener instantHRListener;
-    public static NewConnectedListener stressLevelListener;
+    public static ConnectionListener _NConnListener;
+    public static ConnectionListener instantHRListener;
+    public static ConnectionListener stressLevelListener;
     public static String BhMacID;
     public static String deviceName;
 

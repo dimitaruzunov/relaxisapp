@@ -33,9 +33,9 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.relaxisapp.relaxis.BTBondReceiver;
 import com.relaxisapp.relaxis.BTBroadcastReceiver;
+import com.relaxisapp.relaxis.ConnectionListener;
 import com.relaxisapp.relaxis.NavigationDrawerItem;
 import com.relaxisapp.relaxis.NavigationDrawerListAdapter;
-import com.relaxisapp.relaxis.NewConnectedListener;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.models.HomeModel;
@@ -267,7 +267,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 							BtConnection._bt = new BTClient(
 									BtConnection.adapter, BtConnection.BhMacID);
 
-							BtConnection._NConnListener = new NewConnectedListener(
+							BtConnection._NConnListener = new ConnectionListener(
 									SensorDataHandler, SensorDataHandler);
 							BtConnection._bt
 									.addConnectedEventListener(BtConnection._NConnListener);

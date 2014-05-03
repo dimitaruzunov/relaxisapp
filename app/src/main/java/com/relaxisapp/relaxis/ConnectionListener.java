@@ -10,14 +10,14 @@ import com.relaxisapp.relaxis.utils.CustomUtilities;
 
 import zephyr.android.HxMBT.*;
 
-public class NewConnectedListener extends ConnectListenerImpl {
+public class ConnectionListener extends ConnectListenerImpl {
 	private Handler _OldHandler;
 	private Handler _aNewHandler;
 	private int HR_SPD_DIST_PACKET = 0x26;
 
 	private HRSpeedDistPacketInfo HRSpeedDistPacket = new HRSpeedDistPacketInfo();
 
-	public NewConnectedListener(Handler handler, Handler _NewHandler) {
+	public ConnectionListener(Handler handler, Handler _NewHandler) {
 		super(handler, null);
 		_OldHandler = handler;
 		_aNewHandler = _NewHandler;
