@@ -34,18 +34,8 @@ public class HomeFragment extends Fragment {
 
         handler = new Handler();
 
-
-        model.addListener(HomeModel.ChangeEvent.CONNECTION_STATE_CHANGED, connectionStateListener);
-
 		return view;
 	}
-
-    private EventListener connectionStateListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-
-        }
-    };
 
     private HomeView.ViewListener viewListener = new HomeView.ViewListener() {
 
