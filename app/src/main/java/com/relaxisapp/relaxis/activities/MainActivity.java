@@ -198,23 +198,9 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 		connectTask = new BluetoothConnectTask();
         connectTask.execute();
 	}
-	
-//	private void setPreviousOnButtonClickListener(Button button) {
-//		button.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View view) {
-//				HomeFragment.handleConnectButtonClick((Button) view, MainActivity.this);
-//			}
-//		});
-//	}
-
-	private class AsyncTaskResults {
-		public int result;
-		public Button item;
-	}
 
 	private class BluetoothConnectTask extends
-			AsyncTask<Void, Void, AsyncTaskResults> {
+			AsyncTask<Void, Void, Integer> {
 
 		private final int CODE_CANCELLED = 3;
 		private final int CODE_NO_BT = 2;
@@ -222,9 +208,9 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 		private final int CODE_SUCCESS = 0;
 
 		@Override
-		protected AsyncTaskResults doInBackground(Void... voids) {
-			// Setting the results to be returned
-			AsyncTaskResults results = new AsyncTaskResults();
+		protected Integer doInBackground(Void... voids) {
+
+			int result;
 			
 			// do the work unless user cancel
 			while (!isCancelled()) {
@@ -236,13 +222,12 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 				// Check for Bluetooth support
 				if (BtConnection.adapter == null) {
-					results.result = CODE_NO_BT;
-					return results;
+					result = CODE_NO_BT;
+					return result;
 				}
 
 				// Enable bluetooth if not enabled
 				if (!BtConnection.adapter.isEnabled()) {
-					savedButton = results.item;
 					Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 					startActivityForResult(enableBtIntent, Const.REQUEST_ENABLE_BT);
 				}
@@ -277,26 +262,26 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 								// TODO ? Reset all the values to 0s
 
-								results.result = CODE_SUCCESS;
-								return results;
+								result = CODE_SUCCESS;
+								return result;
 							} else {
-								results.result = CODE_FAILURE;
-								return results;
+								result = CODE_FAILURE;
+								return result;
 							}
 						}
 					}
 				}
 			}
 
-			results.result = CODE_CANCELLED;
-			return results;
+			result = CODE_CANCELLED;
+			return result;
 		}
 
 		@Override
-		protected void onPostExecute(AsyncTaskResults results) {
+		protected void onPostExecute(Integer result) {
 //			setPreviousOnButtonClickListener(results.item);
 			
-			switch (results.result) {
+			switch (result) {
 			case CODE_NO_BT:
 				model.setConnectionState(0);
 				Toast.makeText(MainActivity.this, "Bluetooth is not supported",
@@ -339,9 +324,8 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 			}
 		}
 
-		protected void onCancelled(AsyncTaskResults results) {
-//			setPreviousOnButtonClickListener(results.item);
-
+		protected void onCancelled() {
+            // TODO check whether the connection has been established before the cancellation and terminate it if so
             model.setConnectionState(0);
 			Toast.makeText(MainActivity.this, "Connecting cancelled", Toast.LENGTH_LONG).show();
 		}
@@ -349,7 +333,9 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 	}
 
     void cancelConnecting() {
-        connectTask.cancel(true);
+        while (!connectTask.isCancelled()) {
+            connectTask.cancel(true);
+        }
     }
 
 	void executeDisconnect() {
@@ -500,6 +486,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 				}
 
 				break;
+
 			case Const.PNN50:
 				if (StressEstimationFragment.timeLeft > 0 && StressEstimationFragment.updateScore) {
 					String pNN50 = msg.getData().getString("pNN50");
