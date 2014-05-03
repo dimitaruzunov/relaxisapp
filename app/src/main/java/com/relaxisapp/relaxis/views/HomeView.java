@@ -72,10 +72,6 @@ public class HomeView extends ScrollView {
         }
     }
 
-    public void showMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-    }
-
     /**
      * Remove the listener from the model
      */
@@ -93,7 +89,7 @@ public class HomeView extends ScrollView {
             Log.i(TAG, "Heart rate: " + model.getHeartRate());
         }
 
-        String text = (heartRate > 0) ? String.valueOf(heartRate) : getResources().getString(R.string.heartRate);
+        String text = (heartRate > 0) ? String.valueOf(heartRate) : "HR";
         heartRateTextView.setText(text);
     }
     private void bindRrInterval() {
@@ -103,7 +99,7 @@ public class HomeView extends ScrollView {
             Log.i(TAG, "R-R interval: " + model.getRrInterval());
         }
 
-        String text = (rrInterval > 0) ? String.valueOf(rrInterval) : getResources().getString(R.string.rRInterval);
+        String text = (rrInterval > 0) ? String.valueOf(rrInterval) : "RR";
         rrIntervalTextView.setText(text);
     }
     private void bindInstantHeartRate() {
@@ -113,7 +109,7 @@ public class HomeView extends ScrollView {
             Log.i(TAG, "Instant heart rate: " + model.getInstantHeartRate());
         }
 
-        String text = (instantHeartRate > 0) ? String.valueOf(instantHeartRate) : getResources().getString(R.string.instantHeartRate);
+        String text = (instantHeartRate > 0) ? String.valueOf(instantHeartRate) : "IHR";
         instantHeartRateTextView.setText(text);
     }
     private void bindInstantSpeed() {
@@ -123,7 +119,7 @@ public class HomeView extends ScrollView {
             Log.i(TAG, "Instant speed: " + model.getInstantSpeed());
         }
 
-        String text = (instantSpeed > 0) ? String.valueOf(instantSpeed) : getResources().getString(R.string.instantSpeed);
+        String text = (instantSpeed > 0) ? String.valueOf(instantSpeed) : "IS";
         instantSpeedTextView.setText(text);
     }
 

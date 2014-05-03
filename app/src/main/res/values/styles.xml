@@ -16,7 +16,7 @@
     <!-- Application theme -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:textColor">@color/grey</item>
+        <item name="android:textColor">@color/text_dark</item>
     </style>
     
     <style name="Divider">
@@ -35,13 +35,13 @@
     
     <style name="NavigationDrawerListView">
         <item name="android:listSelector">@drawable/list_selector</item>
-        <item name="android:background">@color/lightgrey</item>
+        <item name="android:background">@color/background_light</item>
         <item name="android:divider">@color/list_divider</item>
         <item name="android:dividerHeight">1dp</item>
     </style>
 
     <style name="DrawerOptionItemTextView">
-        <item name="android:textColor">@color/grey</item>
+        <item name="android:textColor">@color/text_dark</item>
         <item name="android:textSize">@dimen/drawer_text_size</item>
         <item name="android:paddingTop">@dimen/list_item_vertical_padding</item>
         <item name="android:paddingLeft">@dimen/list_item_horizontal_padding</item>
@@ -63,21 +63,26 @@
         <item name="android:paddingLeft">@dimen/list_item_horizontal_padding</item>
     </style>
     
-    <style name="HomeTextView">
+    <style name="HomeDataTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-        <item name="android:drawablePadding">@dimen/activity_horizontal_margin</item>
+        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:drawablePadding">@dimen/drawable_padding</item>
+    </style>
+
+    <style name="HomeDataDescTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/micro_text_size</item>
+        <item name="android:textColor">@color/white</item>
     </style>
     
     <style name="LargeButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
         <item name="android:background">@drawable/button_selector</item>
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:drawablePadding">@dimen/list_item_horizontal_padding</item>
+        <item name="android:textColor">@color/text_dark</item>
+        <item name="android:drawablePadding">@dimen/drawable_padding</item>
         <item name="android:paddingRight">24dp</item>
     </style>
 
