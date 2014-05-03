@@ -55,7 +55,10 @@ public class HomeView extends ScrollView {
         model = HomeModel.getInstance();
     }
 
-    public void updateConnectButton() {
+    /**
+     * Does the work to update the view when the model changes.
+     */
+    private void updateConnectButton() {
         switch (model.getConnectionState()) {
             case 0:
                 connectButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bluetooth, 0, 0, 0);
@@ -73,16 +76,9 @@ public class HomeView extends ScrollView {
     }
 
     /**
-     * Remove the listener from the model
-     */
-    public void destroy() {
-        //model.removeListener(HomeModel.ChangeEvent.ELAPSED_TIME_CHANGED, elapsedTimeListener);
-    }
-
-    /**
      * Does the work to update the view when the model changes.
      */
-    private void bindHeartRate() {
+    private void updateHeartRate() {
         int heartRate = model.getHeartRate();
 
         if (DEBUG) {
@@ -92,7 +88,7 @@ public class HomeView extends ScrollView {
         String text = (heartRate > 0) ? String.valueOf(heartRate) : "HR";
         heartRateTextView.setText(text);
     }
-    private void bindRrInterval() {
+    private void updateRrInterval() {
         int rrInterval = model.getRrInterval();
 
         if (DEBUG) {
@@ -102,7 +98,7 @@ public class HomeView extends ScrollView {
         String text = (rrInterval > 0) ? String.valueOf(rrInterval) : "RR";
         rrIntervalTextView.setText(text);
     }
-    private void bindInstantHeartRate() {
+    private void updateInstantHeartRate() {
         int instantHeartRate = model.getInstantHeartRate();
 
         if (DEBUG) {
@@ -112,7 +108,7 @@ public class HomeView extends ScrollView {
         String text = (instantHeartRate > 0) ? String.valueOf(instantHeartRate) : "IHR";
         instantHeartRateTextView.setText(text);
     }
-    private void bindInstantSpeed() {
+    private void updateInstantSpeed() {
         double instantSpeed = model.getInstantSpeed();
 
         if (DEBUG) {
@@ -185,42 +181,16 @@ public class HomeView extends ScrollView {
         model.addListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
         model.addListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
         updateConnectButton();
-        bindHeartRate();
-        bindRrInterval();
-        bindInstantHeartRate();
-        bindInstantSpeed();
+        updateHeartRate();
+        updateRrInterval();
+        updateInstantHeartRate();
+        updateInstantSpeed();
     }
 
-    private EventListener connectionStateListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-            updateConnectButton();
-        }
-    };
-    private EventListener heartRateListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-            bindHeartRate();
-        }
-    };
-    private EventListener rrIntervalListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-            bindRrInterval();
-        }
-    };
-    private EventListener instantHeartRateListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-            bindInstantHeartRate();
-        }
-    };
-    private EventListener instantSpeedListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-            bindInstantSpeed();
-        }
-    };
+    // TODO use this
+    private void showMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
 
     void handleHeartRateTextViewClick(TextView textView) {
         HintHelper.createAndPositionHint(getContext(), R.string.heartRate, textView).show();
@@ -236,6 +206,48 @@ public class HomeView extends ScrollView {
 
     void handleInstantSpeedTextViewClick(TextView textView) {
         HintHelper.createAndPositionHint(getContext(), R.string.instantSpeed, textView).show();
+    }
+
+    private EventListener connectionStateListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            updateConnectButton();
+        }
+    };
+    private EventListener heartRateListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            updateHeartRate();
+        }
+    };
+    private EventListener rrIntervalListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            updateRrInterval();
+        }
+    };
+    private EventListener instantHeartRateListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            updateInstantHeartRate();
+        }
+    };
+    private EventListener instantSpeedListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            updateInstantSpeed();
+        }
+    };
+
+    /**
+     * Remove the listener from the model
+     */
+    public void destroy() {
+        model.removeListener(HomeModel.ChangeEvent.CONNECTION_STATE_CHANGED, connectionStateListener);
+        model.removeListener(HomeModel.ChangeEvent.HEART_RATE_CHANGED, heartRateListener);
+        model.removeListener(HomeModel.ChangeEvent.RR_INTERVAL_CHANGED, rrIntervalListener);
+        model.removeListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
+        model.removeListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
     }
 
 }

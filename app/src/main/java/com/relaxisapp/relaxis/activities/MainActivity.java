@@ -1,12 +1,5 @@
 package com.relaxisapp.relaxis.activities;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
-import zephyr.android.HxMBT.BTClient;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -17,16 +10,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,27 +28,31 @@ import com.relaxisapp.relaxis.NavigationDrawerItem;
 import com.relaxisapp.relaxis.NavigationDrawerListAdapter;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.SectionsPagerAdapter;
+import com.relaxisapp.relaxis.models.BreathingModel;
 import com.relaxisapp.relaxis.models.HomeModel;
-import com.relaxisapp.relaxis.models.User;
 import com.relaxisapp.relaxis.utils.BtConnection;
 import com.relaxisapp.relaxis.utils.Const;
-import com.relaxisapp.relaxis.views.HomeView;
+
+import java.util.ArrayList;
+import java.util.Set;
+
+import zephyr.android.HxMBT.BTClient;
 
 public class MainActivity extends ActionBarActivity implements ListView.OnItemClickListener {
 
-    private HomeModel model;
-    private HomeView view;
+    private HomeModel homeModel;
+    private BreathingModel breathingModel;
 
 	private NavigationDrawerListAdapter navigationDrawerListAdapter;
     private SectionsPagerAdapter sectionsPagerAdapter;
 	static ViewPager viewPager;
-	private Button savedButton;
     private BluetoothConnectTask connectTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-        model = HomeModel.getInstance();
+        homeModel = HomeModel.getInstance();
+        breathingModel = BreathingModel.getInstance();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -181,19 +175,20 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 		}
 	}
 
+    // TODO remove all toasts from the activities and place them into the views
+
 	private void handleBluetoothConnectResult(int resultCode, Intent resultIntent) {
 		if (resultCode == RESULT_OK) {
 			Toast.makeText(this, "Bluetooth is now enabled", Toast.LENGTH_LONG).show();
 		} else {
 //			setPreviousOnButtonClickListener(savedButton);
 			Toast.makeText(this, "User cancelled the bluetooth enable intent", Toast.LENGTH_LONG).show();
-			model.setConnectionState(0);
-			savedButton = null;
+			homeModel.setConnectionState(0);
 		}
 	}
 
 	void executeConnect() {
-        model.setConnectionState(1);
+        homeModel.setConnectionState(1);
 
 		connectTask = new BluetoothConnectTask();
         connectTask.execute();
@@ -215,7 +210,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 			// do the work unless user cancel
 			while (!isCancelled()) {
                 // connection state - connecting
-                //model.setConnectionState(1);
+                //homeModel.setConnectionState(1);
 
 				// Getting the Bluetooth adapter
 				BtConnection.adapter = BluetoothAdapter.getDefaultAdapter();
@@ -242,8 +237,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 				if (pairedDevices.size() > 0) {
 					for (BluetoothDevice device : pairedDevices) {
 						if (device.getName().startsWith("HXM")) {
-							BluetoothDevice btDevice = device;
-							BtConnection.BhMacID = btDevice.getAddress();
+							BtConnection.BhMacID = device.getAddress();
 
 							BluetoothDevice Device = BtConnection.adapter
 									.getRemoteDevice(BtConnection.BhMacID);
@@ -283,17 +277,17 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 			
 			switch (result) {
 			case CODE_NO_BT:
-				model.setConnectionState(0);
+				homeModel.setConnectionState(0);
 				Toast.makeText(MainActivity.this, "Bluetooth is not supported",
 						Toast.LENGTH_LONG).show();
 				break;
 			case CODE_FAILURE:
-                model.setConnectionState(0);
+                homeModel.setConnectionState(0);
 				Toast.makeText(MainActivity.this, "Unable to connect",
 						Toast.LENGTH_LONG).show();
 				break;
 			case CODE_SUCCESS:
-                model.setConnectionState(2);
+                homeModel.setConnectionState(2);
 				Toast.makeText(MainActivity.this,
 						"Connected to HxM " + BtConnection.deviceName,
 						Toast.LENGTH_LONG).show();
@@ -312,13 +306,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 				}
 
-				// TODO check if the timer is cleared when the back button is
-				// pressed
-				// and then the activity is started again
-				BreathingFragment.graphUpdateTimerTask = new BreathingFragment.GraphUpdateTimerTask();
-				BreathingFragment.graphUpdateTimer.scheduleAtFixedRate(
-						BreathingFragment.graphUpdateTimerTask, 1000,
-						1000 / Const.TIMER_TICKS_PER_SECOND);
+                breathingModel.setGraphUpdateStartedState(true);
 
 				break;
 			}
@@ -326,7 +314,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 		protected void onCancelled() {
             // TODO check whether the connection has been established before the cancellation and terminate it if so
-            model.setConnectionState(0);
+            homeModel.setConnectionState(0);
 			Toast.makeText(MainActivity.this, "Connecting cancelled", Toast.LENGTH_LONG).show();
 		}
 
@@ -339,7 +327,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
     }
 
 	void executeDisconnect() {
-        model.setConnectionState(0);
+        homeModel.setConnectionState(0);
 
 		Toast.makeText(this, "Disconnected from HxM", Toast.LENGTH_LONG).show();
 
@@ -350,7 +338,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 		// failure
 		BtConnection._bt.Close();
 
-		BreathingFragment.graphUpdateTimerTask.cancel();
+        breathingModel.setGraphUpdateStartedState(false);
 	}
 
 	@Override
@@ -365,168 +353,147 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case Const.HEART_RATE:
-                int heartRate = Integer.parseInt(msg.getData().getString("HeartRate"));
-                if (heartRate > 0) {
-                    model.setHeartRate(heartRate);
+                if (msg.getData().getString("HeartRate") != null) {
+                    int heartRate = Integer.parseInt(msg.getData().getString("HeartRate"));
+                    if (heartRate > 0) {
+                        homeModel.setHeartRate(heartRate);
+                    }
                 }
 				break;
 
 			case Const.INSTANT_SPEED:
-                double instantSpeed = Double.parseDouble(msg.getData().getString("InstantSpeed"));
-                if (instantSpeed > 0) {
-                    model.setInstantSpeed(instantSpeed);
+                if (msg.getData().getString("InstantSpeed") != null) {
+                    double instantSpeed = Double.parseDouble(msg.getData().getString("InstantSpeed"));
+                    if (instantSpeed > 0) {
+                        homeModel.setInstantSpeed(instantSpeed);
+                    }
                 }
 				break;
 
 			case Const.RR_INTERVAL:
-                int rrInterval = Integer.parseInt(msg.getData().getString("RRInterval"));
-                if (rrInterval > 0) {
-                    model.setRrInterval(rrInterval);
+                if (msg.getData().getString("RRInterval") != null) {
+                    int rrInterval = Integer.parseInt(msg.getData().getString("RRInterval"));
+                    if (rrInterval > 0) {
+                        homeModel.setRrInterval(rrInterval);
+                    }
                 }
                 break;
 
 			case Const.INSTANT_HR:
-				String instantHRString = msg.getData().getString("InstantHR");
-				int instantHR = Integer.parseInt(instantHRString);
-                if (instantHR > 0) {
-                    model.setInstantHeartRate(instantHR);
+                if (msg.getData().getString("InstantHR") != null) {
+                    String instantHRString = msg.getData().getString("InstantHR");
+                    int instantHR = Integer.parseInt(instantHRString);
+                    if (instantHR > 0) {
+                        homeModel.setInstantHeartRate(instantHR);
+                    }
+
+                    updateBreathingGraph(instantHR);
                 }
-
-				// update HomeFragment
-//				HomeFragment.instantHeartRateTextView.setText(instantHRString);
-
-				// update BreathingFragment
-				BtConnection.instantHRSeries.appendData(new GraphViewData(
-						BreathingFragment.beatsCount, instantHR), false,
-						Const.VIEWPORT_WIDTH + 1);
-				BreathingFragment.beatsCount++;
-
-				BtConnection.recentInstantHR[BreathingFragment.beatsCount
-						% Const.SAVED_HR_COUNT] = instantHR;
-
-				int tAvgMaxHR = 0,
-				tAvgMinHR = 0,
-				tAvgMaxCount = 0,
-				tAvgMinCount = 0;
-				int iHR,
-				iHRPlus1,
-				iHRPlus2,
-				iHRMinus1,
-				iHRMinus2;
-
-				for (int i = 0; i < BtConnection.recentInstantHR.length; i++) {
-					iHR = BtConnection.recentInstantHR[i];
-					iHRPlus1 = BtConnection.recentInstantHR[(i + 1)
-							% Const.SAVED_HR_COUNT];
-					iHRPlus2 = BtConnection.recentInstantHR[(i + 2)
-							% Const.SAVED_HR_COUNT];
-					iHRMinus1 = BtConnection.recentInstantHR[(Const.SAVED_HR_COUNT
-							+ i - 1)
-							% Const.SAVED_HR_COUNT];
-					iHRMinus2 = BtConnection.recentInstantHR[(Const.SAVED_HR_COUNT
-							+ i - 2)
-							% Const.SAVED_HR_COUNT];
-					if (i < ((BreathingFragment.beatsCount - 1)
-							% Const.SAVED_HR_COUNT + Const.SAVED_HR_COUNT - 2)
-							% Const.SAVED_HR_COUNT
-							|| i > ((BreathingFragment.beatsCount - 1)
-									% Const.SAVED_HR_COUNT + 2)
-									% Const.SAVED_HR_COUNT) {
-						if (iHRPlus1 > 0 && iHRMinus1 > 0 && iHRPlus2 > 0
-								&& iHRMinus2 > 0 && iHR >= iHRPlus1
-								&& iHR >= iHRPlus2 && iHR >= iHRMinus1
-								&& iHR >= iHRMinus2) {
-							tAvgMaxHR += iHR;
-							tAvgMaxCount++;
-						}
-						if (iHRPlus1 > 0 && iHRMinus1 > 0 && iHRPlus2 > 0
-								&& iHRMinus2 > 0 && iHR <= iHRPlus1
-								&& iHR <= iHRPlus2 && iHR <= iHRMinus1
-								&& iHR <= iHRMinus2) {
-							tAvgMinHR += iHR;
-							tAvgMinCount++;
-						}
-					}
-				}
-				if (tAvgMaxCount > 0) { // => tAvgMaxHR > 0
-					tAvgMaxHR /= tAvgMaxCount;
-				}
-				if (tAvgMinCount > 0) { // => tAvgMinHR > 0
-					tAvgMinHR /= tAvgMinCount;
-				}
-
-				if (tAvgMaxCount > 0 && tAvgMinCount > 0) {
-					if ((tAvgMaxHR - tAvgMinHR) / 2 > Const.IDEAL_HR_DEVIATION) {
-						BreathingFragment.newMaxHR = tAvgMaxHR;
-						BreathingFragment.newMinHR = tAvgMinHR;
-					} else {
-						if (tAvgMaxHR > BreathingFragment.newMaxHR) {
-							BreathingFragment.newMaxHR = tAvgMaxHR;
-						}
-						if (tAvgMinHR < BreathingFragment.newMinHR) {
-							BreathingFragment.newMinHR = tAvgMinHR;
-						}
-					}
-				}
-
-				if (BreathingFragment.updateScore) {
-					if (Math.abs(BreathingFragment.tIdealHR - instantHR) <= Const.POINT_BARRIER) {
-						BreathingFragment.consecutivePoints++;
-						if (BreathingFragment.consecutivePoints >= 5 * BreathingFragment.multiplier) {
-							BreathingFragment.multiplier++;
-						}
-						BreathingFragment.score += BreathingFragment.multiplier;
-					} else {
-						BreathingFragment.consecutivePoints = 0;
-						BreathingFragment.multiplier = 1;
-					}
-
-					BreathingFragment.scoreTextView.setText(String
-							.valueOf(BreathingFragment.score));
-				}
 
 				break;
 
 			case Const.PNN50:
-				if (StressEstimationFragment.timeLeft > 0 && StressEstimationFragment.updateScore) {
-					String pNN50 = msg.getData().getString("pNN50");
+                if (msg.getData().getString("pNN50") != null) {
+                    if (StressEstimationFragment.timeLeft > 0 && StressEstimationFragment.updateScore) {
+                        String pNN50 = msg.getData().getString("pNN50");
 
-					if (pNN50 != null) {
-						StressEstimationFragment.stressLevel = Double.parseDouble(pNN50);
-					}
-				}
+                        if (pNN50 != null) {
+                            StressEstimationFragment.stressLevel = Double.parseDouble(pNN50);
+                        }
+                    }
+                }
 				break;
 			}
 		}
 
 	};
-	
-	public void getUser(View view) {
-		new HttpRequestTask().execute();
-	}
 
-	private class HttpRequestTask extends AsyncTask<Void, Void, User> {
-		@Override
-		protected User doInBackground(Void... params) {
-			try {
-				final String url = "http://relaxisapp.com/api/users/1";
-				RestTemplate restTemplate = new RestTemplate();
-				restTemplate.getMessageConverters().add(
-						new MappingJackson2HttpMessageConverter());
-				User user = restTemplate.getForObject(url, User.class);
-				return user;
-			} catch (Exception e) {
-				Log.e("MainActivity", e.getMessage(), e);
-			}
+    private void updateBreathingGraph(int instantHR) {
+        // update BreathingFragment
+        breathingModel.addHrGraphData(new GraphViewData(
+                        BreathingFragment.beatsCount, instantHR));
+        BreathingFragment.beatsCount++;
 
-			return null;
-		}
+        BtConnection.recentInstantHR[BreathingFragment.beatsCount
+                % Const.SAVED_HR_COUNT] = instantHR;
 
-		@Override
-		protected void onPostExecute(User user) {
-			System.out.println("spring " + user.getUserId() + " "
-					+ user.getFbUserId());
-		}
+        int tAvgMaxHR = 0,
+                tAvgMinHR = 0,
+                tAvgMaxCount = 0,
+                tAvgMinCount = 0;
+        int iHR,
+                iHRPlus1,
+                iHRPlus2,
+                iHRMinus1,
+                iHRMinus2;
 
-	}
+        for (int i = 0; i < BtConnection.recentInstantHR.length; i++) {
+            iHR = BtConnection.recentInstantHR[i];
+            iHRPlus1 = BtConnection.recentInstantHR[(i + 1)
+                    % Const.SAVED_HR_COUNT];
+            iHRPlus2 = BtConnection.recentInstantHR[(i + 2)
+                    % Const.SAVED_HR_COUNT];
+            iHRMinus1 = BtConnection.recentInstantHR[(Const.SAVED_HR_COUNT
+                    + i - 1)
+                    % Const.SAVED_HR_COUNT];
+            iHRMinus2 = BtConnection.recentInstantHR[(Const.SAVED_HR_COUNT
+                    + i - 2)
+                    % Const.SAVED_HR_COUNT];
+            if (i < ((BreathingFragment.beatsCount - 1)
+                    % Const.SAVED_HR_COUNT + Const.SAVED_HR_COUNT - 2)
+                    % Const.SAVED_HR_COUNT
+                    || i > ((BreathingFragment.beatsCount - 1)
+                    % Const.SAVED_HR_COUNT + 2)
+                    % Const.SAVED_HR_COUNT) {
+                if (iHRPlus1 > 0 && iHRMinus1 > 0 && iHRPlus2 > 0
+                        && iHRMinus2 > 0 && iHR >= iHRPlus1
+                        && iHR >= iHRPlus2 && iHR >= iHRMinus1
+                        && iHR >= iHRMinus2) {
+                    tAvgMaxHR += iHR;
+                    tAvgMaxCount++;
+                }
+                if (iHRPlus1 > 0 && iHRMinus1 > 0 && iHRPlus2 > 0
+                        && iHRMinus2 > 0 && iHR <= iHRPlus1
+                        && iHR <= iHRPlus2 && iHR <= iHRMinus1
+                        && iHR <= iHRMinus2) {
+                    tAvgMinHR += iHR;
+                    tAvgMinCount++;
+                }
+            }
+        }
+        if (tAvgMaxCount > 0) { // => tAvgMaxHR > 0
+            tAvgMaxHR /= tAvgMaxCount;
+        }
+        if (tAvgMinCount > 0) { // => tAvgMinHR > 0
+            tAvgMinHR /= tAvgMinCount;
+        }
+
+        if (tAvgMaxCount > 0 && tAvgMinCount > 0) {
+            if ((tAvgMaxHR - tAvgMinHR) / 2 > Const.IDEAL_HR_DEVIATION) {
+                BreathingFragment.newMaxHR = tAvgMaxHR;
+                BreathingFragment.newMinHR = tAvgMinHR;
+            } else {
+                if (tAvgMaxHR > BreathingFragment.newMaxHR) {
+                    BreathingFragment.newMaxHR = tAvgMaxHR;
+                }
+                if (tAvgMinHR < BreathingFragment.newMinHR) {
+                    BreathingFragment.newMinHR = tAvgMinHR;
+                }
+            }
+        }
+
+        if (BreathingFragment.updateScore) {
+            if (Math.abs(BreathingFragment.tIdealHR - instantHR) <= Const.POINT_BARRIER) {
+                BreathingFragment.consecutivePoints++;
+                if (BreathingFragment.consecutivePoints >= 5 * BreathingFragment.multiplier) {
+                    BreathingFragment.multiplier++;
+                }
+                breathingModel.setScore(breathingModel.getScore() + BreathingFragment.multiplier);
+            } else {
+                BreathingFragment.consecutivePoints = 0;
+                BreathingFragment.multiplier = 1;
+            }
+
+        }
+    }
 }

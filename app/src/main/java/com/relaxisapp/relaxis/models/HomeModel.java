@@ -20,7 +20,16 @@ public class HomeModel extends EventDispatcher {
         }
     }
 
+    private HomeModel() {
+        super();
+    }
+
     private static HomeModel instance;
+
+    public static HomeModel getInstance() {
+        if (instance == null) instance = new HomeModel();
+        return instance;
+    }
 
     private int connectionState = 0;
     public int getConnectionState() {
@@ -65,15 +74,6 @@ public class HomeModel extends EventDispatcher {
     public void setInstantSpeed(double instantSpeed) {
         this.instantSpeed = instantSpeed;
         notifyChange(ChangeEvent.INSTANT_SPEED_CHANGED);
-    }
-
-    private HomeModel() {
-        super();
-    }
-
-    public static HomeModel getInstance() {
-        if (instance == null) instance = new HomeModel();
-        return instance;
     }
 
     private void notifyChange(String type) {

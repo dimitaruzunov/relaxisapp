@@ -42,8 +42,14 @@ public class ApiConnection {
 				RestTemplate restTemplate = new RestTemplate();
 				restTemplate.getMessageConverters().add(
 						new MappingJackson2HttpMessageConverter());
-				User user = restTemplate.exchange(url, HttpMethod.GET, httpEntity, User.class).getBody();
-				return user;
+                User user = new User();
+                try {
+                    user = restTemplate.exchange(url, HttpMethod.GET, httpEntity, User.class).getBody();
+                }
+                catch (Exception e) {
+                    Log.e("API connection", e.getMessage());
+                }
+                return user;
 			} catch (HttpClientErrorException e) {
 				if (e.getStatusCode().value() == 404) {
 					new CreateUserTask().execute();
@@ -113,9 +119,10 @@ public class ApiConnection {
 				requestHeaders.add("Host", "relaxisapp.com");
 				
 				Calendar cal = Calendar.getInstance();
-				
+
+                // TODO fix score
 				BreathingScore body = new BreathingScore(ApiConnection.UserId, 
-						BreathingFragment.score,
+						10,
 						SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));
 				HttpEntity<BreathingScore> httpEntity = new HttpEntity<BreathingScore>(body, requestHeaders);
 				RestTemplate restTemplate = new RestTemplate();

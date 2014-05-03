@@ -21,10 +21,10 @@ public class BtConnection {
     public static String BhMacID;
     public static String deviceName;
 
-    public static int [] recentInstantHR;
+    public static int [] recentInstantHR = {};
 
-    public static int [] recentNn50;
-    public static int nnCount;
+    public static int [] recentNn50 = {};
+    public static int nnCount = 0;
 
     public static double SDSum = 0;
     public static double SDCount = 0;

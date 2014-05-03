@@ -9,21 +9,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.CustomLabelFormatter;
-import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
-import com.jjoe64.graphview.LineGraphView;
 import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.SectionsPagerAdapter;
+import com.relaxisapp.relaxis.events.Event;
+import com.relaxisapp.relaxis.events.EventListener;
+import com.relaxisapp.relaxis.models.BreathingModel;
+import com.relaxisapp.relaxis.models.HomeModel;
 import com.relaxisapp.relaxis.utils.BtConnection;
 import com.relaxisapp.relaxis.utils.Const;
+import com.relaxisapp.relaxis.views.BreathingView;
 
 public class BreathingFragment extends Fragment {
 
@@ -31,12 +29,12 @@ public class BreathingFragment extends Fragment {
 
 	public final static String SECTION_TITLE = "section title";
 
-	static Timer graphUpdateTimer = new Timer();
-	static Timer timeUpdateTimer = new Timer();
-	static GraphUpdateTimerTask graphUpdateTimerTask;
-	static TimeUpdateTimerTask timeUpdateTimerTask;
+	private Timer graphUpdateTimer = new Timer();
+    private Timer timeUpdateTimer = new Timer();
+    private static GraphUpdateTimerTask graphUpdateTimerTask;
+    private static TimeLeftUpdateTimerTask timeLeftUpdateTimerTask;
 
-	static Handler idealHRUpdateHandler = new Handler();
+	Handler handler = new Handler();
 
 	static int idealMinHR = Const.IDEAL_MID_HR - Const.IDEAL_HR_DEVIATION;
 	static int idealMaxHR = Const.IDEAL_MID_HR + Const.IDEAL_HR_DEVIATION;
@@ -50,173 +48,117 @@ public class BreathingFragment extends Fragment {
 	static double tIdealHR;
 
 	static Boolean updateScore = false;
-	public static int score = 0;
 	static int consecutivePoints = 0;
 	static int multiplier = 1;
 
-	static int beatsCount = 0;
+	public static int beatsCount = 0;
 	static int timerCounter = 0;
-	static int timeLeft = 0;
 
-	RelativeLayout layout;
-
-	static GraphView graphView;
-
-	static TextView timeLeftTextView;
-	static TextView scoreTextView;
-
-	private boolean isStopped = true;
-	private static Button startBreathingButton;
-	private TextView scoreDescTextView;
+    private HomeModel homeModel;
+    private BreathingModel breathingModel;
+    private BreathingView view;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_breathing, container, false);
 
-		setupViews(view);
+        homeModel = HomeModel.getInstance();
+        breathingModel = BreathingModel.getInstance();
+        view = (BreathingView) inflater.inflate(R.layout.fragment_breathing, container, false);
+        view.setViewListener(viewListener);
+
+        breathingModel.addListener(BreathingModel.ChangeEvent.GRAPH_UPDATE_STARTED_STATE_CHANGED, graphUpdateStartListener);
 
 		return view;
 	}
 
-	private void setupViews(View view) {
-		layout = (RelativeLayout) view.findViewById(R.id.breathingFragmentLinearLayout);
-		
-		timeLeftTextView = (TextView) view.findViewById(R.id.breathingTimeLeftTextView);
-		timeLeftTextView.setText(String.valueOf(Const.TIME_BREATHING_SECONDS));
-		
-		scoreDescTextView = (TextView) view.findViewById(R.id.scoreDescTextView);
+    private EventListener graphUpdateStartListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            if (breathingModel.getGraphUpdateStartedState()) {
+                startInstantHRGraphTimer();
+            }
+            else {
+                stopInstantHRGraphTimer();
+            }
+        }
+    };
 
-		scoreTextView = (TextView) view.findViewById(R.id.scoreTextView);
+    private BreathingView.ViewListener viewListener = new BreathingView.ViewListener() {
+        @Override
+        public void onStartButtonClick() {
+            if (breathingModel.getStartedState()) {
+                stop();
+            } else {
+                start();
+            }
+        }
+    };
 
-		startBreathingButton = (Button) view.findViewById(R.id.startBreathingButton);
-		startBreathingButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				handleStartBreathingButtonClick((Button) view);
-			}
-		});
+    // TODO rename
+    private void startInstantHRGraphTimer() {
+        // TODO check if the timer is cleared when the back button is
+        // pressed
+        // and then the activity is started again
+        graphUpdateTimerTask =
+                new GraphUpdateTimerTask();
+        graphUpdateTimer.scheduleAtFixedRate(
+                graphUpdateTimerTask, 1000,
+                1000 / Const.TIMER_TICKS_PER_SECOND);
+    }
 
-		graphView = new LineGraphView(getActivity(), "Breathing");
-		graphView.setScrollable(true);
-		graphView.setScalable(true);
-		graphView.setDisableTouch(true);
-		graphView.setViewPort(0, Const.VIEWPORT_WIDTH);
-		graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
-			@Override
-			public String formatLabel(double value, boolean isValueX) {
-				if (isValueX) {
-					return "";
-				} else {
-					return "";
-				}
-			}
-		});
-		graphView.getGraphViewStyle().setNumHorizontalLabels(1);
-		graphView.getGraphViewStyle().setNumVerticalLabels(5);
-		graphView.getGraphViewStyle().setVerticalLabelsWidth(1);
-		graphView.getGraphViewStyle().setGridColor(getResources().getColor(R.color.grey));
-		graphView.getGraphViewStyle().setHorizontalLabelsColor(getResources().getColor(R.color.grey));
-		graphView.getGraphViewStyle().setTextSize(25);
-		BtConnection.idealBreathingCycle.resetData(new GraphViewData[] {});
-		BtConnection.instantHRSeries.resetData(new GraphViewData[] {});
-		BtConnection.dummySeries.resetData(new GraphViewData[] {});
-		graphView.addSeries(BtConnection.idealBreathingCycle);
-		graphView.addSeries(BtConnection.instantHRSeries);
-		graphView.addSeries(BtConnection.dummySeries);
-		// TODO show legend and customize it
-		
-		layout.addView(graphView, setupLayoutParams());
-	}
-	
-	private LayoutParams setupLayoutParams() {
-		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, 500);
-		layoutParams.addRule(RelativeLayout.BELOW, R.id.breathingDivider2);
-		
-		return layoutParams;
-	}
+    private void stopInstantHRGraphTimer() {
+        graphUpdateTimerTask.cancel();
+    }
 
-	private void handleStartBreathingButtonClick(Button button) {
-		if (isStopped) {
-			start(button);
-		} else {
-			stop(button);
-		}
-	}
-
-	private void start(Button button) {
-		if (HomeFragment.connectionState != 2) {
+	private void start() {
+		if (homeModel.getConnectionState() != 2) {
 			MainActivity.viewPager
 					.setCurrentItem(SectionsPagerAdapter.HOME_FRAGMENT);
 			Toast.makeText(getActivity(), "Please connect to HxM",
 					Toast.LENGTH_SHORT).show();
 		} else {
-			resetScoreAndTime();
 			timeUpdateTimer = new Timer();
-			timeUpdateTimerTask = new TimeUpdateTimerTask();
+			timeLeftUpdateTimerTask = new TimeLeftUpdateTimerTask();
 			timeUpdateTimer.scheduleAtFixedRate(
-					timeUpdateTimerTask, 0,
+                    timeLeftUpdateTimerTask, 1000,
 					1000);
 			updateScore = true;
-			isStopped = false;
-			changeButtonIconStop(button);
-			showScore();
+			breathingModel.setStartedState(true);
 		}
 	}
 
-	private void stop(Button button) {
+	private void stop() {
 		updateScore = false;
-		isStopped = true;
-		hideScore();
-		changeButtonIconStart(button);
-		timeUpdateTimerTask.cancel();
+		breathingModel.setStartedState(false);
+		timeLeftUpdateTimerTask.cancel();
 		timeUpdateTimer.cancel();
+        resetScoreAndTime();
 	}
 
 	private void resetScoreAndTime() {
-		score = 0;
-		timeLeft = Const.TIME_BREATHING_SECONDS;
+        // TODO reset multiplier
+		breathingModel.setScore(0);
+		breathingModel.setTimeLeft(Const.TIME_BREATHING_SECONDS);
 	}
 
-	private void showScore() {
-		scoreDescTextView.setVisibility(View.VISIBLE);
-		scoreTextView.setVisibility(View.VISIBLE);
-	}
-
-	private void hideScore() {
-		scoreDescTextView.setVisibility(View.INVISIBLE);
-		scoreTextView.setVisibility(View.INVISIBLE);
-	}
-
-	private void changeButtonIconStart(Button button) {
-		button.setCompoundDrawablesWithIntrinsicBounds(
-				R.drawable.ic_action_play, 0, 0, 0);
-		button.setText(R.string.start);
-	}
-
-	private void changeButtonIconStop(Button button) {
-		button.setCompoundDrawablesWithIntrinsicBounds(
-				R.drawable.ic_action_stop, 0, 0, 0);
-		button.setText(R.string.stop);
-	}
-
-	static class GraphUpdateTimerTask extends TimerTask {
+	public class GraphUpdateTimerTask extends TimerTask {
 
 		@Override
 		public void run() {
-			idealHRUpdateHandler.post(new Runnable() {
+			handler.post(new Runnable() {
 
-				@Override
-				public void run() {
-					updateIdealHR();
-					updateIdealHRGraph(tIdealHR);
-				}
-			});
+                @Override
+                public void run() {
+                    updateIdealHR();
+                    updateDummyGraph();
+                }
+            });
 			timerCounter++;
 		}
 
 	}
 
-	private static void updateIdealHR() {
+	private void updateIdealHR() {
 		if (Math.sin(timerCounter * Math.PI
 				/ (6 * Const.TIMER_TICKS_PER_SECOND)) == 1) {
 			avgMinHR = newMinHR;
@@ -229,14 +171,13 @@ public class BreathingFragment extends Fragment {
 		tIdealHR = tAvgHR
 				+ Math.sin(timerCounter * Math.PI
 						/ (6 * Const.TIMER_TICKS_PER_SECOND)) * tDeviation;
-	}
 
-	private static void updateIdealHRGraph(final double currentIdealHR) {
-		BtConnection.idealBreathingCycle.appendData(new GraphViewData(
-				timerCounter * 1.0 / Const.TIMER_TICKS_PER_SECOND,
-				currentIdealHR), false, Const.VIEWPORT_WIDTH
-				* Const.TIMER_TICKS_PER_SECOND);
+        breathingModel.addIdealGraphData(new GraphViewData(
+                timerCounter * 1.0 / Const.TIMER_TICKS_PER_SECOND,
+                tIdealHR));
+    }
 
+	private void updateDummyGraph() {
 		// keep the viewport 2 seconds forward and zoom it to the min/max ideal
 		// HR
 		BtConnection.dummySeries.appendData(new GraphViewData(
@@ -244,32 +185,36 @@ public class BreathingFragment extends Fragment {
 				(timerCounter % 2 == 0) ? idealMinHR : idealMaxHR), true, 2);
 	}
 
-	class TimeUpdateTimerTask extends TimerTask {
+	class TimeLeftUpdateTimerTask extends TimerTask {
 
 		@Override
 		public void run() {
-			idealHRUpdateHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					updateTimeLeft();
-				}
-			});
+			handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    updateTimeLeft();
+                }
+            });
 		}
 
 	}
 
 	private void updateTimeLeft() {
-		timeLeftTextView.setText(String.valueOf(timeLeft));
-		if (timeLeft <= 0) {
+		if (breathingModel.getTimeLeft() <= 0) {
 			if (ApiConnection.UserId > 0) {
 				new ApiConnection.AddBreathingScoreTask().execute();
 				Toast.makeText(getActivity(), "Breathing score saved: " +
-						BreathingFragment.score, Toast.LENGTH_SHORT).show();
+						breathingModel.getScore(), Toast.LENGTH_SHORT).show();
 			}
 			// startBreathingButton.callOnClick(); TODO find alternative method
 			return;
 		}
-		timeLeft--;
+        breathingModel.setTimeLeft(breathingModel.getTimeLeft() - 1);
 	}
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        view.destroy();
+    }
 }

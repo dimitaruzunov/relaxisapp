@@ -62,4 +62,9 @@ public class HomeFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        view.destroy();
+    }
 }
