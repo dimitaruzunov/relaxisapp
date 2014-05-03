@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.widgets;
 
 public class NavigationDrawerItem {
 

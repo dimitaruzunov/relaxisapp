@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.widgets;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 
+import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.activities.BreathingFragment;
 import com.relaxisapp.relaxis.activities.HomeFragment;
 import com.relaxisapp.relaxis.activities.LoginFragment;

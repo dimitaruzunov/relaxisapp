@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.R;
-import com.relaxisapp.relaxis.SectionsPagerAdapter;
+import com.relaxisapp.relaxis.widgets.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
 import com.relaxisapp.relaxis.models.BreathingModel;

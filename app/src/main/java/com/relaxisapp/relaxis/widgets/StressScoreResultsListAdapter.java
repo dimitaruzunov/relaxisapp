@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.widgets;
 
 import java.util.ArrayList;
 
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.models.StressScore;
 
 public class StressScoreResultsListAdapter extends BaseAdapter {

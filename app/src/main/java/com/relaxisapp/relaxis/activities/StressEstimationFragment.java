@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.R;
-import com.relaxisapp.relaxis.SectionsPagerAdapter;
+import com.relaxisapp.relaxis.widgets.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.utils.BtConnection;
 import com.relaxisapp.relaxis.utils.Const;
 

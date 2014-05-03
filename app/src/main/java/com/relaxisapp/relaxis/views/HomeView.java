@@ -9,7 +9,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.relaxisapp.relaxis.HintHelper;
+import com.relaxisapp.relaxis.widgets.HintHelper;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
@@ -185,11 +185,6 @@ public class HomeView extends ScrollView {
         updateRrInterval();
         updateInstantHeartRate();
         updateInstantSpeed();
-    }
-
-    // TODO use this
-    private void showMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     void handleHeartRateTextViewClick(TextView textView) {

@@ -19,9 +19,9 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.relaxisapp.relaxis.ApiConnection;
-import com.relaxisapp.relaxis.BreathingScoreResultsListAdapter;
+import com.relaxisapp.relaxis.widgets.BreathingScoreResultsListAdapter;
 import com.relaxisapp.relaxis.R;
-import com.relaxisapp.relaxis.StressScoreResultsListAdapter;
+import com.relaxisapp.relaxis.widgets.StressScoreResultsListAdapter;
 
 public class LoginFragment extends Fragment {
 

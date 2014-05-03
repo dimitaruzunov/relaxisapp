@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.widgets;
 
 import java.util.ArrayList;
 
@@ -17,6 +17,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.relaxisapp.relaxis.R;
 
 public class NavigationDrawerListAdapter extends BaseAdapter {
 
