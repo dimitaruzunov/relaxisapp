@@ -14,10 +14,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.daos.StressScoresDao;
 import com.relaxisapp.relaxis.models.StressScore;
+import com.relaxisapp.relaxis.models.UserModel;
 import com.relaxisapp.relaxis.widgets.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.utils.BtConnection;
 import com.relaxisapp.relaxis.utils.Const;
@@ -43,10 +43,15 @@ public class StressEstimationFragment extends Fragment {
 	private boolean isStopped = true;
 
     private StressScoresDao stressScoresDao;
+
+    private UserModel userModel;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         stressScoresDao = new StressScoresDao();
+
+        userModel = UserModel.getInstance();
 
 		View view = inflater.inflate(R.layout.fragment_stress_estimation, container, false);
 		
@@ -154,7 +159,7 @@ public class StressEstimationFragment extends Fragment {
 		timeLeftTextView.setText(String.valueOf(timeLeft));
 		if (timeLeft == 0)
 		{
-			if (ApiConnection.UserId > 0) {
+			if (userModel.getUserId() > 0) {
                 MainActivity.dalHandler.post(new Runnable() {
                     @Override
                     public void run() {

@@ -1,9 +1,7 @@
 package com.relaxisapp.relaxis.daos;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.models.User;
 
 import org.springframework.http.HttpEntity;

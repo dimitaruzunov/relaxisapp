@@ -8,11 +8,8 @@ public interface IScoresDao <T> {
     // HTTP POST
     boolean create(T score);
 
-    // HTTP GET - get all
-    T[] read();
-
-    // HTTP GET
-    T read(int id);
+    // HTTP GET - get all for the user
+    T[] read(int userId);
 
     // HTTP PUT
     void update(T score);

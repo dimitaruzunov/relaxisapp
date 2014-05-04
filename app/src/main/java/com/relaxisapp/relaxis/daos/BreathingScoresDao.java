@@ -2,7 +2,6 @@ package com.relaxisapp.relaxis.daos;
 
 import android.util.Log;
 
-import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.models.BreathingScore;
 
 import org.springframework.http.HttpEntity;
@@ -29,7 +28,7 @@ public class BreathingScoresDao implements IScoresDao<BreathingScore> {
         Calendar cal = Calendar.getInstance();
 
         // TODO fix score
-        BreathingScore body = new BreathingScore(ApiConnection.UserId,
+        BreathingScore body = new BreathingScore(score.getUserId(),
                 score.getScore(),
                 SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));
         HttpEntity<BreathingScore> httpEntity = new HttpEntity<BreathingScore>(body, requestHeaders);
@@ -48,9 +47,9 @@ public class BreathingScoresDao implements IScoresDao<BreathingScore> {
     }
 
     @Override
-    public BreathingScore[] read() {
+    public BreathingScore[] read(int userId) {
 
-        final String url = "http://relaxisapp.com/api/users/"+ ApiConnection.UserId +"/breathingscores";
+        final String url = "http://relaxisapp.com/api/users/"+ userId +"/breathingscores";
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("Authorization-Token", "$kG7j2lr&");
         requestHeaders.add("Content-Type", "application/json");
@@ -68,17 +67,7 @@ public class BreathingScoresDao implements IScoresDao<BreathingScore> {
             return null;
         }
 
-        ApiConnection.currentUserBreathingScores = new ArrayList<BreathingScore>();
-        for (int i = 0; i < scores.length; i++) {
-            ApiConnection.currentUserBreathingScores.add(scores[i]);
-        }
-
         return scores;
-    }
-
-    @Override
-    public BreathingScore read(int id) {
-        return null;
     }
 
     @Override

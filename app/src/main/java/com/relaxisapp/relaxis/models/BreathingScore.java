@@ -10,14 +10,15 @@ public class BreathingScore {
 		
 	}
 
+    public BreathingScore(int userId, double score) {
+        this.userId = userId;
+        this.score = score;
+    }
+
     public BreathingScore(int userId, double score, String timestamp) {
         this.userId = userId;
         this.score = score;
         this.timestamp = timestamp;
-    }
-
-    public BreathingScore(double score) {
-        this.score = score;
     }
 	
 	private int userId;

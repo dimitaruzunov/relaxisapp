@@ -2,8 +2,6 @@ package com.relaxisapp.relaxis.daos;
 
 import android.util.Log;
 
-import com.relaxisapp.relaxis.ApiConnection;
-import com.relaxisapp.relaxis.models.BreathingScore;
 import com.relaxisapp.relaxis.models.StressScore;
 
 import org.springframework.http.HttpEntity;
@@ -29,7 +27,7 @@ public class StressScoresDao implements IScoresDao<StressScore> {
 
         Calendar cal = Calendar.getInstance();
 
-        StressScore body = new StressScore(ApiConnection.UserId,
+        StressScore body = new StressScore(score.getUserId(),
                 score.getScore(),
                 SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));
         HttpEntity<StressScore> httpEntity = new HttpEntity<StressScore>(body, requestHeaders);
@@ -48,8 +46,8 @@ public class StressScoresDao implements IScoresDao<StressScore> {
     }
 
     @Override
-    public StressScore[] read() {
-        final String url = "http://relaxisapp.com/api/users/"+ ApiConnection.UserId +"/stressscores";
+    public StressScore[] read(int userId) {
+        final String url = "http://relaxisapp.com/api/users/"+ userId +"/stressscores";
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("Authorization-Token", "$kG7j2lr&");
         requestHeaders.add("Content-Type", "application/json");
@@ -66,18 +64,7 @@ public class StressScoresDao implements IScoresDao<StressScore> {
             return null;
         }
 
-        ApiConnection.currentUserStressScores = new ArrayList<StressScore>();
-        for (int i = 0; i < scores.length; i++) {
-            ApiConnection.currentUserStressScores.add(scores[i]);
-        }
-
-
         return scores;
-    }
-
-    @Override
-    public StressScore read(int id) {
-        return null;
     }
 
     @Override

@@ -13,10 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
-import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.daos.BreathingScoresDao;
 import com.relaxisapp.relaxis.models.BreathingScore;
+import com.relaxisapp.relaxis.models.UserModel;
 import com.relaxisapp.relaxis.widgets.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
@@ -59,6 +59,7 @@ public class BreathingFragment extends Fragment {
 
     private HomeModel homeModel;
     private BreathingModel breathingModel;
+    private UserModel userModel;
     private BreathingView view;
 
     private BreathingScoresDao breathingScoresDao;
@@ -70,6 +71,7 @@ public class BreathingFragment extends Fragment {
 
         homeModel = HomeModel.getInstance();
         breathingModel = BreathingModel.getInstance();
+        userModel = UserModel.getInstance();
         view = (BreathingView) inflater.inflate(R.layout.fragment_breathing, container, false);
         view.setViewListener(viewListener);
 
@@ -209,11 +211,11 @@ public class BreathingFragment extends Fragment {
 
 	private void updateTimeLeft() {
 		if (breathingModel.getTimeLeft() <= 0) {
-			if (ApiConnection.UserId > 0) {
+			if (userModel.getUserId() > 0) {
                 MainActivity.dalHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        breathingScoresDao.create(new BreathingScore(breathingModel.getScore()));
+                        breathingScoresDao.create(new BreathingScore(userModel.getUserId() ,breathingModel.getScore()));
                     }
                 });
 

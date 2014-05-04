@@ -20,13 +20,13 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
-import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.daos.BreathingScoresDao;
 import com.relaxisapp.relaxis.daos.StressScoresDao;
 import com.relaxisapp.relaxis.daos.UsersDao;
 import com.relaxisapp.relaxis.models.BreathingScore;
 import com.relaxisapp.relaxis.models.StressScore;
 import com.relaxisapp.relaxis.models.User;
+import com.relaxisapp.relaxis.models.UserModel;
 import com.relaxisapp.relaxis.widgets.BreathingScoreResultsListAdapter;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.widgets.StressScoreResultsListAdapter;
@@ -60,6 +60,8 @@ public class LoginFragment extends Fragment {
     private BreathingScoresDao breathingScoresDao;
     private StressScoresDao stressScoresDao;
 
+    private UserModel userModel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,8 @@ public class LoginFragment extends Fragment {
         usersDao = new UsersDao();
         breathingScoresDao = new BreathingScoresDao();
         stressScoresDao = new StressScoresDao();
+
+        userModel = UserModel.getInstance();
     }
 
     @Override
@@ -79,20 +83,20 @@ public class LoginFragment extends Fragment {
 
         setupViews(view);
 
-        Log.d("API", String.valueOf(ApiConnection.currentUserBreathingScores));
+        Log.d("API", String.valueOf(userModel.getBreathingScores()));
 
-        if (ApiConnection.currentUserBreathingScores != null) {
+        if (userModel.getBreathingScores() != null) {
             breathingScoreResultsListAdapter = new BreathingScoreResultsListAdapter(
                     getActivity().getApplicationContext(),
-                    ApiConnection.currentUserBreathingScores);
+                    userModel.getBreathingScores());
 
             breathingScoreResultsListView.setAdapter(breathingScoreResultsListAdapter);
         }
 
-        if (ApiConnection.currentUserStressScores != null) {
+        if (userModel.getStressScores() != null) {
             stressScoreResultsListAdapter = new StressScoreResultsListAdapter(
                     getActivity().getApplicationContext(),
-                    ApiConnection.currentUserStressScores);
+                    userModel.getStressScores());
 
             stressScoreResultsListView.setAdapter(stressScoreResultsListAdapter);
         }
@@ -175,39 +179,33 @@ public class LoginFragment extends Fragment {
                         // If the response is successful
                         if (session == Session.getActiveSession()) {
                             if (user != null) {
-                                ApiConnection.FbUserId = user.getId();
-                                ApiConnection.FbUserName = user.getName();
+                                userModel.setFbUserId(user.getId());
+                                userModel.setFbUserName(user.getName());
 
-                                userName.setText(ApiConnection.FbUserName);
+                                userName.setText(userModel.getFbUserName());
                                 profilePictureView
-                                        .setProfileId(ApiConnection.FbUserId);
+                                        .setProfileId(userModel.getFbUserId());
                             }
                         }
 
                         MainActivity.dalHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                User apiUser = usersDao.read(ApiConnection.FbUserId);
+                                User apiUser = usersDao.read(userModel.getFbUserId());
                                 if (apiUser == null) {
-                                    ApiConnection.UserId =
-                                            usersDao.create(new User(ApiConnection.FbUserId, ApiConnection.FbUserName));
-                                } else {
+                                    userModel.setUserId(usersDao.create(new User(userModel.getFbUserId(), userModel.getFbUserName())));
+                                }
+                                else {
                                     Log.d("USER", String.valueOf(apiUser.getUserId()));
-                                    ApiConnection.UserId = apiUser.getUserId();
-                                }
+                                    userModel.setUserId(apiUser.getUserId());
 
-                                BreathingScore[] breathingScores = breathingScoresDao.read();
-                                if (breathingScores != null) {
-                                    ApiConnection.currentUserBreathingScores = new ArrayList<BreathingScore>();
-                                    for (BreathingScore score : breathingScores) {
-                                        ApiConnection.currentUserBreathingScores.add(score);
+                                    BreathingScore[] breathingScores = breathingScoresDao.read(userModel.getUserId());
+                                    if (breathingScores != null) {
+                                        userModel.setBreathingScores(breathingScores);
                                     }
-                                }
-                                StressScore[] stressScores = stressScoresDao.read();
-                                if (stressScores != null) {
-                                    ApiConnection.currentUserStressScores = new ArrayList<StressScore>();
-                                    for (StressScore score : stressScores) {
-                                        ApiConnection.currentUserStressScores.add(score);
+                                    StressScore[] stressScores = stressScoresDao.read(userModel.getUserId());
+                                    if (stressScores != null) {
+                                        userModel.setStressScores(stressScores);
                                     }
                                 }
                             }
@@ -229,9 +227,9 @@ public class LoginFragment extends Fragment {
                 toggleViewsVisibility(0);
             }
         } else if (state.isClosed()) {
-            ApiConnection.UserId = 0;
-            ApiConnection.FbUserId = "";
-            ApiConnection.FbUserName = "";
+            userModel.setUserId(0);
+            userModel.setFbUserId("");
+            userModel.setFbUserName("");
             toggleViewsVisibility(4);
         } else {
             // System.out.println(state.toString());
