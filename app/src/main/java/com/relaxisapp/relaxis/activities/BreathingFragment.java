@@ -145,7 +145,7 @@ public class BreathingFragment extends Fragment {
 	}
 
 	private void resetScoreAndTime() {
-        // TODO reset multiplier
+        multiplier = 1;
 		breathingModel.setScore(0);
 		breathingModel.setTimeLeft(Const.TIME_BREATHING_SECONDS);
 	}

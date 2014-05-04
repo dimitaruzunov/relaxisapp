@@ -27,7 +27,6 @@ public class BreathingScoresDao implements IScoresDao<BreathingScore> {
 
         Calendar cal = Calendar.getInstance();
 
-        // TODO fix score
         BreathingScore body = new BreathingScore(score.getUserId(),
                 score.getScore(),
                 SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));

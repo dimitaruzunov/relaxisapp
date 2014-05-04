@@ -112,27 +112,30 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 			}
 		});
 
-		// TODO Try to put the following code out of the onCreate method
+        setupIntentFiltersForConnection();
 
+	}
+
+    private void setupIntentFiltersForConnection() {
 		/*
 		 * Sending a message to android that we are going to initiate a pairing
 		 * request
 		 */
-		IntentFilter filter = new IntentFilter(
-				"android.bluetooth.device.action.PAIRING_REQUEST");
+        IntentFilter filter = new IntentFilter(
+                "android.bluetooth.device.action.PAIRING_REQUEST");
 		/*
 		 * Registering a new BTBroadcast receiver from the Main Activity context
 		 * with pairing request event
 		 */
-		this.getApplicationContext().registerReceiver(
-				new BTBroadcastReceiver(), filter);
-		// Registering the BTBondReceiver in the application that the
-		// status of the receiver has changed to Paired
-		IntentFilter filter2 = new IntentFilter(
-				"android.bluetooth.device.action.BOND_STATE_CHANGED");
-		this.getApplicationContext().registerReceiver(new BTBondReceiver(),
-				filter2);
-	}
+        this.getApplicationContext().registerReceiver(
+                new BTBroadcastReceiver(), filter);
+        // Registering the BTBondReceiver in the application that the
+        // status of the receiver has changed to Paired
+        IntentFilter filter2 = new IntentFilter(
+                "android.bluetooth.device.action.BOND_STATE_CHANGED");
+        this.getApplicationContext().registerReceiver(new BTBondReceiver(),
+                filter2);
+    }
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -281,7 +284,6 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 		@Override
 		protected void onPostExecute(Integer result) {
-			
 			switch (result) {
 			case CODE_NO_BT:
 				homeModel.setConnectionState(0);
@@ -322,7 +324,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 		protected void onCancelled() {
             // TODO check whether the connection has been established before the cancellation and terminate it if so
             homeModel.setConnectionState(0);
-			Toast.makeText(MainActivity.this, "Connecting cancelled", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Connecting cancelled", Toast.LENGTH_LONG).show();
 		}
 
 	}
