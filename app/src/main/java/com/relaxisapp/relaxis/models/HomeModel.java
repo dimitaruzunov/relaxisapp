@@ -14,6 +14,7 @@ public class HomeModel extends EventDispatcher {
         public static final String RR_INTERVAL_CHANGED = "rrIntervalChanged";
         public static final String INSTANT_HEART_RATE_CHANGED = "instantHeartRateChanged";
         public static final String INSTANT_SPEED_CHANGED = "instantSpeedChanged";
+        public static final String MUSIC_PLAYED = "musicPlayed";
 
         public ChangeEvent(String type) {
             super(type);
@@ -69,11 +70,20 @@ public class HomeModel extends EventDispatcher {
 
     private double instantSpeed = 0.0;
     public double getInstantSpeed() {
-        return  instantSpeed;
+        return instantSpeed;
     }
     public void setInstantSpeed(double instantSpeed) {
         this.instantSpeed = instantSpeed;
         notifyChange(ChangeEvent.INSTANT_SPEED_CHANGED);
+    }
+
+    private boolean musicPlayed = false;
+    public boolean getMusicPlayed() {
+        return musicPlayed;
+    }
+    public void setMusicPlayed(boolean musicPlayed) {
+        this.musicPlayed = musicPlayed;
+        notifyChange(ChangeEvent.MUSIC_PLAYED);
     }
 
     private void notifyChange(String type) {

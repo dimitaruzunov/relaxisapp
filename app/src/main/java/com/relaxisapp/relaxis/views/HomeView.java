@@ -1,10 +1,13 @@
 package com.relaxisapp.relaxis.views;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -24,6 +27,14 @@ public class HomeView extends ScrollView {
     public static interface ViewListener {
         public void onConnectButtonClick();
         public void onMusicButtonClick();
+
+        void onPrevButtonClick();
+
+        void onPauseButtonClick();
+
+        void onStopButtonClick();
+
+        void onNextButtonClick();
     }
 
     private static boolean DEBUG = false;
@@ -35,6 +46,9 @@ public class HomeView extends ScrollView {
     private static TextView instantSpeedTextView;
 
     Button connectButton, musicButton;
+    ImageButton prevButton, pauseButton, stopButton, nextButton;
+    LinearLayout musicPlayerLayout;
+    AudioManager audioManager;
     private HomeModel model;
 
     /**
@@ -117,6 +131,55 @@ public class HomeView extends ScrollView {
         instantSpeedTextView.setText(text);
     }
 
+    private void toggleMusicPlayer() {
+        boolean musicPlayed = model.getMusicPlayed();
+
+        if (musicPlayed) {
+            musicButton.setVisibility(INVISIBLE);
+            musicPlayerSetup();
+        } else {
+            musicButton.setVisibility(VISIBLE);
+            musicPlayerLayout.setVisibility(INVISIBLE);
+        }
+    }
+
+    private void musicPlayerSetup() {
+        musicPlayerLayout = (LinearLayout) findViewById(R.id.musicPlayerLayout);
+        musicPlayerLayout.setVisibility(VISIBLE);
+
+        prevButton = (ImageButton) findViewById(R.id.prevButton);
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewListener.onPrevButtonClick();
+            }
+        });
+
+        pauseButton = (ImageButton) findViewById(R.id.pauseButton);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewListener.onPauseButtonClick();
+            }
+        });
+
+        stopButton = (ImageButton) findViewById(R.id.stopButton);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewListener.onStopButtonClick();
+            }
+        });
+
+        nextButton = (ImageButton) findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewListener.onNextButtonClick();
+            }
+        });
+    }
+
     /**
      * Find our references to the objects in the xml layout
      */
@@ -150,6 +213,7 @@ public class HomeView extends ScrollView {
         model.addListener(HomeModel.ChangeEvent.RR_INTERVAL_CHANGED, rrIntervalListener);
         model.addListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
         model.addListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
+        model.addListener(HomeModel.ChangeEvent.MUSIC_PLAYED, musicPlayedListener);
         updateConnectButton();
         updateHeartRate();
         updateRrInterval();
@@ -187,6 +251,12 @@ public class HomeView extends ScrollView {
             updateInstantSpeed();
         }
     };
+    private EventListener musicPlayedListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            toggleMusicPlayer();
+        }
+    };
 
     /**
      * Remove the listener from the model
@@ -197,6 +267,7 @@ public class HomeView extends ScrollView {
         model.removeListener(HomeModel.ChangeEvent.RR_INTERVAL_CHANGED, rrIntervalListener);
         model.removeListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
         model.removeListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
+        model.removeListener(HomeModel.ChangeEvent.MUSIC_PLAYED, musicPlayedListener);
     }
 
 }

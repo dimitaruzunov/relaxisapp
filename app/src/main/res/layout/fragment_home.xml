@@ -105,6 +105,41 @@
             android:layout_gravity="center_horizontal"
             style="@style/LargeButton" />
 
+        <LinearLayout
+            android:id="@+id/musicPlayerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:visibility="invisible"
+            android:padding="@dimen/layout_padding">
+
+            <ImageButton
+                android:id="@+id/prevButton"
+                android:src="@drawable/ic_action_previous"
+                android:layout_gravity="center_horizontal"
+                style="@style/PlayerButton" />
+
+            <ImageButton
+                android:id="@+id/pauseButton"
+                android:src="@drawable/ic_action_pause"
+                android:layout_gravity="center_horizontal"
+                style="@style/PlayerButton" />
+
+            <ImageButton
+                android:id="@+id/stopButton"
+                android:src="@drawable/ic_action_stop"
+                android:layout_gravity="center_horizontal"
+                style="@style/PlayerButton" />
+
+            <ImageButton
+                android:id="@+id/nextButton"
+                android:src="@drawable/ic_action_next"
+                android:layout_gravity="center_horizontal"
+                style="@style/PlayerButton" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </com.relaxisapp.relaxis.views.HomeView>
