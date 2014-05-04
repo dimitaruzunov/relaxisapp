@@ -13,10 +13,10 @@
     <color name="list_item_pressed">#1Aaaaaaa</color>
     
     <!-- Table colors -->
-    <color name="table_hr">#4D99cc00</color>
-    <color name="table_rr">#4Dff4444</color>
-    <color name="table_ihr">#8099cc00</color>
-    <color name="table_is">#80ff4444</color>
+    <color name="table_hr">#7399cc00</color>
+    <color name="table_rr">#73ff4444</color>
+    <color name="table_ihr">#8C99cc00</color>
+    <color name="table_is">#8Cff4444</color>
 
     <!-- Backgrounds -->
     <color name="background_light">#eee</color>

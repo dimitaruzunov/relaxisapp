@@ -47,8 +47,6 @@ public class HomeView extends ScrollView {
 
     Button connectButton, musicButton;
     ImageButton prevButton, pauseButton, stopButton, nextButton;
-    LinearLayout musicPlayerLayout;
-    AudioManager audioManager;
     private HomeModel model;
 
     /**
@@ -84,6 +82,16 @@ public class HomeView extends ScrollView {
                 connectButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_bluetooth_connected, 0, 0, 0);
                 connectButton.setText(R.string.action_bluetooth_disconnect);
                 break;
+        }
+    }
+
+    private void updatePauseButton() {
+        boolean musicPlayed = model.getMusicPlayed();
+
+        if (musicPlayed) {
+            pauseButton.setImageResource(R.drawable.ic_action_pause);
+        } else {
+            pauseButton.setImageResource(R.drawable.ic_action_play);
         }
     }
 
@@ -131,21 +139,49 @@ public class HomeView extends ScrollView {
         instantSpeedTextView.setText(text);
     }
 
-    private void toggleMusicPlayer() {
-        boolean musicPlayed = model.getMusicPlayed();
+    /**
+     * Find our references to the objects in the xml layout
+     */
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
 
-        if (musicPlayed) {
-            musicButton.setVisibility(INVISIBLE);
-            musicPlayerSetup();
-        } else {
-            musicButton.setVisibility(VISIBLE);
-            musicPlayerLayout.setVisibility(INVISIBLE);
-        }
+        heartRateTextView = (TextView) findViewById(R.id.heartRateTextView);
+        rrIntervalTextView = (TextView) findViewById(R.id.rRIntervalTextView);
+        instantHeartRateTextView = (TextView) findViewById(R.id.instantHeartRateTextView);
+        instantSpeedTextView = (TextView) findViewById(R.id.instantSpeedTextView);
+
+        connectButton = (Button) findViewById(R.id.connectButton);
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewListener.onConnectButtonClick();
+            }
+        });
+
+        musicPlayerSetup();
+
+        model.addListener(HomeModel.ChangeEvent.CONNECTION_STATE_CHANGED, connectionStateListener);
+        model.addListener(HomeModel.ChangeEvent.HEART_RATE_CHANGED, heartRateListener);
+        model.addListener(HomeModel.ChangeEvent.RR_INTERVAL_CHANGED, rrIntervalListener);
+        model.addListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
+        model.addListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
+        model.addListener(HomeModel.ChangeEvent.MUSIC_PLAYED, musicPlayedListener);
+        updateConnectButton();
+        updateHeartRate();
+        updateRrInterval();
+        updateInstantHeartRate();
+        updateInstantSpeed();
     }
 
     private void musicPlayerSetup() {
-        musicPlayerLayout = (LinearLayout) findViewById(R.id.musicPlayerLayout);
-        musicPlayerLayout.setVisibility(VISIBLE);
+        musicButton = (Button) findViewById(R.id.musicButton);
+        musicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewListener.onMusicButtonClick();
+            }
+        });
 
         prevButton = (ImageButton) findViewById(R.id.prevButton);
         prevButton.setOnClickListener(new View.OnClickListener() {
@@ -178,47 +214,6 @@ public class HomeView extends ScrollView {
                 viewListener.onNextButtonClick();
             }
         });
-    }
-
-    /**
-     * Find our references to the objects in the xml layout
-     */
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-        heartRateTextView = (TextView) findViewById(R.id.heartRateTextView);
-        rrIntervalTextView = (TextView) findViewById(R.id.rRIntervalTextView);
-        instantHeartRateTextView = (TextView) findViewById(R.id.instantHeartRateTextView);
-        instantSpeedTextView = (TextView) findViewById(R.id.instantSpeedTextView);
-
-        connectButton = (Button) findViewById(R.id.connectButton);
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewListener.onConnectButtonClick();
-            }
-        });
-
-        musicButton = (Button) findViewById(R.id.musicButton);
-        musicButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewListener.onMusicButtonClick();
-            }
-        });
-
-        model.addListener(HomeModel.ChangeEvent.CONNECTION_STATE_CHANGED, connectionStateListener);
-        model.addListener(HomeModel.ChangeEvent.HEART_RATE_CHANGED, heartRateListener);
-        model.addListener(HomeModel.ChangeEvent.RR_INTERVAL_CHANGED, rrIntervalListener);
-        model.addListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
-        model.addListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
-        model.addListener(HomeModel.ChangeEvent.MUSIC_PLAYED, musicPlayedListener);
-        updateConnectButton();
-        updateHeartRate();
-        updateRrInterval();
-        updateInstantHeartRate();
-        updateInstantSpeed();
     }
 
     private EventListener connectionStateListener = new EventListener() {
@@ -254,7 +249,7 @@ public class HomeView extends ScrollView {
     private EventListener musicPlayedListener = new EventListener() {
         @Override
         public void onEvent(Event event) {
-            toggleMusicPlayer();
+            updatePauseButton();
         }
     };
 

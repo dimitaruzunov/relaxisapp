@@ -26,12 +26,6 @@
     <string name="cancel">Cancel</string>
     <string name="breathing_score_list_desc">Your breathing scores:</string>
     <string name="stress_score_list_desc">Your relaxation scores:</string>
-    <string name="music">Play music</string>
-
-    <!-- Music player buttons -->
-    <string name="prevButton">Previous</string>
-    <string name="pauseButton">Pause</string>
-    <string name="stopButton">Stop</string>
-    <string name="nextButton">Next</string>
+    <string name="musicButton">Choose music</string>
 
 </resources>

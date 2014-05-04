@@ -100,18 +100,16 @@
 
         <Button
             android:id="@+id/musicButton"
-            android:text="@string/music"
-            android:drawableLeft="@drawable/ic_action_play"
+            android:text="@string/musicButton"
+            android:drawableLeft="@drawable/ic_action_view_as_list"
             android:layout_gravity="center_horizontal"
             style="@style/LargeButton" />
 
         <LinearLayout
-            android:id="@+id/musicPlayerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_horizontal"
-            android:visibility="invisible"
             android:padding="@dimen/layout_padding">
 
             <ImageButton
@@ -122,7 +120,7 @@
 
             <ImageButton
                 android:id="@+id/pauseButton"
-                android:src="@drawable/ic_action_pause"
+                android:src="@drawable/ic_action_play"
                 android:layout_gravity="center_horizontal"
                 style="@style/PlayerButton" />
 

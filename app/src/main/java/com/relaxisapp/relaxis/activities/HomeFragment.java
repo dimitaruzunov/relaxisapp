@@ -78,6 +78,13 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onPauseButtonClick() {
+            audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager.isMusicActive()) {
+                model.setMusicPlayed(false);
+            } else {
+                model.setMusicPlayed(true);
+            }
+
             Intent i = new Intent("com.android.music.musicservicecommand");
             i.putExtra("command", "togglepause");
             getActivity().sendBroadcast(i);
