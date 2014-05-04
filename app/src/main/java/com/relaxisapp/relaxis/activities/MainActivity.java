@@ -21,9 +21,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
-import com.relaxisapp.relaxis.BTBondReceiver;
-import com.relaxisapp.relaxis.BTBroadcastReceiver;
-import com.relaxisapp.relaxis.ConnectionListener;
+import com.relaxisapp.relaxis.utils.BTBondReceiver;
+import com.relaxisapp.relaxis.utils.BTBroadcastReceiver;
+import com.relaxisapp.relaxis.utils.ConnectionListener;
 import com.relaxisapp.relaxis.widgets.NavigationDrawerItem;
 import com.relaxisapp.relaxis.widgets.NavigationDrawerListAdapter;
 import com.relaxisapp.relaxis.R;
