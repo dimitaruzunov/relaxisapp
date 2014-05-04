@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.utils;
 
 import android.os.Bundle;
 import android.os.Handler;

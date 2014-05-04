@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -21,9 +22,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
-import com.relaxisapp.relaxis.BTBondReceiver;
-import com.relaxisapp.relaxis.BTBroadcastReceiver;
-import com.relaxisapp.relaxis.ConnectionListener;
+import com.relaxisapp.relaxis.utils.BTBondReceiver;
+import com.relaxisapp.relaxis.utils.BTBroadcastReceiver;
+import com.relaxisapp.relaxis.utils.ConnectionListener;
 import com.relaxisapp.relaxis.widgets.NavigationDrawerItem;
 import com.relaxisapp.relaxis.widgets.NavigationDrawerListAdapter;
 import com.relaxisapp.relaxis.R;
@@ -48,8 +49,14 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 	static ViewPager viewPager;
     private BluetoothConnectTask connectTask;
 
+    public static HandlerThread dalThread = new HandlerThread("DAL");
+    public static Handler dalHandler;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+        dalThread.start();
+        dalHandler = new Handler(dalThread.getLooper());
 
         homeModel = HomeModel.getInstance();
         breathingModel = BreathingModel.getInstance();

@@ -18,22 +18,19 @@ import org.springframework.web.client.RestTemplate;
  */
 public class UsersDao {
 
-    private int userId;
-    private boolean registered;
-
-    public User read(int fbid) {
+    public User read(String fbid) {
+        final String url = "http://relaxisapp.com/api/users/" + fbid;
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Authorization-Token", "$kG7j2lr&");
+        requestHeaders.add("Content-Type", "application/json");
+        requestHeaders.add("Host", "relaxisapp.com");
+        HttpEntity<?> httpEntity = new HttpEntity<Object>(requestHeaders);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(
+                new MappingJackson2HttpMessageConverter());
+        User user;
         try {
-            final String url = "http://relaxisapp.com/api/users/"
-                    + ApiConnection.FbUserId;
-            HttpHeaders requestHeaders = new HttpHeaders();
-            requestHeaders.add("Authorization-Token", "$kG7j2lr&");
-            requestHeaders.add("Content-Type", "application/json");
-            requestHeaders.add("Host", "relaxisapp.com");
-            HttpEntity<?> httpEntity = new HttpEntity<Object>(requestHeaders);
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(
-                    new MappingJackson2HttpMessageConverter());
-            User user = restTemplate.exchange(url, HttpMethod.GET, httpEntity, User.class).getBody();
+            user = restTemplate.exchange(url, HttpMethod.GET, httpEntity, User.class).getBody();
             return user;
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().value() == 404) {

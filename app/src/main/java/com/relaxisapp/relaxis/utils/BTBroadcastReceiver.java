@@ -1,4 +1,4 @@
-package com.relaxisapp.relaxis;
+package com.relaxisapp.relaxis.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
