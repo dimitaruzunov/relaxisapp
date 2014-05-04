@@ -13,6 +13,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -280,7 +281,6 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 		@Override
 		protected void onPostExecute(Integer result) {
-//			setPreviousOnButtonClickListener(results.item);
 			
 			switch (result) {
 			case CODE_NO_BT:
@@ -360,34 +360,43 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case Const.HEART_RATE:
-                if (msg.getData().getString("HeartRate") != null) {
+                try {
                     int heartRate = Integer.parseInt(msg.getData().getString("HeartRate"));
                     if (heartRate > 0) {
                         homeModel.setHeartRate(heartRate);
                     }
                 }
+                catch (Exception e) {
+                    Log.e("HEARTRATE", e.getMessage());
+                }
 				break;
 
 			case Const.INSTANT_SPEED:
-                if (msg.getData().getString("InstantSpeed") != null) {
+                try {
                     double instantSpeed = Double.parseDouble(msg.getData().getString("InstantSpeed"));
                     if (instantSpeed > 0) {
                         homeModel.setInstantSpeed(instantSpeed);
                     }
                 }
+                catch (Exception e) {
+                    Log.e("INSTANTSPEED", e.getMessage());
+                }
 				break;
 
 			case Const.RR_INTERVAL:
-                if (msg.getData().getString("RRInterval") != null) {
+                try {
                     int rrInterval = Integer.parseInt(msg.getData().getString("RRInterval"));
                     if (rrInterval > 0) {
                         homeModel.setRrInterval(rrInterval);
                     }
                 }
+                catch (Exception e) {
+                    Log.e("RRINTERVAL", e.getMessage());
+                }
                 break;
 
 			case Const.INSTANT_HR:
-                if (msg.getData().getString("InstantHR") != null) {
+                try {
                     String instantHRString = msg.getData().getString("InstantHR");
                     int instantHR = Integer.parseInt(instantHRString);
                     if (instantHR > 0) {
@@ -396,11 +405,13 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
                     updateBreathingGraph(instantHR);
                 }
-
+                catch (Exception e) {
+                    Log.e("INSTANTHR", e.getMessage());
+                }
 				break;
 
 			case Const.PNN50:
-                if (msg.getData().getString("pNN50") != null) {
+                try {
                     if (StressEstimationFragment.timeLeft > 0 && StressEstimationFragment.updateScore) {
                         String pNN50 = msg.getData().getString("pNN50");
 
@@ -408,6 +419,9 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
                             StressEstimationFragment.stressLevel = Double.parseDouble(pNN50);
                         }
                     }
+                }
+                catch (Exception e) {
+                    Log.e("PNN50", e.getMessage());
                 }
 				break;
 			}

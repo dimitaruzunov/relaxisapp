@@ -173,13 +173,14 @@ public class ConnectionListener extends ConnectListenerImpl {
 					int instantHR = (rrIntervals[0] == 0) ? 0
 							: (60000 / rrIntervals[0]);
 
-					System.out.println(CustomUtilities
-							.ByteToUnsignedInt(DataArray[9])); // HR
-					System.out.println(CustomUtilities
-							.ByteToUnsignedInt(DataArray[10])); // Heart beat n
+//					System.out.println(CustomUtilities
+//							.ByteToUnsignedInt(DataArray[9])); // HR
+//					System.out.println(CustomUtilities
+//							.ByteToUnsignedInt(DataArray[10])); // Heart beat n
 
 					// ***************Displaying the Heart
 					// Rate********************************
+                    // TODO test this with heart rate > 127
 					int HRate = HRSpeedDistPacket.GetHeartRate(DataArray);
 					Message text1 = _aNewHandler
 							.obtainMessage(Const.HEART_RATE);
@@ -187,7 +188,7 @@ public class ConnectionListener extends ConnectListenerImpl {
 					b1.putString("HeartRate", String.valueOf(HRate));
 					text1.setData(b1);
 					_aNewHandler.sendMessage(text1);
-					System.out.println("Heart Rate is " + HRate);
+//					System.out.println("Heart Rate is " + HRate);
 
 					// ***************Displaying the Instant
 					// Speed********************************
@@ -206,7 +207,7 @@ public class ConnectionListener extends ConnectListenerImpl {
 					b1.putString("RRInterval", String.valueOf(rrIntervals[0]));
 					text1.setData(b1);
 					_aNewHandler.sendMessage(text1);
-					System.out.println("R-R interval is " + rrIntervals[0]);
+//					System.out.println("R-R interval is " + rrIntervals[0]);
 
 					// *********** Add Instant heart rate to the message
 					// ****************

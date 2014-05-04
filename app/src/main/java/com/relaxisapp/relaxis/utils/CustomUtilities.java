@@ -13,10 +13,7 @@ public class CustomUtilities {
 	 * @return Unsigned integer based on the two bytes.
 	 */
 	public static int TwoBytesToUnsignedInt(byte byte1, byte byte2) {
-		// int result = 0;
-		// for (int i = 0; i < bytes.length; i++) {
-		// result = (result << 8) + (bytes[i] & 0xFF);
-		// }
+        // TODO test this
 		return ((byte2 & 0xFF) << 8) + (byte1 & 0xFF);
 	}
 }

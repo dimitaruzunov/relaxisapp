@@ -32,12 +32,12 @@ public class BreathingFragment extends Fragment {
 
 	public final static String SECTION_TITLE = "section title";
 
-	private Timer graphUpdateTimer = new Timer();
-    private Timer timeUpdateTimer = new Timer();
+	private static Timer graphUpdateTimer = new Timer();
+    private static Timer timeUpdateTimer = new Timer();
     private static GraphUpdateTimerTask graphUpdateTimerTask;
     private static TimeLeftUpdateTimerTask timeLeftUpdateTimerTask;
 
-	Handler handler = new Handler();
+	private static Handler handler = new Handler();
 
 	static int idealMinHR = Const.IDEAL_MID_HR - Const.IDEAL_HR_DEVIATION;
 	static int idealMaxHR = Const.IDEAL_MID_HR + Const.IDEAL_HR_DEVIATION;
@@ -104,7 +104,6 @@ public class BreathingFragment extends Fragment {
         }
     };
 
-    // TODO rename
     private void startInstantHRGraphTimer() {
         // TODO check if the timer is cleared when the back button is
         // pressed
@@ -163,7 +162,7 @@ public class BreathingFragment extends Fragment {
                     updateDummyGraph();
                 }
             });
-			timerCounter++;
+            timerCounter++;
 		}
 
 	}
@@ -232,5 +231,6 @@ public class BreathingFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         view.destroy();
+        breathingModel.removeListener(BreathingModel.ChangeEvent.GRAPH_UPDATE_STARTED_STATE_CHANGED, graphUpdateStartListener);
     }
 }
