@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.relaxisapp.relaxis.widgets.HintHelper;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
@@ -127,37 +125,9 @@ public class HomeView extends ScrollView {
         super.onFinishInflate();
 
         heartRateTextView = (TextView) findViewById(R.id.heartRateTextView);
-        heartRateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleHeartRateTextViewClick((TextView) view);
-            }
-        });
-
         rrIntervalTextView = (TextView) findViewById(R.id.rRIntervalTextView);
-        rrIntervalTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleRRIntervalTextViewClick((TextView) view);
-            }
-        });
-
         instantHeartRateTextView = (TextView) findViewById(R.id.instantHeartRateTextView);
-        instantHeartRateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleInstantHeartRateTextViewClick((TextView) view);
-            }
-        });
-
         instantSpeedTextView = (TextView) findViewById(R.id.instantSpeedTextView);
-        instantSpeedTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleInstantSpeedTextViewClick((TextView) view);
-            }
-        });
-
 
         connectButton = (Button) findViewById(R.id.connectButton);
         connectButton.setOnClickListener(new View.OnClickListener() {
@@ -185,22 +155,6 @@ public class HomeView extends ScrollView {
         updateRrInterval();
         updateInstantHeartRate();
         updateInstantSpeed();
-    }
-
-    void handleHeartRateTextViewClick(TextView textView) {
-        HintHelper.createAndPositionHint(getContext(), R.string.heartRate, textView).show();
-    }
-
-    void handleInstantHeartRateTextViewClick(TextView textView) {
-        HintHelper.createAndPositionHint(getContext(), R.string.instantHeartRate, textView).show();
-    }
-
-    void handleRRIntervalTextViewClick(TextView textView) {
-        HintHelper.createAndPositionHint(getContext(), R.string.rRInterval, textView).show();
-    }
-
-    void handleInstantSpeedTextViewClick(TextView textView) {
-        HintHelper.createAndPositionHint(getContext(), R.string.instantSpeed, textView).show();
     }
 
     private EventListener connectionStateListener = new EventListener() {
