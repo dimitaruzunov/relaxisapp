@@ -6,7 +6,10 @@ package com.relaxisapp.relaxis.daos;
 public interface IScoresDao <T> {
 
     // HTTP POST
-    int create(T score);
+    boolean create(T score);
+
+    // HTTP GET - get all
+    T[] read();
 
     // HTTP GET
     T read(int id);

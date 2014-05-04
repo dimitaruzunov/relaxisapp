@@ -9,12 +9,16 @@ public class BreathingScore {
 	public BreathingScore() {
 		
 	}
-	
-	public BreathingScore(int userId, double score, String timestamp) {
-		this.userId = userId;
-		this.score = score;
-		this.timestamp = timestamp;
-	}
+
+    public BreathingScore(int userId, double score, String timestamp) {
+        this.userId = userId;
+        this.score = score;
+        this.timestamp = timestamp;
+    }
+
+    public BreathingScore(double score) {
+        this.score = score;
+    }
 	
 	private int userId;
 	private double score;

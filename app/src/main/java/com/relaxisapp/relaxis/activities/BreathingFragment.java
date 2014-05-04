@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.relaxisapp.relaxis.ApiConnection;
 import com.relaxisapp.relaxis.R;
+import com.relaxisapp.relaxis.daos.BreathingScoresDao;
+import com.relaxisapp.relaxis.models.BreathingScore;
 import com.relaxisapp.relaxis.widgets.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
@@ -58,8 +61,12 @@ public class BreathingFragment extends Fragment {
     private BreathingModel breathingModel;
     private BreathingView view;
 
+    private BreathingScoresDao breathingScoresDao;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        breathingScoresDao = new BreathingScoresDao();
 
         homeModel = HomeModel.getInstance();
         breathingModel = BreathingModel.getInstance();
@@ -83,6 +90,7 @@ public class BreathingFragment extends Fragment {
         }
     };
 
+    // onButtonClick
     private BreathingView.ViewListener viewListener = new BreathingView.ViewListener() {
         @Override
         public void onStartButtonClick() {
@@ -202,11 +210,17 @@ public class BreathingFragment extends Fragment {
 	private void updateTimeLeft() {
 		if (breathingModel.getTimeLeft() <= 0) {
 			if (ApiConnection.UserId > 0) {
-				new ApiConnection.AddBreathingScoreTask().execute();
+                MainActivity.dalHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        breathingScoresDao.create(new BreathingScore(breathingModel.getScore()));
+                    }
+                });
+
 				Toast.makeText(getActivity(), "Breathing score saved: " +
 						breathingModel.getScore(), Toast.LENGTH_SHORT).show();
 			}
-			// startBreathingButton.callOnClick(); TODO find alternative method
+            stop();
 			return;
 		}
         breathingModel.setTimeLeft(breathingModel.getTimeLeft() - 1);

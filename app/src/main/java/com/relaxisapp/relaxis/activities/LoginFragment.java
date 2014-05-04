@@ -2,6 +2,8 @@ package com.relaxisapp.relaxis.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,203 +21,247 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.relaxisapp.relaxis.ApiConnection;
+import com.relaxisapp.relaxis.daos.BreathingScoresDao;
+import com.relaxisapp.relaxis.daos.StressScoresDao;
+import com.relaxisapp.relaxis.daos.UsersDao;
+import com.relaxisapp.relaxis.models.BreathingScore;
+import com.relaxisapp.relaxis.models.StressScore;
+import com.relaxisapp.relaxis.models.User;
 import com.relaxisapp.relaxis.widgets.BreathingScoreResultsListAdapter;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.widgets.StressScoreResultsListAdapter;
 
+import java.util.ArrayList;
+
 public class LoginFragment extends Fragment {
 
-	public final static String SECTION_TITLE = "section title";
+    public final static String SECTION_TITLE = "section title";
 
-	private UiLifecycleHelper uiHelper;
+    private UiLifecycleHelper uiHelper;
 
-	private Session mSession;
+    private Session mSession;
 
-	private Request meRequest;
+    private Request meRequest;
 
-	LoginButton authButton;
-	ProfilePictureView profilePictureView;
-	TextView userName;
-	
-	private BreathingScoreResultsListAdapter breathingScoreResultsListAdapter;
-	private ListView breathingScoreResultsListView;
-	
-	private StressScoreResultsListAdapter stressScoreResultsListAdapter;
-	private ListView stressScoreResultsListView;
-	
-	private TextView breathingScoreListDesc;
-	private TextView stressScoreListDesc;
+    LoginButton authButton;
+    ProfilePictureView profilePictureView;
+    TextView userName;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		uiHelper = new UiLifecycleHelper(getActivity(), callback);
-		uiHelper.onCreate(savedInstanceState);
-	}
+    private BreathingScoreResultsListAdapter breathingScoreResultsListAdapter;
+    private ListView breathingScoreResultsListView;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_login, container, false);
+    private StressScoreResultsListAdapter stressScoreResultsListAdapter;
+    private ListView stressScoreResultsListView;
 
-		setupViews(view);
-		
-		Log.d("API", String.valueOf(ApiConnection.currentUserBreathingScores));
-		
-		if (ApiConnection.currentUserBreathingScores != null) {
-			breathingScoreResultsListAdapter = new BreathingScoreResultsListAdapter(
-					getActivity().getApplicationContext(),
-					ApiConnection.currentUserBreathingScores);
-			
-			breathingScoreResultsListView.setAdapter(breathingScoreResultsListAdapter);
-		}
-		
-		if (ApiConnection.currentUserStressScores != null) {
-			stressScoreResultsListAdapter = new StressScoreResultsListAdapter(
-					getActivity().getApplicationContext(),
-					ApiConnection.currentUserStressScores);
-			
-			stressScoreResultsListView.setAdapter(stressScoreResultsListAdapter);
-		}
+    private TextView breathingScoreListDesc;
+    private TextView stressScoreListDesc;
 
-		return view;
-	}
+    private UsersDao usersDao;
+    private BreathingScoresDao breathingScoresDao;
+    private StressScoresDao stressScoresDao;
 
-	private void setupViews(View view) {
-		authButton = (LoginButton) view.findViewById(R.id.authButton);
-		authButton.setFragment(this);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		profilePictureView = (ProfilePictureView) view
-				.findViewById(R.id.profilePic);
-		profilePictureView.setCropped(true);
+        uiHelper = new UiLifecycleHelper(getActivity(), callback);
+        uiHelper.onCreate(savedInstanceState);
 
-		userName = (TextView) view.findViewById(R.id.userName);
-		
-		stressScoreResultsListView = (ListView) view.findViewById(R.id.stressScoreResults);
-		breathingScoreResultsListView = (ListView) view.findViewById(R.id.breathingScoreResults);
-		
-		breathingScoreListDesc = (TextView) view.findViewById(R.id.breathingScoreListDesc);
-		stressScoreListDesc = (TextView) view.findViewById(R.id.stressScoreListDesc);
-	}
+        usersDao = new UsersDao();
+        breathingScoresDao = new BreathingScoresDao();
+        stressScoresDao = new StressScoresDao();
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-		// For scenarios where the main activity is launched and user
-		// session is not null, the session state change notification
-		// may not be triggered. Trigger it if it's open/closed.
-		Session session = Session.getActiveSession();
-		if (session != null && (session.isOpened() || session.isClosed())) {
-			onSessionStateChange(session, session.getState(), null);
-		}
+        setupViews(view);
 
-		uiHelper.onResume();
-	}
+        Log.d("API", String.valueOf(ApiConnection.currentUserBreathingScores));
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		uiHelper.onActivityResult(requestCode, resultCode, data);
-	}
+        if (ApiConnection.currentUserBreathingScores != null) {
+            breathingScoreResultsListAdapter = new BreathingScoreResultsListAdapter(
+                    getActivity().getApplicationContext(),
+                    ApiConnection.currentUserBreathingScores);
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		uiHelper.onPause();
-	}
+            breathingScoreResultsListView.setAdapter(breathingScoreResultsListAdapter);
+        }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		uiHelper.onDestroy();
-	}
+        if (ApiConnection.currentUserStressScores != null) {
+            stressScoreResultsListAdapter = new StressScoreResultsListAdapter(
+                    getActivity().getApplicationContext(),
+                    ApiConnection.currentUserStressScores);
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		uiHelper.onSaveInstanceState(outState);
-	}
+            stressScoreResultsListView.setAdapter(stressScoreResultsListAdapter);
+        }
 
-	private Session.StatusCallback callback = new Session.StatusCallback() {
-		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
-			onSessionStateChange(session, state, exception);
-		}
-	};
+        return view;
+    }
 
-	private void makeMeRequest(final Session session) {
-		// Make an API call to get user data and define a
-		// new callback to handle the response.
-		meRequest = Request.newMeRequest(session,
-				new Request.GraphUserCallback() {
+    private void setupViews(View view) {
+        authButton = (LoginButton) view.findViewById(R.id.authButton);
+        authButton.setFragment(this);
 
-					@Override
-					public void onCompleted(GraphUser user, Response response) {
-						// If the response is successful
-						if (session == Session.getActiveSession()) {
-							if (user != null) {
-								ApiConnection.FbUserId = user.getId();
-								ApiConnection.FbUserName = user.getName();
+        profilePictureView = (ProfilePictureView) view
+                .findViewById(R.id.profilePic);
+        profilePictureView.setCropped(true);
 
-								userName.setText(ApiConnection.FbUserName);
-								profilePictureView
-										.setProfileId(ApiConnection.FbUserId);
-							}
-						}
-						new ApiConnection.CheckUserTask().execute();
-					}
+        userName = (TextView) view.findViewById(R.id.userName);
 
-				});
-		Request.executeBatchAsync(meRequest);
-	}
+        stressScoreResultsListView = (ListView) view.findViewById(R.id.stressScoreResults);
+        breathingScoreResultsListView = (ListView) view.findViewById(R.id.breathingScoreResults);
 
-	private void onSessionStateChange(Session session, SessionState state,
-			Exception exception) {
-		if (state.isOpened()) {
-			// this is necessary because of a double callback one because of
-			// UiLifecycleHelper and second because of LoginFragment.onResume()
-			if (mSession == null || isSessionChanged(session)) {
-				mSession = session;
-				makeMeRequest(session);
-				toggleViewsVisibility(0);
-			}
-		} else if (state.isClosed()) {
-			ApiConnection.UserId = 0;
-			ApiConnection.FbUserId = "";
-			ApiConnection.FbUserName = "";
-			toggleViewsVisibility(4);
-		} else {
-			// System.out.println(state.toString());
-		}
-	}
+        breathingScoreListDesc = (TextView) view.findViewById(R.id.breathingScoreListDesc);
+        stressScoreListDesc = (TextView) view.findViewById(R.id.stressScoreListDesc);
+    }
 
-	private boolean isSessionChanged(Session session) {
+    @Override
+    public void onResume() {
+        super.onResume();
 
-		// Check if session state changed
-		if (mSession.getState() != session.getState())
-			return true;
+        // For scenarios where the main activity is launched and user
+        // session is not null, the session state change notification
+        // may not be triggered. Trigger it if it's open/closed.
+        Session session = Session.getActiveSession();
+        if (session != null && (session.isOpened() || session.isClosed())) {
+            onSessionStateChange(session, session.getState(), null);
+        }
 
-		// Check if accessToken changed
-		if (mSession.getAccessToken() != null) {
-			if (!mSession.getAccessToken().equals(session.getAccessToken()))
-				return true;
-		} else if (session.getAccessToken() != null) {
-			return true;
-		}
+        uiHelper.onResume();
+    }
 
-		// Nothing changed
-		return false;
-	}
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
+    }
 
-	private void toggleViewsVisibility(int visibility) {
-		userName.setVisibility(visibility);
-		profilePictureView.setVisibility(visibility);
-		breathingScoreResultsListView.setVisibility(visibility);
-		stressScoreResultsListView.setVisibility(visibility);
-		breathingScoreListDesc.setVisibility(visibility);
-		stressScoreListDesc.setVisibility(visibility);
-	}
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
+
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state,
+                         Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+
+    private void makeMeRequest(final Session session) {
+        // Make an API call to get user data and define a
+        // new callback to handle the response.
+        meRequest = Request.newMeRequest(session,
+                new Request.GraphUserCallback() {
+
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        // If the response is successful
+                        if (session == Session.getActiveSession()) {
+                            if (user != null) {
+                                ApiConnection.FbUserId = user.getId();
+                                ApiConnection.FbUserName = user.getName();
+
+                                userName.setText(ApiConnection.FbUserName);
+                                profilePictureView
+                                        .setProfileId(ApiConnection.FbUserId);
+                            }
+                        }
+
+                        MainActivity.dalHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                User apiUser = usersDao.read(ApiConnection.FbUserId);
+                                if (apiUser == null) {
+                                    ApiConnection.UserId =
+                                            usersDao.create(new User(ApiConnection.FbUserId, ApiConnection.FbUserName));
+                                } else {
+                                    Log.d("USER", String.valueOf(apiUser.getUserId()));
+                                    ApiConnection.UserId = apiUser.getUserId();
+                                }
+
+                                BreathingScore[] breathingScores = breathingScoresDao.read();
+                                if (breathingScores != null) {
+                                    ApiConnection.currentUserBreathingScores = new ArrayList<BreathingScore>();
+                                    for (BreathingScore score : breathingScores) {
+                                        ApiConnection.currentUserBreathingScores.add(score);
+                                    }
+                                }
+                                StressScore[] stressScores = stressScoresDao.read();
+                                if (stressScores != null) {
+                                    ApiConnection.currentUserStressScores = new ArrayList<StressScore>();
+                                    for (StressScore score : stressScores) {
+                                        ApiConnection.currentUserStressScores.add(score);
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                });
+        Request.executeBatchAsync(meRequest);
+    }
+
+    private void onSessionStateChange(Session session, SessionState state,
+                                      Exception exception) {
+        if (state.isOpened()) {
+            // this is necessary because of a double callback one because of
+            // UiLifecycleHelper and second because of LoginFragment.onResume()
+            if (mSession == null || isSessionChanged(session)) {
+                mSession = session;
+                makeMeRequest(session);
+                toggleViewsVisibility(0);
+            }
+        } else if (state.isClosed()) {
+            ApiConnection.UserId = 0;
+            ApiConnection.FbUserId = "";
+            ApiConnection.FbUserName = "";
+            toggleViewsVisibility(4);
+        } else {
+            // System.out.println(state.toString());
+        }
+    }
+
+    private boolean isSessionChanged(Session session) {
+
+        // Check if session state changed
+        if (mSession.getState() != session.getState())
+            return true;
+
+        // Check if accessToken changed
+        if (mSession.getAccessToken() != null) {
+            if (!mSession.getAccessToken().equals(session.getAccessToken()))
+                return true;
+        } else if (session.getAccessToken() != null) {
+            return true;
+        }
+
+        // Nothing changed
+        return false;
+    }
+
+    private void toggleViewsVisibility(int visibility) {
+        userName.setVisibility(visibility);
+        profilePictureView.setVisibility(visibility);
+        breathingScoreResultsListView.setVisibility(visibility);
+        stressScoreResultsListView.setVisibility(visibility);
+        breathingScoreListDesc.setVisibility(visibility);
+        stressScoreListDesc.setVisibility(visibility);
+    }
 }

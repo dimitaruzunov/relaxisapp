@@ -9,12 +9,16 @@ public class StressScore {
 	public StressScore() {
 		
 	}
-	
-	public StressScore(int userId, double score, String timestamp) {
-		this.userId = userId;
-		this.score = score;
-		this.timestamp = timestamp;
-	}
+
+    public StressScore(double score) {
+        this.score = score;
+    }
+
+    public StressScore(int userId, double score, String timestamp) {
+        this.userId = userId;
+        this.score = score;
+        this.timestamp = timestamp;
+    }
 	
 	private int userId;
 	private double score;
