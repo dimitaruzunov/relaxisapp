@@ -22,17 +22,18 @@
     </style>
 
     <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/red</item>
+        <item name="android:background">@drawable/action_solid_bg</item>
 
         <!-- Support library compatibility -->
-        <item name="background">@color/red</item>
+        <item name="background">@drawable/action_solid_bg</item>
+        <item name="backgroundStacked">@drawable/action_stacked_solid_bg</item>
     </style>
 
     <style name="ActionBarTabs" parent="@style/Widget.AppCompat.ActionBar.TabView">
-        <item name="android:background">@color/background_dark</item>
+        <item name="android:background">@drawable/tab_indicator</item>
 
         <!-- Support library compatibility -->
-        <item name="background">@color/background_dark</item>
+        <item name="background">@drawable/tab_indicator</item>
     </style>
     
     <style name="Divider">
