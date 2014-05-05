@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -47,7 +49,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 	private NavigationDrawerListAdapter navigationDrawerListAdapter;
     private SectionsPagerAdapter sectionsPagerAdapter;
-	static ViewPager viewPager;
+    static ViewPager viewPager;
     private BluetoothConnectTask connectTask;
 
     public static HandlerThread dalThread = new HandlerThread("DAL");
@@ -55,7 +57,6 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
         dalThread.start();
         dalHandler = new Handler(dalThread.getLooper());
 
@@ -67,74 +68,114 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		// Navigation drawer setup
-		String[] navigationMenuTitles = getResources().getStringArray(R.array.navigation_drawer_options);
-        int[] navigationMenuColors = getResources().getIntArray(R.array.navigation_drawer_colors);
-		TypedArray navigationMenuIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
-
-		ArrayList<NavigationDrawerItem> navigationDrawerItems = new ArrayList<NavigationDrawerItem>();
-
-		for (int i = 0, len = navigationMenuTitles.length; i < len; i++) {
-			navigationDrawerItems.add(new NavigationDrawerItem(navigationMenuTitles[i],
-                    navigationMenuColors[i],
-                    navigationMenuIcons.getResourceId(i, -1)));
-		}
-
-		// Recycle the typed arrays
-		navigationMenuIcons.recycle();
-
-		navigationDrawerListAdapter = new NavigationDrawerListAdapter(getApplicationContext(), navigationDrawerItems);
-
-        ListView drawerListView = (ListView) findViewById(R.id.left_drawer);
-		drawerListView.setAdapter(navigationDrawerListAdapter);
-
-		navigationDrawerListAdapter.setup(this, this);
-		navigationDrawerListAdapter.setSelection(NavigationDrawerListAdapter.HOME_OPTION_ITEM);
-
 		// Sections pager setup
-		sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
+        setupPager();
 
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		viewPager.setAdapter(sectionsPagerAdapter);
-		viewPager.setCurrentItem(SectionsPagerAdapter.HOME_FRAGMENT);
-		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				navigationDrawerListAdapter.handleSelect(position);
-			}
+        // Tabs setup
+        setupTabs();
 
-			@Override
-			public void onPageScrolled(int position, float positionOffset,int positionOffsetPixels) {
-			}
+        // Navigation drawer setup
+        setupNavigationDrawer();
 
-			@Override
-			public void onPageScrollStateChanged(int state) {
-			}
-		});
+        // set home as the current fragment
+        viewPager.setCurrentItem(SectionsPagerAdapter.HOME_FRAGMENT);
 
         setupIntentFiltersForConnection();
-
 	}
+
+    private void setupPager() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // change navigation drawer option on swipe
+                navigationDrawerListAdapter.handleSelect(position);
+                // change tab on swipe
+                getSupportActionBar().setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset,int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    private void setupTabs() {
+        ActionBar actionBar = getSupportActionBar();
+
+        // Specify that tabs should be displayed in the action bar.
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // set fragment
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            }
+        };
+
+        // Add tabs, specifying the tab's text and TabListener
+        for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setText(sectionsPagerAdapter.getPageTitle(i))
+                            .setTabListener(tabListener));
+        }
+    }
+
+    private void setupNavigationDrawer() {
+        String[] navigationMenuTitles = getResources().getStringArray(R.array.navigation_drawer_options);
+        int[] navigationMenuColors = getResources().getIntArray(R.array.navigation_drawer_colors);
+        TypedArray navigationMenuIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
+
+        ArrayList<NavigationDrawerItem> navigationDrawerItems = new ArrayList<NavigationDrawerItem>();
+
+        for (int i = 0, len = navigationMenuTitles.length; i < len; i++) {
+            navigationDrawerItems.add(new NavigationDrawerItem(navigationMenuTitles[i],
+                    navigationMenuColors[i],
+                    navigationMenuIcons.getResourceId(i, -1)));
+        }
+
+        // Recycle the typed arrays
+        navigationMenuIcons.recycle();
+
+        navigationDrawerListAdapter = new NavigationDrawerListAdapter(getApplicationContext(), navigationDrawerItems);
+
+        ListView drawerListView = (ListView) findViewById(R.id.left_drawer);
+        drawerListView.setAdapter(navigationDrawerListAdapter);
+
+        navigationDrawerListAdapter.setup(this, this);
+        navigationDrawerListAdapter.setSelection(NavigationDrawerListAdapter.HOME_OPTION_ITEM);
+    }
 
     private void setupIntentFiltersForConnection() {
 		/*
 		 * Sending a message to android that we are going to initiate a pairing
 		 * request
 		 */
-        IntentFilter filter = new IntentFilter(
-                "android.bluetooth.device.action.PAIRING_REQUEST");
+        IntentFilter filter = new IntentFilter("android.bluetooth.device.action.PAIRING_REQUEST");
 		/*
 		 * Registering a new BTBroadcast receiver from the Main Activity context
 		 * with pairing request event
 		 */
-        this.getApplicationContext().registerReceiver(
-                new BTBroadcastReceiver(), filter);
+        this.getApplicationContext().registerReceiver(new BTBroadcastReceiver(), filter);
         // Registering the BTBondReceiver in the application that the
         // status of the receiver has changed to Paired
-        IntentFilter filter2 = new IntentFilter(
-                "android.bluetooth.device.action.BOND_STATE_CHANGED");
-        this.getApplicationContext().registerReceiver(new BTBondReceiver(),
-                filter2);
+        IntentFilter filter2 = new IntentFilter("android.bluetooth.device.action.BOND_STATE_CHANGED");
+        this.getApplicationContext().registerReceiver(new BTBondReceiver(), filter2);
     }
 
 	@Override

@@ -6,7 +6,6 @@ import java.util.TimerTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +28,6 @@ import com.relaxisapp.relaxis.views.BreathingView;
 public class BreathingFragment extends Fragment {
 
 	// TODO find out why it is breaking at some point
-
-	public final static String SECTION_TITLE = "section title";
 
 	private static Timer graphUpdateTimer = new Timer();
     private static Timer timeUpdateTimer = new Timer();

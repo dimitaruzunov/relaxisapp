@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.relaxisapp.relaxis.views.HomeView;
 
 
 public class HomeFragment extends Fragment {
-
-	public final static String SECTION_TITLE = "section title";
 
     public static int connectionState = 0;
 

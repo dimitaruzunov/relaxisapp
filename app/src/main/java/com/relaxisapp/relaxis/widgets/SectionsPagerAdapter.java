@@ -23,47 +23,30 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	public final static int STRESS_FRAGMENT = 3;
 	
 	String[] sectionTitles;
-	SparseArray<Fragment> pageReferenceMap;
 	
 	public SectionsPagerAdapter(FragmentManager fm, Context context) {
 		super(fm);
 		
 		Resources resources = context.getResources();
         sectionTitles = resources.getStringArray(R.array.section_titles);
-        
-        pageReferenceMap = new SparseArray<Fragment>();
 	}
 
 	@Override
 	public Fragment getItem(int position) {
 		Fragment fragment = null;
 		
-		Bundle arguments = new Bundle();
-		
 		switch (position) {
 		case LOGIN_FRAGMENT:
-			arguments.putString(LoginFragment.SECTION_TITLE, sectionTitles[position]);
 			fragment = new LoginFragment();
-			fragment.setArguments(arguments);
-			pageReferenceMap.put(position, fragment);
 			break;
 		case HOME_FRAGMENT:
-			arguments.putString(HomeFragment.SECTION_TITLE, sectionTitles[position]);
 			fragment = new HomeFragment();
-			fragment.setArguments(arguments);
-			pageReferenceMap.put(position, fragment);
 			break;
 		case BREATHING_FRAGMENT:
-			arguments.putString(BreathingFragment.SECTION_TITLE, sectionTitles[position]);
 			fragment = new BreathingFragment();
-			fragment.setArguments(arguments);
-			pageReferenceMap.put(position, fragment);
 			break;
 		case STRESS_FRAGMENT:
-			arguments.putString(StressEstimationFragment.SECTION_TITLE, sectionTitles[position]);
 			fragment = new StressEstimationFragment();
-			fragment.setArguments(arguments);
-			pageReferenceMap.put(position, fragment);
 			break;
 		}
 		
@@ -78,10 +61,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return sectionTitles[position];
-	}
-	
-	public Fragment getFragment(int key) {
-	    return pageReferenceMap.get(key);
 	}
 	
 	public void setFragment(int position, ViewPager viewPager) {

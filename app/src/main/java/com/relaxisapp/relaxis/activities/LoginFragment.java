@@ -2,8 +2,6 @@ package com.relaxisapp.relaxis.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,11 +29,7 @@ import com.relaxisapp.relaxis.widgets.BreathingScoreResultsListAdapter;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.widgets.StressScoreResultsListAdapter;
 
-import java.util.ArrayList;
-
 public class LoginFragment extends Fragment {
-
-    public final static String SECTION_TITLE = "section title";
 
     private UiLifecycleHelper uiHelper;
 

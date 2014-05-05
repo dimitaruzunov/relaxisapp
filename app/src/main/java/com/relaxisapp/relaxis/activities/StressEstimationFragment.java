@@ -24,8 +24,6 @@ import com.relaxisapp.relaxis.utils.Const;
 
 public class StressEstimationFragment extends Fragment {
 
-	public final static String SECTION_TITLE = "section title";
-
 	static Timer timeUpdateTimer = new Timer();
 	static TimeUpdateTimerTask timeUpdateTimerTask;
 	
