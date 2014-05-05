@@ -20,6 +20,7 @@
 
     <!-- Backgrounds -->
     <color name="background_light">#eee</color>
+    <color name="background_dark">#333</color>
 
     <!-- Text colors -->
     <color name="text_dark">#333</color>
@@ -28,6 +29,7 @@
     <!-- Buttons -->
     <color name="action_button">#9933b5e5</color>
     <color name="action_button_pressed">#CC33b5e5</color>
+    <color name="action_button_shadow">#80333333</color>
 
     <color name="red">#ff6060</color>
     <color name="lightred">#ff7a7a</color>

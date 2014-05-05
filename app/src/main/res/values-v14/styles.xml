@@ -6,13 +6,18 @@
         AppBaseTheme from BOTH res/values/styles.xml and
         res/values-v11/styles.xml on API 14+ devices.
     -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- API 14 theme customizations can go here. -->
         <item name="android:actionBarStyle">@style/ActionBar</item>
+        <!-- <item name="android:actionBarTabStyle">@style/ActionBarTabs</item> -->
     </style>
-    
+
     <style name="ActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/red</item>
+    </style>
+
+    <style name="ActionBarTabs" parent="android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@color/background_dark</item>
     </style>
 
 </resources>
