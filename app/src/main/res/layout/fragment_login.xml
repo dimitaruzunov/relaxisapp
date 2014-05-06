@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.relaxisapp.relaxis.views.UserView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
@@ -79,4 +79,4 @@
         android:choiceMode="singleChoice"
         style="@style/ScoreListView" />
 
-</RelativeLayout>
+</com.relaxisapp.relaxis.views.UserView>
