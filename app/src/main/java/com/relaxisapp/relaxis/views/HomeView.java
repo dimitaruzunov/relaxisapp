@@ -40,10 +40,10 @@ public class HomeView extends ScrollView {
     private static boolean DEBUG = false;
     private static final String TAG = HomeView.class.getSimpleName();
 
-    private static TextView heartRateTextView;
-    private static TextView rrIntervalTextView;
-    private static TextView instantHeartRateTextView;
-    private static TextView instantSpeedTextView;
+    private TextView heartRateTextView;
+    private TextView rrIntervalTextView;
+    private TextView instantHeartRateTextView;
+    private TextView instantSpeedTextView;
 
     Button connectButton, musicButton;
     ImageButton prevButton, pauseButton, stopButton, nextButton;
@@ -167,6 +167,7 @@ public class HomeView extends ScrollView {
         model.addListener(HomeModel.ChangeEvent.INSTANT_HEART_RATE_CHANGED, instantHeartRateListener);
         model.addListener(HomeModel.ChangeEvent.INSTANT_SPEED_CHANGED, instantSpeedListener);
         model.addListener(HomeModel.ChangeEvent.MUSIC_PLAYED, musicPlayedListener);
+
         updateConnectButton();
         updateHeartRate();
         updateRrInterval();

@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.relaxisapp.relaxis.models.StressModel;
 import com.relaxisapp.relaxis.utils.BTBondReceiver;
 import com.relaxisapp.relaxis.utils.BTBroadcastReceiver;
 import com.relaxisapp.relaxis.utils.ConnectionListener;
@@ -46,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
     private HomeModel homeModel;
     private BreathingModel breathingModel;
+    private StressModel stressModel;
 
 	private NavigationDrawerListAdapter navigationDrawerListAdapter;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -62,6 +64,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
         homeModel = HomeModel.getInstance();
         breathingModel = BreathingModel.getInstance();
+        stressModel = StressModel.getInstance();
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -455,11 +458,11 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 			case Const.PNN50:
                 try {
-                    if (StressEstimationFragment.timeLeft > 0 && StressEstimationFragment.updateScore) {
+                    if (StressEstimationFragment.timeLeft > 0) {
                         String pNN50 = msg.getData().getString("pNN50");
 
                         if (pNN50 != null) {
-                            StressEstimationFragment.stressLevel = Double.parseDouble(pNN50);
+                            stressModel.setStressLevel(Double.parseDouble(pNN50));
                         }
                     }
                 }

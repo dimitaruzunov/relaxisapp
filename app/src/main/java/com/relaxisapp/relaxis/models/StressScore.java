@@ -10,7 +10,8 @@ public class StressScore {
 		
 	}
 
-    public StressScore(double score) {
+    public StressScore(int userId, double score) {
+        this.userId = userId;
         this.score = score;
     }
 

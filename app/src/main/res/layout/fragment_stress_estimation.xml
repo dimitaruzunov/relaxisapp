@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<com.relaxisapp.relaxis.views.StressView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -42,7 +42,6 @@
             android:id="@+id/stressLevelDescTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:text="@string/stress_level_desc"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         
@@ -51,11 +50,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:visibility="invisible"
             android:drawableLeft="@drawable/ic_stress"
             android:drawablePadding="@dimen/activity_horizontal_margin"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         
     </LinearLayout>
 
-</ScrollView>
+</com.relaxisapp.relaxis.views.StressView>

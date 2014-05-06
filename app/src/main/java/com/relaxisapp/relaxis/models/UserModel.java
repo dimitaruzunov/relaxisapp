@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public class UserModel extends EventDispatcher {
 
     public static class ChangeEvent extends SimpleEvent {
-        public static String FB_USER_ID_CHANGE = "fbUserIdChange";
-        public static String FB_USER_NAME_CHANGE = "fbUserNameChange";
-        public static String USER_ID_CHANGE = "userIdChange";
-        public static String BREATHING_SCORES_CHANGE = "breathingScoresChange";
-        public static String STRESS_SCORES_CHANGE = "stressScoresChange";
+        public static final String FB_USER_ID_CHANGE = "fbUserIdChange";
+        public static final String FB_USER_NAME_CHANGE = "fbUserNameChange";
+        public static final String USER_ID_CHANGE = "userIdChange";
+        public static final String BREATHING_SCORES_CHANGE = "breathingScoresChange";
+        public static final String STRESS_SCORES_CHANGE = "stressScoresChange";
         public ChangeEvent(String type) {
             super(type);
         }

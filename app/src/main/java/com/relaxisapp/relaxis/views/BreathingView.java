@@ -30,13 +30,13 @@ public class BreathingView extends ScrollView {
 
     private BreathingModel model;
 
-    static GraphView graphView;
+    private GraphView graphView;
 
     private TextView timeLeftTextView;
     private TextView timeLeftDescTextView;
     private TextView scoreTextView;
     private TextView scoreDescTextView;
-    private static Button startBreathingButton;
+    private Button startBreathingButton;
 
     public BreathingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -159,6 +159,7 @@ public class BreathingView extends ScrollView {
         model.addListener(BreathingModel.ChangeEvent.SCORE_CHANGED, scoreListener);
         model.addListener(BreathingModel.ChangeEvent.IDEAL_GRAPH_DATA_ADDED, idealGraphListener);
         model.addListener(BreathingModel.ChangeEvent.HR_GRAPH_DATA_ADDED, hrGraphListener);
+
         loadHrGraph();
         loadIdealGraph();
         updateButton();
