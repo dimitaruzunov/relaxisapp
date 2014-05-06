@@ -25,6 +25,7 @@ import com.relaxisapp.relaxis.models.BreathingScore;
 import com.relaxisapp.relaxis.models.StressScore;
 import com.relaxisapp.relaxis.models.User;
 import com.relaxisapp.relaxis.models.UserModel;
+import com.relaxisapp.relaxis.views.UserView;
 import com.relaxisapp.relaxis.widgets.BreathingScoreResultsListAdapter;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.widgets.StressScoreResultsListAdapter;
@@ -37,18 +38,7 @@ public class LoginFragment extends Fragment {
 
     private Request meRequest;
 
-    LoginButton authButton;
-    ProfilePictureView profilePictureView;
-    TextView userName;
-
-    private BreathingScoreResultsListAdapter breathingScoreResultsListAdapter;
-    private ListView breathingScoreResultsListView;
-
-    private StressScoreResultsListAdapter stressScoreResultsListAdapter;
-    private ListView stressScoreResultsListView;
-
-    private TextView breathingScoreListDesc;
-    private TextView stressScoreListDesc;
+    private LoginButton authButton;
 
     private UsersDao usersDao;
     private BreathingScoresDao breathingScoresDao;
@@ -56,63 +46,34 @@ public class LoginFragment extends Fragment {
 
     private UserModel userModel;
 
+    private UserView view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         usersDao = new UsersDao();
         breathingScoresDao = new BreathingScoresDao();
         stressScoresDao = new StressScoresDao();
 
         userModel = UserModel.getInstance();
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        view = (UserView) inflater.inflate(R.layout.fragment_login, container, false);
 
-        setupViews(view);
-
-        Log.d("API", String.valueOf(userModel.getBreathingScores()));
-
-        if (userModel.getBreathingScores() != null) {
-            breathingScoreResultsListAdapter = new BreathingScoreResultsListAdapter(
-                    getActivity().getApplicationContext(),
-                    userModel.getBreathingScores());
-
-            breathingScoreResultsListView.setAdapter(breathingScoreResultsListAdapter);
-        }
-
-        if (userModel.getStressScores() != null) {
-            stressScoreResultsListAdapter = new StressScoreResultsListAdapter(
-                    getActivity().getApplicationContext(),
-                    userModel.getStressScores());
-
-            stressScoreResultsListView.setAdapter(stressScoreResultsListAdapter);
-        }
-
-        return view;
-    }
-
-    private void setupViews(View view) {
         authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
 
-        profilePictureView = (ProfilePictureView) view
-                .findViewById(R.id.profilePic);
-        profilePictureView.setCropped(true);
+        Log.d("API", String.valueOf(userModel.getBreathingScores()));
 
-        userName = (TextView) view.findViewById(R.id.userName);
-
-        stressScoreResultsListView = (ListView) view.findViewById(R.id.stressScoreResults);
-        breathingScoreResultsListView = (ListView) view.findViewById(R.id.breathingScoreResults);
-
-        breathingScoreListDesc = (TextView) view.findViewById(R.id.breathingScoreListDesc);
-        stressScoreListDesc = (TextView) view.findViewById(R.id.stressScoreListDesc);
+        return view;
     }
 
     @Override
@@ -175,10 +136,6 @@ public class LoginFragment extends Fragment {
                             if (user != null) {
                                 userModel.setFbUserId(user.getId());
                                 userModel.setFbUserName(user.getName());
-
-                                userName.setText(userModel.getFbUserName());
-                                profilePictureView
-                                        .setProfileId(userModel.getFbUserId());
                             }
                         }
 
@@ -218,13 +175,13 @@ public class LoginFragment extends Fragment {
             if (mSession == null || isSessionChanged(session)) {
                 mSession = session;
                 makeMeRequest(session);
-                toggleViewsVisibility(0);
+                view.toggleViewsVisibility(0);
             }
         } else if (state.isClosed()) {
             userModel.setUserId(0);
             userModel.setFbUserId("");
             userModel.setFbUserName("");
-            toggleViewsVisibility(4);
+            view.toggleViewsVisibility(4);
         } else {
             // System.out.println(state.toString());
         }
@@ -246,14 +203,5 @@ public class LoginFragment extends Fragment {
 
         // Nothing changed
         return false;
-    }
-
-    private void toggleViewsVisibility(int visibility) {
-        userName.setVisibility(visibility);
-        profilePictureView.setVisibility(visibility);
-        breathingScoreResultsListView.setVisibility(visibility);
-        stressScoreResultsListView.setVisibility(visibility);
-        breathingScoreListDesc.setVisibility(visibility);
-        stressScoreListDesc.setVisibility(visibility);
     }
 }

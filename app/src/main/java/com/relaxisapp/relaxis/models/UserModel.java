@@ -26,38 +26,38 @@ public class UserModel extends EventDispatcher {
         return instance;
     }
 
-    private String fbUserId;
-    public String getFbUserId() {
+    private String fbUserId = "";
+    public synchronized String getFbUserId() {
         return fbUserId;
     }
-    public void setFbUserId(String fbUserId) {
+    public synchronized void setFbUserId(String fbUserId) {
         this.fbUserId = fbUserId;
         notifyChange(ChangeEvent.FB_USER_ID_CHANGE);
     }
 
-    private String fbUserName;
-    public String getFbUserName() {
+    private String fbUserName = "";
+    public synchronized String getFbUserName() {
         return fbUserName;
     }
-    public void setFbUserName(String fbUserName) {
+    public synchronized void setFbUserName(String fbUserName) {
         this.fbUserName = fbUserName;
         notifyChange(ChangeEvent.FB_USER_NAME_CHANGE);
     }
 
     private int userId = 0;
-    public int getUserId() {
+    public synchronized int getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public synchronized void setUserId(int userId) {
         this.userId = userId;
         notifyChange(ChangeEvent.USER_ID_CHANGE);
     }
 
     private ArrayList<BreathingScore> breathingScores = null;
-    public ArrayList<BreathingScore> getBreathingScores() {
+    public synchronized ArrayList<BreathingScore> getBreathingScores() {
         return breathingScores;
     }
-    public void setBreathingScores(BreathingScore[] breathingScores) {
+    public synchronized void setBreathingScores(BreathingScore[] breathingScores) {
         this.breathingScores = new ArrayList<BreathingScore>();
         for (BreathingScore score : breathingScores) {
             this.breathingScores.add(score);
@@ -66,10 +66,10 @@ public class UserModel extends EventDispatcher {
     }
 
     private ArrayList<StressScore> stressScores = null;
-    public ArrayList<StressScore> getStressScores() {
+    public synchronized ArrayList<StressScore> getStressScores() {
         return stressScores;
     }
-    public void setStressScores(StressScore[] stressScores) {
+    public synchronized void setStressScores(StressScore[] stressScores) {
         this.stressScores = new ArrayList<StressScore>();
         for (StressScore score : stressScores) {
             this.stressScores.add(score);
