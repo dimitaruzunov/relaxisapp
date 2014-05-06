@@ -1,6 +1,5 @@
 package com.relaxisapp.relaxis.activities;
 
-import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,8 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.relaxisapp.relaxis.R;
@@ -19,7 +16,6 @@ import com.relaxisapp.relaxis.daos.StressScoresDao;
 import com.relaxisapp.relaxis.models.StressModel;
 import com.relaxisapp.relaxis.models.StressScore;
 import com.relaxisapp.relaxis.models.UserModel;
-import com.relaxisapp.relaxis.views.HomeView;
 import com.relaxisapp.relaxis.views.StressView;
 import com.relaxisapp.relaxis.widgets.SectionsPagerAdapter;
 import com.relaxisapp.relaxis.utils.BtConnection;

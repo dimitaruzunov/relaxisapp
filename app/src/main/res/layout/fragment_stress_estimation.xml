@@ -1,58 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.relaxisapp.relaxis.views.StressView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:orientation="vertical"
-        android:gravity="center">
-        
-        <Button
-            android:id="@+id/startStressEstimationButton"
-            android:text="@string/start"
-            android:drawableLeft="@drawable/ic_action_play"
-            style="@style/LargeButton" />
+        android:padding="@dimen/layout_padding">
 
-        <TextView
-            android:id="@+id/stressTimeLeftDescTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time_left_desc"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        
-        <TextView
-            android:id="@+id/stressTimeLeftTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        
         <View
-            android:id="@+id/stressDivider"
-            style="@style/Divider" />
-
-        <TextView
-            android:id="@+id/stressLevelDescTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stress_level_desc"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:id="@+id/stressLevelSlider"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/stress_slider_bg"/>
         
         <TextView
             android:id="@+id/stressLevelTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:drawableLeft="@drawable/ic_stress"
-            android:drawablePadding="@dimen/activity_horizontal_margin"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:drawableTop="@drawable/ic_stress"
+            android:textSize="@dimen/large_text_size" />
         
     </LinearLayout>
 

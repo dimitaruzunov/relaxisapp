@@ -21,6 +21,9 @@
     <!-- Backgrounds -->
     <color name="background_light">#eee</color>
     <color name="background_dark">#333</color>
+    <color name="stress_gradient_start">#ff4444</color>
+    <color name="stress_gradient_center">#ffbb33</color>
+    <color name="stress_gradient_end">#99cc00</color>
 
     <!-- Text colors -->
     <color name="text_dark">#333</color>
@@ -32,13 +35,8 @@
     <color name="action_button_shadow">#80333333</color>
 
     <color name="red">#ff6060</color>
-    <color name="lightred">#ff7a7a</color>
     <color name="darkred">#b33131</color>
-    <color name="lightgrey">#eee</color>
-    <color name="grey">#333</color>
     <color name="darkgrey">#222</color>
     <color name="white">#fff</color>
-    <color name="lightgreen">#60ff8d</color>
-    <color name="green">#20b349</color>
 
 </resources>

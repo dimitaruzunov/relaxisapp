@@ -43,13 +43,6 @@
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
     </style>
     
-    <style name="PagerTitleStrip">
-        <item name="android:background">@color/grey</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:paddingTop">@dimen/pager_title_strip_vertical_padding</item>
-        <item name="android:paddingBottom">@dimen/pager_title_strip_vertical_padding</item>
-    </style>
-    
     <style name="NavigationDrawerListView">
         <item name="android:listSelector">@drawable/list_selector</item>
         <item name="android:background">@color/background_light</item>
@@ -67,7 +60,7 @@
     
     <style name="ScoreListView">
         <item name="android:listSelector">@drawable/list_selector</item>
-        <item name="android:background">@color/grey</item>
+        <item name="android:background">@color/background_dark</item>
         <item name="android:divider">@color/darkgrey</item>
         <item name="android:dividerHeight">1dp</item>
     </style>

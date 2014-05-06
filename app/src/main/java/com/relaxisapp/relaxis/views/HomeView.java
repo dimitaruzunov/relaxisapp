@@ -27,14 +27,10 @@ public class HomeView extends ScrollView {
     public static interface ViewListener {
         public void onConnectButtonClick();
         public void onMusicButtonClick();
-
-        void onPrevButtonClick();
-
-        void onPauseButtonClick();
-
-        void onStopButtonClick();
-
-        void onNextButtonClick();
+        public void onPrevButtonClick();
+        public void onPauseButtonClick();
+        public void onStopButtonClick();
+        public void onNextButtonClick();
     }
 
     private static boolean DEBUG = false;
@@ -173,6 +169,7 @@ public class HomeView extends ScrollView {
         updateRrInterval();
         updateInstantHeartRate();
         updateInstantSpeed();
+        updatePauseButton();
     }
 
     private void musicPlayerSetup() {
