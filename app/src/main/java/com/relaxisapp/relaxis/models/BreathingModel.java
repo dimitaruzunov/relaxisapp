@@ -18,7 +18,6 @@ public class BreathingModel extends EventDispatcher {
         public static final String SCORE_CHANGED = "scoreChanged";
         public static final String IDEAL_GRAPH_DATA_ADDED = "idealGraphDataAdded";
         public static final String HR_GRAPH_DATA_ADDED = "hrGraphDataAdded";
-        public static final String DUMMY_DATA_ADDED = "dummyDataAdded";
 
         public ChangeEvent(String type) {
             super(type);

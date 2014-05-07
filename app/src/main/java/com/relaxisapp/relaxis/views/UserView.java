@@ -1,14 +1,12 @@
 package com.relaxisapp.relaxis.views;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.events.Event;
@@ -101,8 +99,8 @@ public class UserView extends RelativeLayout {
         stressScoreListDesc = (TextView) findViewById(R.id.stressScoreListDesc);
 
         model.addListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
-        model.addListener(UserModel.ChangeEvent.BREATHING_SCORES_CHANGE, breathingScoresListener);
-        model.addListener(UserModel.ChangeEvent.STRESS_SCORES_CHANGE, stressScoresListener);
+        model.addListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresListener);
+        model.addListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresListener);
 
         updateFbUserInfo();
         updateBreathingScores();
@@ -132,7 +130,7 @@ public class UserView extends RelativeLayout {
 
     public void destroy() {
         model.removeListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
-        model.removeListener(UserModel.ChangeEvent.BREATHING_SCORES_CHANGE, breathingScoresListener);
-        model.removeListener(UserModel.ChangeEvent.STRESS_SCORES_CHANGE, stressScoresListener);
+        model.removeListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresListener);
+        model.removeListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresListener);
     }
 }
