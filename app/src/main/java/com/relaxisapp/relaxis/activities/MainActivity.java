@@ -59,8 +59,10 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-        dalThread.start();
-        dalHandler = new Handler(dalThread.getLooper());
+        if (!dalThread.isAlive()) {
+            dalThread.start();
+            dalHandler = new Handler(dalThread.getLooper());
+        }
 
         homeModel = HomeModel.getInstance();
         breathingModel = BreathingModel.getInstance();
