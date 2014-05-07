@@ -1,5 +1,7 @@
 package com.relaxisapp.relaxis.models;
 
+import android.util.Log;
+
 import com.jjoe64.graphview.GraphView;
 import com.relaxisapp.relaxis.events.EventDispatcher;
 import com.relaxisapp.relaxis.events.SimpleEvent;
@@ -15,9 +17,8 @@ public class BreathingModel extends EventDispatcher {
         public static final String TIME_LEFT_CHANGED = "timeLeftChanged";
         public static final String SCORE_CHANGED = "scoreChanged";
         public static final String IDEAL_GRAPH_DATA_ADDED = "idealGraphDataAdded";
-        public static final String IDEAL_GRAPH_DATA_RESET = "idealGraphDataReset";
         public static final String HR_GRAPH_DATA_ADDED = "hrGraphDataAdded";
-        public static final String HR_GRAPH_DATA_RESET = "hrGraphDataReset";
+        public static final String DUMMY_DATA_ADDED = "dummyDataAdded";
 
         public ChangeEvent(String type) {
             super(type);
@@ -72,8 +73,7 @@ public class BreathingModel extends EventDispatcher {
         return idealGraphData.get(idealGraphData.size()-1);
     }
     public GraphView.GraphViewData[] getIdealGraphData() {
-        GraphView.GraphViewData[] data = new GraphView.GraphViewData[idealGraphData.size()];
-        idealGraphData.toArray(data);
+        GraphView.GraphViewData[] data = idealGraphData.toArray(new GraphView.GraphViewData[0]);
         return data;
     }
     public void addIdealGraphData(GraphView.GraphViewData data) {
@@ -83,18 +83,13 @@ public class BreathingModel extends EventDispatcher {
         idealGraphData.add(data);
         notifyChange(ChangeEvent.IDEAL_GRAPH_DATA_ADDED);
     }
-    public void setIdealGraphData(ArrayList<GraphView.GraphViewData> idealGraphData) {
-        this.idealGraphData = idealGraphData;
-        notifyChange(ChangeEvent.IDEAL_GRAPH_DATA_RESET);
-    }
 
     private ArrayList<GraphView.GraphViewData> hrGraphData = new ArrayList<GraphView.GraphViewData>();
     public GraphView.GraphViewData getLastHrGraphData() {
         return hrGraphData.get(hrGraphData.size()-1);
     }
     public GraphView.GraphViewData[] getHrGraphData() {
-        GraphView.GraphViewData[] data = new GraphView.GraphViewData[hrGraphData.size()];
-        hrGraphData.toArray(data);
+        GraphView.GraphViewData[] data = hrGraphData.toArray(new GraphView.GraphViewData[0]);
         return data;
     }
     public void addHrGraphData(GraphView.GraphViewData data) {
@@ -103,10 +98,6 @@ public class BreathingModel extends EventDispatcher {
         }
         hrGraphData.add(data);
         notifyChange(ChangeEvent.HR_GRAPH_DATA_ADDED);
-    }
-    public void setHrGraphData(ArrayList<GraphView.GraphViewData> hrGraphData) {
-        this.hrGraphData = hrGraphData;
-        notifyChange(ChangeEvent.HR_GRAPH_DATA_RESET);
     }
 
     private void notifyChange(String type) {

@@ -52,7 +52,7 @@ public class BreathingFragment extends Fragment {
 	static int multiplier = 1;
 
 	public static int beatsCount = 0;
-	static int timerCounter = 0;
+	public static int timerCounter = 0;
 
     private HomeModel homeModel;
     private BreathingModel breathingModel;
@@ -74,6 +74,9 @@ public class BreathingFragment extends Fragment {
 
         breathingModel.addListener(BreathingModel.ChangeEvent.GRAPH_UPDATE_STARTED_STATE_CHANGED, graphUpdateStartListener);
 
+        updateDummyGraph(idealMinHR);
+        updateDummyGraph(idealMaxHR);
+
 		return view;
 	}
 
@@ -85,6 +88,7 @@ public class BreathingFragment extends Fragment {
             }
             else {
                 stopInstantHRGraphTimer();
+                beatsCount = timerCounter / Const.TIMER_TICKS_PER_SECOND;
             }
         }
     };
@@ -108,7 +112,8 @@ public class BreathingFragment extends Fragment {
         graphUpdateTimerTask =
                 new GraphUpdateTimerTask();
         graphUpdateTimer.scheduleAtFixedRate(
-                graphUpdateTimerTask, 1000,
+                graphUpdateTimerTask,
+                (timerCounter % Const.TIMER_TICKS_PER_SECOND) * 1000 / Const.TIMER_TICKS_PER_SECOND,
                 1000 / Const.TIMER_TICKS_PER_SECOND);
     }
 
@@ -156,7 +161,7 @@ public class BreathingFragment extends Fragment {
                 @Override
                 public void run() {
                     updateIdealHR();
-                    updateDummyGraph();
+                    updateDummyGraph((timerCounter % 2 == 0) ? idealMinHR : idealMaxHR);
                 }
             });
             timerCounter++;
@@ -183,12 +188,12 @@ public class BreathingFragment extends Fragment {
                 tIdealHR));
     }
 
-	private void updateDummyGraph() {
+	private void updateDummyGraph(int value) {
 		// keep the viewport 2 seconds forward and zoom it to the min/max ideal
 		// HR
 		BtConnection.dummySeries.appendData(new GraphViewData(
 				(timerCounter * 1.0 / Const.TIMER_TICKS_PER_SECOND) + 2,
-				(timerCounter % 2 == 0) ? idealMinHR : idealMaxHR), true, 2);
+				value), true, 2);
 	}
 
 	class TimeLeftUpdateTimerTask extends TimerTask {

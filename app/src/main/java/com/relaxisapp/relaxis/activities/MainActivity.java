@@ -359,8 +359,6 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
 
 				}
 
-                breathingModel.setGraphUpdateStartedState(true);
-
 				break;
 			}
 		}
@@ -413,7 +411,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
                     }
                 }
                 catch (Exception e) {
-                    Log.e("HEARTRATE", e.getMessage());
+//                    Log.e("HEARTRATE", e.getMessage());
                 }
 				break;
 
@@ -425,7 +423,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
                     }
                 }
                 catch (Exception e) {
-                    Log.e("INSTANTSPEED", e.getMessage());
+//                    Log.e("INSTANTSPEED", e.getMessage());
                 }
 				break;
 
@@ -437,7 +435,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
                     }
                 }
                 catch (Exception e) {
-                    Log.e("RRINTERVAL", e.getMessage());
+//                    Log.e("RRINTERVAL", e.getMessage());
                 }
                 break;
 
@@ -449,10 +447,14 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
                         homeModel.setInstantHeartRate(instantHR);
                     }
 
+                    if (!breathingModel.getGraphUpdateStartedState()) {
+                        breathingModel.setGraphUpdateStartedState(true);
+                    }
+
                     updateBreathingGraph(instantHR);
                 }
                 catch (Exception e) {
-                    Log.e("INSTANTHR", e.getMessage());
+//                    Log.e("INSTANTHR", e.getMessage());
                 }
 				break;
 
@@ -467,7 +469,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
                     }
                 }
                 catch (Exception e) {
-                    Log.e("PNN50", e.getMessage());
+//                    Log.e("PNN50", e.getMessage());
                 }
 				break;
 			}
