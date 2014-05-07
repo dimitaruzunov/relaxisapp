@@ -10,6 +10,7 @@ public class HomeModel extends EventDispatcher {
 
     public static class ChangeEvent extends SimpleEvent {
         public static final String CONNECTION_STATE_CHANGED = "connectionStateChanged";
+        public static final String NN_COUNT_CHANGED = "nnCountChanged";
         public static final String HEART_RATE_CHANGED = "heartRateChanged";
         public static final String RR_INTERVAL_CHANGED = "rrIntervalChanged";
         public static final String INSTANT_HEART_RATE_CHANGED = "instantHeartRateChanged";
@@ -39,6 +40,15 @@ public class HomeModel extends EventDispatcher {
     public void setConnectionState(int connectionState) {
         this.connectionState = connectionState;
         notifyChange(ChangeEvent.CONNECTION_STATE_CHANGED);
+    }
+
+    public int nnCount = 0;
+    public int getNnCount() {
+        return nnCount;
+    }
+    public void setNnCount(int nnCount) {
+        this.nnCount = nnCount;
+        notifyChange(ChangeEvent.NN_COUNT_CHANGED);
     }
 
     private int heartRate = 0;

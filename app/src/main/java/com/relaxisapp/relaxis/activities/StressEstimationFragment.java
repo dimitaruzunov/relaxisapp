@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.daos.StressScoresDao;
+import com.relaxisapp.relaxis.events.Event;
+import com.relaxisapp.relaxis.events.EventListener;
+import com.relaxisapp.relaxis.models.BreathingModel;
+import com.relaxisapp.relaxis.models.HomeModel;
 import com.relaxisapp.relaxis.models.StressModel;
 import com.relaxisapp.relaxis.models.StressScore;
 import com.relaxisapp.relaxis.models.UserModel;
@@ -23,16 +27,10 @@ import com.relaxisapp.relaxis.utils.Const;
 
 public class StressEstimationFragment extends Fragment {
 
-	static Timer timeUpdateTimer = new Timer();
-	static TimeUpdateTimerTask timeUpdateTimerTask;
-	
-	private Handler timeLeftUpdateHandler = new Handler();
-	
-	static int timeLeft = Const.TIME_STRESS_SECONDS;
-
     private StressScoresDao stressScoresDao;
 
     private StressView view;
+    private HomeModel homeModel;
     private StressModel stressModel;
     private UserModel userModel;
 	
@@ -41,10 +39,13 @@ public class StressEstimationFragment extends Fragment {
 
         stressScoresDao = new StressScoresDao();
 
+        homeModel = HomeModel.getInstance();
         stressModel = StressModel.getInstance();
         userModel = UserModel.getInstance();
 
 		view = (StressView) inflater.inflate(R.layout.fragment_stress_estimation, container, false);
+
+        homeModel.addListener(HomeModel.ChangeEvent.NN_COUNT_CHANGED, nnCountListener);
 		
 		// TODO check if the timer is cleared when the back button is pressed
 		// and then the activity is started again
@@ -52,62 +53,32 @@ public class StressEstimationFragment extends Fragment {
 		
 		return view;
 	}
-	
-	private void start() {
-		if (HomeFragment.connectionState != 2) {
-			MainActivity.viewPager.setCurrentItem(SectionsPagerAdapter.HOME_FRAGMENT);
-			Toast.makeText(getActivity(), "Please connect to HxM", Toast.LENGTH_SHORT).show();
-		} else {
-			if (timeLeft == 0) {
-				timeLeft = Const.TIME_STRESS_SECONDS;
-			}
-			timeUpdateTimer = new Timer();
-			timeUpdateTimerTask = new TimeUpdateTimerTask();
-			timeUpdateTimer.scheduleAtFixedRate(
-					timeUpdateTimerTask, 0,
-					1000);
-		}
-	}
-	
-	private void stop() {
-		timeUpdateTimerTask.cancel();
-		timeUpdateTimer.cancel();
-	}
-	
-	private class TimeUpdateTimerTask extends TimerTask {
 
-		@Override
-		public void run() {
-			timeLeftUpdateHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					updateTimeLeft();
-					System.out.println("test"+ BtConnection.nnCount);
-				}
-			});
-		}
+    private EventListener nnCountListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            if (homeModel.getNnCount() % Const.TIME_STRESS_SECONDS == 0 && homeModel.getConnectionState() == 2) {
+                saveStressScore();
+            }
+        }
+    };
 
-	}
+    private boolean saveStressScore() {
+        if (userModel.getUserId() > 0) {
+            MainActivity.dalHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    stressScoresDao.create(new StressScore(userModel.getUserId(), stressModel.getStressLevel() * 10));
+                }
+            });
 
-	private void updateTimeLeft() {
-		if (timeLeft == 0)
-		{
-			if (userModel.getUserId() > 0) {
-                MainActivity.dalHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        stressScoresDao.create(new StressScore(userModel.getUserId(), stressModel.getStressLevel() * 10));
-                    }
-                });
+            Toast.makeText(getActivity(), "Stress level saved: " +
+                    stressModel.getStressLevel() * 10, Toast.LENGTH_SHORT).show();
+        }
 
-				Toast.makeText(getActivity(), "Stress level saved: " +
-				stressModel.getStressLevel() * 10, Toast.LENGTH_SHORT).show();
-			}
-			// startStressEstimationButton.callOnClick(); TODO find alternative method
-			return;
-		}
-		timeLeft--;
-	}
+        // TODO return whether the save is successful
+        return true;
+    }
 
     @Override
     public void onDestroy() {

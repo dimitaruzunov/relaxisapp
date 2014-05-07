@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
     private BreathingModel breathingModel;
     private StressModel stressModel;
 
-	private NavigationDrawerListAdapter navigationDrawerListAdapter;
+    private NavigationDrawerListAdapter navigationDrawerListAdapter;
     private SectionsPagerAdapter sectionsPagerAdapter;
     static ViewPager viewPager;
     private BluetoothConnectTask connectTask;
@@ -57,8 +56,8 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
     public static HandlerThread dalThread = new HandlerThread("DAL");
     public static Handler dalHandler;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         if (!dalThread.isAlive()) {
             dalThread.start();
             dalHandler = new Handler(dalThread.getLooper());
@@ -68,12 +67,12 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
         breathingModel = BreathingModel.getInstance();
         stressModel = StressModel.getInstance();
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		// Sections pager setup
+        // Sections pager setup
         setupPager();
 
         // Tabs setup
@@ -86,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
         viewPager.setCurrentItem(SectionsPagerAdapter.HOME_FRAGMENT);
 
         setupIntentFiltersForConnection();
-	}
+    }
 
     private void setupPager() {
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
@@ -183,195 +182,195 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
         this.getApplicationContext().registerReceiver(new BTBondReceiver(), filter2);
     }
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
-		navigationDrawerListAdapter.syncState();
-	}
+        navigationDrawerListAdapter.syncState();
+    }
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		navigationDrawerListAdapter.handleOnPrepareOptionsMenu(menu);
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        navigationDrawerListAdapter.handleOnPrepareOptionsMenu(menu);
 
-		return super.onPrepareOptionsMenu(menu);
-	}
+        return super.onPrepareOptionsMenu(menu);
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		boolean handled = true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        boolean handled = true;
 
-		navigationDrawerListAdapter.handleOnOptionsItemSelected(item);
+        navigationDrawerListAdapter.handleOnOptionsItemSelected(item);
 
-		return handled;
-	}
+        return handled;
+    }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		navigationDrawerListAdapter.syncState();
-		super.onConfigurationChanged(newConfig);
-	}
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        navigationDrawerListAdapter.syncState();
+        super.onConfigurationChanged(newConfig);
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
-		super.onActivityResult(requestCode, resultCode, resultIntent);
-		switch (requestCode) {
-		case Const.REQUEST_ENABLE_BT:
-			handleBluetoothConnectResult(resultCode, resultIntent);
-			break;
-		}
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        super.onActivityResult(requestCode, resultCode, resultIntent);
+        switch (requestCode) {
+            case Const.REQUEST_ENABLE_BT:
+                handleBluetoothConnectResult(resultCode, resultIntent);
+                break;
+        }
+    }
 
     // TODO remove all toasts from the activities and place them into the views
 
-	private void handleBluetoothConnectResult(int resultCode, Intent resultIntent) {
-		if (resultCode == RESULT_OK) {
-			Toast.makeText(this, "Bluetooth is now enabled", Toast.LENGTH_LONG).show();
-		} else {
+    private void handleBluetoothConnectResult(int resultCode, Intent resultIntent) {
+        if (resultCode == RESULT_OK) {
+            Toast.makeText(this, "Bluetooth is now enabled", Toast.LENGTH_LONG).show();
+        } else {
 //			setPreviousOnButtonClickListener(savedButton);
-			Toast.makeText(this, "User cancelled the bluetooth enable intent", Toast.LENGTH_LONG).show();
-			homeModel.setConnectionState(0);
-		}
-	}
+            Toast.makeText(this, "User cancelled the bluetooth enable intent", Toast.LENGTH_LONG).show();
+            homeModel.setConnectionState(0);
+        }
+    }
 
-	void executeConnect() {
+    void executeConnect() {
         homeModel.setConnectionState(1);
 
-		connectTask = new BluetoothConnectTask();
+        connectTask = new BluetoothConnectTask();
         connectTask.execute();
-	}
+    }
 
-	private class BluetoothConnectTask extends
-			AsyncTask<Void, Void, Integer> {
+    private class BluetoothConnectTask extends
+            AsyncTask<Void, Void, Integer> {
 
-		private final int CODE_CANCELLED = 3;
-		private final int CODE_NO_BT = 2;
-		private final int CODE_FAILURE = 1;
-		private final int CODE_SUCCESS = 0;
+        private final int CODE_CANCELLED = 3;
+        private final int CODE_NO_BT = 2;
+        private final int CODE_FAILURE = 1;
+        private final int CODE_SUCCESS = 0;
 
-		@Override
-		protected Integer doInBackground(Void... voids) {
+        @Override
+        protected Integer doInBackground(Void... voids) {
 
-			int result;
-			
-			// do the work unless user cancel
-			while (!isCancelled()) {
+            int result;
+
+            // do the work unless user cancel
+            while (!isCancelled()) {
                 // connection state - connecting
                 //homeModel.setConnectionState(1);
 
-				// Getting the Bluetooth adapter
-				BtConnection.adapter = BluetoothAdapter.getDefaultAdapter();
+                // Getting the Bluetooth adapter
+                BtConnection.adapter = BluetoothAdapter.getDefaultAdapter();
 
-				// Check for Bluetooth support
-				if (BtConnection.adapter == null) {
-					result = CODE_NO_BT;
-					return result;
-				}
+                // Check for Bluetooth support
+                if (BtConnection.adapter == null) {
+                    result = CODE_NO_BT;
+                    return result;
+                }
 
-				// Enable bluetooth if not enabled
-				if (!BtConnection.adapter.isEnabled()) {
-					Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-					startActivityForResult(enableBtIntent, Const.REQUEST_ENABLE_BT);
-				}
+                // Enable bluetooth if not enabled
+                if (!BtConnection.adapter.isEnabled()) {
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBtIntent, Const.REQUEST_ENABLE_BT);
+                }
 
-				// TODO try to write this better
-				while (!BtConnection.adapter.isEnabled()) {
-					// wait until the bluetooth is on
-				}
+                // TODO try to write this better
+                while (!BtConnection.adapter.isEnabled()) {
+                    // wait until the bluetooth is on
+                }
 
-				Set<BluetoothDevice> pairedDevices = BtConnection.adapter
-						.getBondedDevices();
-				if (pairedDevices.size() > 0) {
-					for (BluetoothDevice device : pairedDevices) {
-						if (device.getName().startsWith("HXM")) {
-							BtConnection.BhMacID = device.getAddress();
+                Set<BluetoothDevice> pairedDevices = BtConnection.adapter
+                        .getBondedDevices();
+                if (pairedDevices.size() > 0) {
+                    for (BluetoothDevice device : pairedDevices) {
+                        if (device.getName().startsWith("HXM")) {
+                            BtConnection.BhMacID = device.getAddress();
 
-							BluetoothDevice Device = BtConnection.adapter
-									.getRemoteDevice(BtConnection.BhMacID);
-							BtConnection.deviceName = Device.getName();
+                            BluetoothDevice Device = BtConnection.adapter
+                                    .getRemoteDevice(BtConnection.BhMacID);
+                            BtConnection.deviceName = Device.getName();
 
-							BtConnection._bt = new BTClient(
-									BtConnection.adapter, BtConnection.BhMacID);
+                            BtConnection._bt = new BTClient(
+                                    BtConnection.adapter, BtConnection.BhMacID);
 
-							BtConnection._NConnListener = new ConnectionListener(
-									SensorDataHandler, SensorDataHandler);
-							BtConnection._bt
-									.addConnectedEventListener(BtConnection._NConnListener);
+                            BtConnection._NConnListener = new ConnectionListener(
+                                    SensorDataHandler, SensorDataHandler);
+                            BtConnection._bt
+                                    .addConnectedEventListener(BtConnection._NConnListener);
 
-							if (BtConnection._bt.IsConnected()) {
-								BtConnection._bt.start();
+                            if (BtConnection._bt.IsConnected()) {
+                                BtConnection._bt.start();
 
-								// TODO ? Reset all the values to 0s
+                                // TODO ? Reset all the values to 0s
 
-								result = CODE_SUCCESS;
-								return result;
-							} else {
-								result = CODE_FAILURE;
-								return result;
-							}
-						}
-					}
-				}
-			}
+                                result = CODE_SUCCESS;
+                                return result;
+                            } else {
+                                result = CODE_FAILURE;
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
 
-			result = CODE_CANCELLED;
-			return result;
-		}
+            result = CODE_CANCELLED;
+            return result;
+        }
 
-		@Override
-		protected void onPostExecute(Integer result) {
-			switch (result) {
-			case CODE_NO_BT:
-				homeModel.setConnectionState(0);
-				Toast.makeText(MainActivity.this, "Bluetooth is not supported",
-						Toast.LENGTH_LONG).show();
-				break;
-			case CODE_FAILURE:
-                homeModel.setConnectionState(0);
-				Toast.makeText(MainActivity.this, "Unable to connect",
-						Toast.LENGTH_LONG).show();
-				break;
-			case CODE_SUCCESS:
-                homeModel.setConnectionState(2);
-				Toast.makeText(MainActivity.this,
-						"Connected to HxM " + BtConnection.deviceName,
-						Toast.LENGTH_LONG).show();
+        @Override
+        protected void onPostExecute(Integer result) {
+            switch (result) {
+                case CODE_NO_BT:
+                    homeModel.setConnectionState(0);
+                    Toast.makeText(MainActivity.this, "Bluetooth is not supported",
+                            Toast.LENGTH_LONG).show();
+                    break;
+                case CODE_FAILURE:
+                    homeModel.setConnectionState(0);
+                    Toast.makeText(MainActivity.this, "Unable to connect",
+                            Toast.LENGTH_LONG).show();
+                    break;
+                case CODE_SUCCESS:
+                    homeModel.setConnectionState(2);
+                    Toast.makeText(MainActivity.this,
+                            "Connected to HxM " + BtConnection.deviceName,
+                            Toast.LENGTH_LONG).show();
 
-				// reset the stress score and time
-				StressEstimationFragment.timeLeft = Const.TIME_STRESS_SECONDS;
-				BtConnection.recentNn50 = new int[Const.SAVED_NN50_COUNT];
-				for (int i = 0; i < BtConnection.recentNn50.length; i++) {
-					BtConnection.recentNn50[i] = 0;
-				}
+                    // reset the stress score and time
+                    homeModel.setNnCount(0);
+                    BtConnection.recentNn50 = new int[Const.SAVED_NN50_COUNT];
+                    for (int i = 0; i < BtConnection.recentNn50.length; i++) {
+                        BtConnection.recentNn50[i] = 0;
+                    }
 
-				// reset the instant HR arr
-				BtConnection.recentInstantHR = new int[Const.SAVED_HR_COUNT];
-				for (int i = 0; i < BtConnection.recentInstantHR.length; i++) {
-					BtConnection.recentInstantHR[i] = 0;
+                    // reset the instant HR arr
+                    BtConnection.recentInstantHR = new int[Const.SAVED_HR_COUNT];
+                    for (int i = 0; i < BtConnection.recentInstantHR.length; i++) {
+                        BtConnection.recentInstantHR[i] = 0;
 
-				}
+                    }
 
-				break;
-			}
-		}
+                    break;
+            }
+        }
 
-		protected void onCancelled() {
+        protected void onCancelled() {
             // TODO check whether the connection has been established before the cancellation and terminate it if so
             homeModel.setConnectionState(0);
             Toast.makeText(MainActivity.this, "Connecting cancelled", Toast.LENGTH_LONG).show();
-		}
+        }
 
-	}
+    }
 
     void cancelConnecting() {
         while (!connectTask.isCancelled()) {
@@ -379,110 +378,110 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
         }
     }
 
-	void executeDisconnect() {
+    void executeDisconnect() {
         homeModel.setConnectionState(0);
 
-		Toast.makeText(this, "Disconnected from HxM", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Disconnected from HxM", Toast.LENGTH_LONG).show();
 
-		// This disconnects listener from acting on received messages
-		BtConnection._bt
-				.removeConnectedEventListener(BtConnection._NConnListener);
-		// Close the communication with the device & throw an exception if
-		// failure
-		BtConnection._bt.Close();
+        // This disconnects listener from acting on received messages
+        BtConnection._bt
+                .removeConnectedEventListener(BtConnection._NConnListener);
+        // Close the communication with the device & throw an exception if
+        // failure
+        BtConnection._bt.Close();
 
         breathingModel.setGraphUpdateStartedState(false);
-	}
+    }
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int option, long id) {
-		sectionsPagerAdapter.setFragment(option, viewPager);
-		navigationDrawerListAdapter.closeDrawer();
-	}
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int option, long id) {
+        sectionsPagerAdapter.setFragment(option, viewPager);
+        navigationDrawerListAdapter.closeDrawer();
+    }
 
-	final Handler SensorDataHandler = new Handler() {
+    final Handler SensorDataHandler = new Handler() {
 
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case Const.HEART_RATE:
-                try {
-                    int heartRate = Integer.parseInt(msg.getData().getString("HeartRate"));
-                    if (heartRate > 0) {
-                        homeModel.setHeartRate(heartRate);
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Const.HEART_RATE:
+                    try {
+                        int heartRate = Integer.parseInt(msg.getData().getString("HeartRate"));
+                        if (heartRate > 0) {
+                            homeModel.setHeartRate(heartRate);
+                        }
                     }
-                }
-                catch (Exception e) {
+                    catch (Exception e) {
 //                    Log.e("HEARTRATE", e.getMessage());
-                }
-				break;
-
-			case Const.INSTANT_SPEED:
-                try {
-                    double instantSpeed = Double.parseDouble(msg.getData().getString("InstantSpeed"));
-                    if (instantSpeed > 0) {
-                        homeModel.setInstantSpeed(instantSpeed);
                     }
-                }
-                catch (Exception e) {
+                    break;
+
+                case Const.INSTANT_SPEED:
+                    try {
+                        double instantSpeed = Double.parseDouble(msg.getData().getString("InstantSpeed"));
+                        if (instantSpeed > 0) {
+                            homeModel.setInstantSpeed(instantSpeed);
+                        }
+                    }
+                    catch (Exception e) {
 //                    Log.e("INSTANTSPEED", e.getMessage());
-                }
-				break;
-
-			case Const.RR_INTERVAL:
-                try {
-                    int rrInterval = Integer.parseInt(msg.getData().getString("RRInterval"));
-                    if (rrInterval > 0) {
-                        homeModel.setRrInterval(rrInterval);
                     }
-                }
-                catch (Exception e) {
+                    break;
+
+                case Const.RR_INTERVAL:
+                    try {
+                        int rrInterval = Integer.parseInt(msg.getData().getString("RRInterval"));
+                        if (rrInterval > 0) {
+                            homeModel.setRrInterval(rrInterval);
+                        }
+                    }
+                    catch (Exception e) {
 //                    Log.e("RRINTERVAL", e.getMessage());
-                }
-                break;
-
-			case Const.INSTANT_HR:
-                try {
-                    String instantHRString = msg.getData().getString("InstantHR");
-                    int instantHR = Integer.parseInt(instantHRString);
-                    if (instantHR > 0) {
-                        homeModel.setInstantHeartRate(instantHR);
                     }
+                    break;
 
-                    if (!breathingModel.getGraphUpdateStartedState()) {
-                        breathingModel.setGraphUpdateStartedState(true);
+                case Const.INSTANT_HR:
+                    try {
+                        String instantHRString = msg.getData().getString("InstantHR");
+                        int instantHR = Integer.parseInt(instantHRString);
+                        if (instantHR > 0) {
+                            homeModel.setInstantHeartRate(instantHR);
+                        }
+
+                        if (!breathingModel.getGraphUpdateStartedState()) {
+                            breathingModel.setGraphUpdateStartedState(true);
+                        }
+
+                        updateBreathingGraph(instantHR);
                     }
-
-                    updateBreathingGraph(instantHR);
-                }
-                catch (Exception e) {
+                    catch (Exception e) {
 //                    Log.e("INSTANTHR", e.getMessage());
-                }
-				break;
+                    }
+                    break;
 
-			case Const.PNN50:
-                try {
-                    if (StressEstimationFragment.timeLeft > 0) {
+                case Const.PNN50:
+                    try {
                         String pNN50 = msg.getData().getString("pNN50");
 
                         if (pNN50 != null) {
                             stressModel.setStressLevel(Double.parseDouble(pNN50));
                         }
-                    }
-                }
-                catch (Exception e) {
-//                    Log.e("PNN50", e.getMessage());
-                }
-				break;
-			}
-		}
 
-	};
+                        homeModel.setNnCount(homeModel.getNnCount() + 1);
+                    }
+                    catch (Exception e) {
+//                    Log.e("PNN50", e.getMessage());
+                    }
+                    break;
+            }
+        }
+
+    };
 
     private void updateBreathingGraph(int instantHR) {
         // update BreathingFragment
         breathingModel.addHrGraphData(new GraphViewData(
-                        BreathingFragment.beatsCount, instantHR));
+                BreathingFragment.beatsCount, instantHR));
         BreathingFragment.beatsCount++;
 
         BtConnection.recentInstantHR[BreathingFragment.beatsCount
