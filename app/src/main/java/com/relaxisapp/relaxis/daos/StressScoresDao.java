@@ -38,7 +38,7 @@ public class StressScoresDao implements IScoresDao<StressScore> {
         try {
             restTemplate.exchange(url, HttpMethod.POST, httpEntity, StressScore.class);
         } catch (Exception e) {
-            Log.e("MainActivity", e.getMessage(), e);
+            Log.e("StressScoresDao", e.getMessage(), e);
             return false;
         }
 
@@ -60,7 +60,7 @@ public class StressScoresDao implements IScoresDao<StressScore> {
         try {
             scores = restTemplate.exchange(url, HttpMethod.GET, httpEntity, StressScore[].class).getBody();
         } catch (Exception e) {
-            Log.e("MainActivity", e.getMessage(), e);
+            Log.e("StressScoresDao", e.getMessage(), e);
             return null;
         }
 

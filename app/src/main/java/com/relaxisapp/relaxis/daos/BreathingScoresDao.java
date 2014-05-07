@@ -38,7 +38,7 @@ public class BreathingScoresDao implements IScoresDao<BreathingScore> {
         try {
             restTemplate.exchange(url, HttpMethod.POST, httpEntity, BreathingScore.class);
         } catch (Exception e) {
-            Log.e("CreateBreathingScore", e.getMessage(), e);
+            Log.e("BreathingScoresDao", e.getMessage(), e);
             return false;
         }
 
@@ -62,7 +62,7 @@ public class BreathingScoresDao implements IScoresDao<BreathingScore> {
         try {
             scores = restTemplate.exchange(url, HttpMethod.GET, httpEntity, BreathingScore[].class).getBody();
         } catch (Exception e) {
-            Log.e("MainActivity", e.getMessage(), e);
+            Log.e("BreathingScoresDao", e.getMessage(), e);
             return null;
         }
 

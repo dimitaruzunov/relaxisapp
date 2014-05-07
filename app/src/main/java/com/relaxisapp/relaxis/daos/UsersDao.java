@@ -11,6 +11,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.UnknownHostException;
+
 /**
  * Created by zdravko on 14-5-1.
  */
@@ -35,8 +37,10 @@ public class UsersDao {
                 // this facebook user is not yet registered
                 // return null;
             } else {
-                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("UsersDao", e.getMessage(), e);
             }
+        } catch (Exception e) {
+            Log.e("UsersDao", e.getMessage(), e);
         }
 
         //TODO throw appropriate exceptions
@@ -44,20 +48,21 @@ public class UsersDao {
     }
 
     public int create(User user) {
+        final String url = "http://relaxisapp.com/api/users/";
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Authorization-Token", "$kG7j2lr&");
+        requestHeaders.add("Content-Type", "application/json");
+        requestHeaders.add("Host", "relaxisapp.com");
+        HttpEntity<User> httpEntity = new HttpEntity<User>(user, requestHeaders);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(
+                new MappingJackson2HttpMessageConverter());
+        User createdUser;
         try {
-            final String url = "http://relaxisapp.com/api/users/";
-            HttpHeaders requestHeaders = new HttpHeaders();
-            requestHeaders.add("Authorization-Token", "$kG7j2lr&");
-            requestHeaders.add("Content-Type", "application/json");
-            requestHeaders.add("Host", "relaxisapp.com");
-            HttpEntity<User> httpEntity = new HttpEntity<User>(user, requestHeaders);
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(
-                    new MappingJackson2HttpMessageConverter());
-            User createdUser = restTemplate.exchange(url, HttpMethod.POST, httpEntity, User.class).getBody();
+            createdUser = restTemplate.exchange(url, HttpMethod.POST, httpEntity, User.class).getBody();
             return createdUser.getUserId();
         } catch (Exception e) {
-            Log.e("MainActivity", e.getMessage(), e);
+            Log.e("UsersDao", e.getMessage(), e);
         }
 
         //TODO throw appropriate exceptions
