@@ -1,35 +1,28 @@
 package com.relaxisapp.relaxis.views;
 
 import android.content.Context;
-import android.os.Handler;
+import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.widget.ListView;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
+import com.jjoe64.graphview.BarGraphView;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GraphViewSeries;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
 import com.relaxisapp.relaxis.models.UserModel;
-import com.relaxisapp.relaxis.widgets.BreathingScoreResultsListAdapter;
-import com.relaxisapp.relaxis.widgets.StressScoreResultsListAdapter;
 
-public class UserView extends RelativeLayout {
+public class UserView extends ScrollView {
 
     private ProfilePictureView profilePictureView;
     private TextView userName;
 
-    private TextView breathingScoreListDesc;
-    private TextView stressScoreListDesc;
-
-    private BreathingScoreResultsListAdapter breathingScoreResultsListAdapter;
-    private ListView breathingScoreResultsListView;
-
-    private StressScoreResultsListAdapter stressScoreResultsListAdapter;
-    private ListView stressScoreResultsListView;
+    private GraphViewSeries stressScoresSeries;
 
     private UserModel model;
 
@@ -41,14 +34,9 @@ public class UserView extends RelativeLayout {
     public void toggleViewsVisibility(int visibility) {
         userName.setVisibility(visibility);
         profilePictureView.setVisibility(visibility);
-        breathingScoreResultsListView.setVisibility(visibility);
-        stressScoreResultsListView.setVisibility(visibility);
-        breathingScoreListDesc.setVisibility(visibility);
-        stressScoreListDesc.setVisibility(visibility);
     }
 
     private void updateFbUserInfo() {
-        Log.i("UPDATEFBUSERINFO", model.getFbUserName());
         userName.setText(model.getFbUserName());
         profilePictureView.setProfileId(model.getFbUserId());
     }
@@ -59,11 +47,7 @@ public class UserView extends RelativeLayout {
             @Override
             public void run() {
                 if (model.getBreathingScores() != null) {
-                    breathingScoreResultsListAdapter = new BreathingScoreResultsListAdapter(
-                            getContext(),
-                            model.getBreathingScores());
-
-                    breathingScoreResultsListView.setAdapter(breathingScoreResultsListAdapter);
+                    // update breathing scores
                 }
             }
         });
@@ -75,11 +59,7 @@ public class UserView extends RelativeLayout {
             @Override
             public void run() {
                 if (model.getStressScores() != null) {
-                    stressScoreResultsListAdapter = new StressScoreResultsListAdapter(
-                            getContext(),
-                            model.getStressScores());
-
-                    stressScoreResultsListView.setAdapter(stressScoreResultsListAdapter);
+                    // stressScoresSeries.appendData(model.getStressScores(), false, 5);
                 };
             }
         });
@@ -89,16 +69,23 @@ public class UserView extends RelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.loginFragmentRelativeLayout);
+
         profilePictureView = (ProfilePictureView) findViewById(R.id.profilePic);
         profilePictureView.setCropped(true);
 
         userName = (TextView) findViewById(R.id.userName);
 
-        stressScoreResultsListView = (ListView) findViewById(R.id.stressScoreResults);
-        breathingScoreResultsListView = (ListView) findViewById(R.id.breathingScoreResults);
+        stressScoresSeries = new GraphViewSeries(
+                "Stress Scores", new GraphViewSeries.GraphViewSeriesStyle(
+                Color.rgb(20, 20, 255), 5), new GraphView.GraphViewData[] {});
 
-        breathingScoreListDesc = (TextView) findViewById(R.id.breathingScoreListDesc);
-        stressScoreListDesc = (TextView) findViewById(R.id.stressScoreListDesc);
+        GraphView graphView = new BarGraphView(getContext(), "Stress Scores");
+        graphView.setScrollable(true);
+        graphView.setScalable(true);
+        graphView.addSeries(stressScoresSeries);
+
+        layout.addView(graphView, setupLayoutParams());
 
         model.addListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
         model.addListener(UserModel.ChangeEvent.BREATHING_SCORES_CHANGE, breathingScoresListener);
@@ -107,6 +94,13 @@ public class UserView extends RelativeLayout {
         updateFbUserInfo();
         updateBreathingScores();
         updateStressScores();
+    }
+
+    private ViewGroup.LayoutParams setupLayoutParams() {
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.stressScoreResults);
+
+        return layoutParams;
     }
 
     private EventListener fbUserInfoListener = new EventListener() {

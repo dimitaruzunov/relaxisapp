@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -17,7 +15,6 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import com.facebook.widget.ProfilePictureView;
 import com.relaxisapp.relaxis.daos.BreathingScoresDao;
 import com.relaxisapp.relaxis.daos.StressScoresDao;
 import com.relaxisapp.relaxis.daos.UsersDao;
@@ -26,9 +23,7 @@ import com.relaxisapp.relaxis.models.StressScore;
 import com.relaxisapp.relaxis.models.User;
 import com.relaxisapp.relaxis.models.UserModel;
 import com.relaxisapp.relaxis.views.UserView;
-import com.relaxisapp.relaxis.widgets.BreathingScoreResultsListAdapter;
 import com.relaxisapp.relaxis.R;
-import com.relaxisapp.relaxis.widgets.StressScoreResultsListAdapter;
 
 public class LoginFragment extends Fragment {
 
@@ -57,9 +52,7 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         usersDao = new UsersDao();
         breathingScoresDao = new BreathingScoresDao();
         stressScoresDao = new StressScoresDao();
@@ -117,8 +110,7 @@ public class LoginFragment extends Fragment {
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
-        public void call(Session session, SessionState state,
-                         Exception exception) {
+        public void call(Session session, SessionState state, Exception exception) {
             onSessionStateChange(session, state, exception);
         }
     };
@@ -167,8 +159,7 @@ public class LoginFragment extends Fragment {
         Request.executeBatchAsync(meRequest);
     }
 
-    private void onSessionStateChange(Session session, SessionState state,
-                                      Exception exception) {
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
             // this is necessary because of a double callback one because of
             // UiLifecycleHelper and second because of LoginFragment.onResume()
@@ -188,10 +179,10 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean isSessionChanged(Session session) {
-
         // Check if session state changed
-        if (mSession.getState() != session.getState())
+        if (mSession.getState() != session.getState()) {
             return true;
+        }
 
         // Check if accessToken changed
         if (mSession.getAccessToken() != null) {
