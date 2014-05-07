@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -33,9 +33,7 @@ public class BreathingView extends ScrollView {
     private GraphView graphView;
 
     private TextView timeLeftTextView;
-    private TextView timeLeftDescTextView;
     private TextView scoreTextView;
-    private TextView scoreDescTextView;
     private Button startBreathingButton;
 
     public BreathingView(Context context, AttributeSet attrs) {
@@ -53,29 +51,12 @@ public class BreathingView extends ScrollView {
 
     private void updateButton() {
         if (model.getStartedState()) {
-            startBreathingButton.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_action_stop, 0, 0, 0);
+            startBreathingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_stop, 0, 0, 0);
             startBreathingButton.setText(R.string.stop);
         }
         else {
-            startBreathingButton.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_action_play, 0, 0, 0);
+            startBreathingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_play, 0, 0, 0);
             startBreathingButton.setText(R.string.start);
-        }
-    }
-
-    private void updateTimeScoreVisibility() {
-        if (model.getStartedState()) {
-            scoreDescTextView.setVisibility(View.VISIBLE);
-            scoreTextView.setVisibility(View.VISIBLE);
-            timeLeftDescTextView.setVisibility(View.VISIBLE);
-            timeLeftTextView.setVisibility(View.VISIBLE);
-        }
-        else {
-            scoreDescTextView.setVisibility(View.INVISIBLE);
-            scoreTextView.setVisibility(View.INVISIBLE);
-            timeLeftDescTextView.setVisibility(View.INVISIBLE);
-            timeLeftTextView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -109,14 +90,9 @@ public class BreathingView extends ScrollView {
     public void onFinishInflate() {
         super.onFinishInflate();
 
-
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.breathingFragmentLinearLayout);
-
-        timeLeftDescTextView = (TextView) findViewById(R.id.breathingTimeLeftDescTextView);
-        timeLeftTextView = (TextView) findViewById(R.id.breathingTimeLeftTextView);
-
-        scoreDescTextView = (TextView) findViewById(R.id.scoreDescTextView);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.breathingFragmentLinearLayout);
         scoreTextView = (TextView) findViewById(R.id.scoreTextView);
+        timeLeftTextView = (TextView) findViewById(R.id.breathingTimeLeftTextView);
 
         startBreathingButton = (Button) findViewById(R.id.startBreathingButton);
         startBreathingButton.setOnClickListener(new View.OnClickListener() {
@@ -163,23 +139,18 @@ public class BreathingView extends ScrollView {
         loadHrGraph();
         loadIdealGraph();
         updateButton();
-        updateTimeScoreVisibility();
         updateTimeLeft();
         updateScore();
     }
 
     private ViewGroup.LayoutParams setupLayoutParams() {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
-        layoutParams.addRule(RelativeLayout.BELOW, R.id.breathingDivider2);
-
-        return layoutParams;
+        return new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
     }
 
     private EventListener startedStateListener = new EventListener() {
         @Override
         public void onEvent(Event event) {
             updateButton();
-            updateTimeScoreVisibility();
         }
     };
     private EventListener timeLeftListener = new EventListener() {

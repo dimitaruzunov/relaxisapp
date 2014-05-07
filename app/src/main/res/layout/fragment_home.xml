@@ -33,12 +33,12 @@
                     <TextView
                         android:id="@+id/heartRateTextView"
                         android:drawableLeft="@drawable/ic_heart_rate"
-                        style="@style/HomeDataTextView" />
+                        style="@style/DataTextView" />
 
                     <TextView
                         android:id="@+id/heartRateDescTextView"
                         android:text="@string/heartRate"
-                        style="@style/HomeDataDescTextView" />
+                        style="@style/DataDescTextView" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -50,12 +50,12 @@
                     <TextView
                         android:id="@+id/rRIntervalTextView"
                         android:drawableLeft="@drawable/ic_rr_interval"
-                        style="@style/HomeDataTextView" />
+                        style="@style/DataTextView" />
 
                     <TextView
                         android:id="@+id/rRIntervalDescTextView"
                         android:text="@string/rRInterval"
-                        style="@style/HomeDataDescTextView" />
+                        style="@style/DataDescTextView" />
                 </LinearLayout>
             </TableRow>
 
@@ -69,12 +69,12 @@
                     <TextView
                         android:id="@+id/instantHeartRateTextView"
                         android:drawableLeft="@drawable/ic_instant_heart_rate"
-                        style="@style/HomeDataTextView" />
+                        style="@style/DataTextView" />
 
                     <TextView
                         android:id="@+id/instantHeartRateDescTextView"
                         android:text="@string/instantHeartRate"
-                        style="@style/HomeDataDescTextView" />
+                        style="@style/DataDescTextView" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -86,12 +86,12 @@
                     <TextView
                         android:id="@+id/instantSpeedTextView"
                         android:drawableLeft="@drawable/ic_instant_speed"
-                        style="@style/HomeDataTextView" />
+                        style="@style/DataTextView" />
 
                     <TextView
                         android:id="@+id/instantSpeedDescTextView"
                         android:text="@string/instantSpeed"
-                        style="@style/HomeDataDescTextView" />
+                        style="@style/DataDescTextView" />
                 </LinearLayout>
             </TableRow>
 

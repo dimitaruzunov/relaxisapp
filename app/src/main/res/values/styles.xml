@@ -73,14 +73,14 @@
         <item name="android:paddingLeft">@dimen/list_item_horizontal_padding</item>
     </style>
     
-    <style name="HomeDataTextView">
+    <style name="DataTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/large_text_size</item>
         <item name="android:drawablePadding">@dimen/drawable_padding</item>
     </style>
 
-    <style name="HomeDataDescTextView">
+    <style name="DataDescTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/micro_text_size</item>
