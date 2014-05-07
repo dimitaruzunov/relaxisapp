@@ -22,6 +22,7 @@ public class UserView extends ScrollView {
     private ProfilePictureView profilePictureView;
     private TextView userName;
 
+    private GraphViewSeries breathingScoresSeries;
     private GraphViewSeries stressScoresSeries;
 
     private UserModel model;
@@ -47,7 +48,7 @@ public class UserView extends ScrollView {
             @Override
             public void run() {
                 if (model.getBreathingScores() != null) {
-                    // update breathing scores
+                    breathingScoresSeries.appendData(model.getLastStressScore(), false, 5);
                 }
             }
         });
@@ -59,10 +60,18 @@ public class UserView extends ScrollView {
             @Override
             public void run() {
                 if (model.getStressScores() != null) {
-                    // stressScoresSeries.appendData(model.getStressScores(), false, 5);
+                    stressScoresSeries.appendData(model.getLastStressScore(), false, 5);
                 };
             }
         });
+    }
+
+    private void loadBreathingScores() {
+        stressScoresSeries.resetData(model.getBreathingScores());
+    }
+
+    private void loadStressScores() {
+        stressScoresSeries.resetData(model.getStressScores());
     }
 
     @Override
@@ -76,21 +85,32 @@ public class UserView extends ScrollView {
 
         userName = (TextView) findViewById(R.id.userName);
 
+        breathingScoresSeries = new GraphViewSeries(
+                "Stress Scores", new GraphViewSeries.GraphViewSeriesStyle(
+                Color.rgb(20, 20, 255), 5), new GraphView.GraphViewData[] {});
+
         stressScoresSeries = new GraphViewSeries(
                 "Stress Scores", new GraphViewSeries.GraphViewSeriesStyle(
                 Color.rgb(20, 20, 255), 5), new GraphView.GraphViewData[] {});
 
-        GraphView graphView = new BarGraphView(getContext(), "Stress Scores");
-        graphView.setScrollable(true);
-        graphView.setScalable(true);
-        graphView.addSeries(stressScoresSeries);
+        GraphView breathingGraphView = new BarGraphView(getContext(), "Breathing Scores");
+        breathingGraphView.setScrollable(true);
+        breathingGraphView.setScalable(true);
+        breathingGraphView.addSeries(breathingScoresSeries);
 
-        layout.addView(graphView, setupLayoutParams());
+        GraphView stressGraphView = new BarGraphView(getContext(), "Stress Scores");
+        stressGraphView.setScrollable(true);
+        stressGraphView.setScalable(true);
+        stressGraphView.addSeries(stressScoresSeries);
+
+        layout.addView(stressGraphView, setupLayoutParams());
 
         model.addListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
-        model.addListener(UserModel.ChangeEvent.BREATHING_SCORES_CHANGE, breathingScoresListener);
-        model.addListener(UserModel.ChangeEvent.STRESS_SCORES_CHANGE, stressScoresListener);
+        model.addListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresListener);
+        model.addListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresListener);
 
+        loadBreathingScores();
+        loadStressScores();
         updateFbUserInfo();
         updateBreathingScores();
         updateStressScores();
@@ -98,7 +118,7 @@ public class UserView extends ScrollView {
 
     private ViewGroup.LayoutParams setupLayoutParams() {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
-        layoutParams.addRule(RelativeLayout.BELOW, R.id.stressScoreResults);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.loginDivider);
 
         return layoutParams;
     }
@@ -126,7 +146,7 @@ public class UserView extends ScrollView {
 
     public void destroy() {
         model.removeListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
-        model.removeListener(UserModel.ChangeEvent.BREATHING_SCORES_CHANGE, breathingScoresListener);
-        model.removeListener(UserModel.ChangeEvent.STRESS_SCORES_CHANGE, stressScoresListener);
+        model.removeListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresListener);
+        model.removeListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresListener);
     }
 }
