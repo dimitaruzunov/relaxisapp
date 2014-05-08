@@ -1,6 +1,7 @@
 package com.relaxisapp.relaxis.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -10,8 +11,12 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.jjoe64.graphview.BarGraphView;
+import com.jjoe64.graphview.CustomLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GraphViewDataInterface;
 import com.jjoe64.graphview.GraphViewSeries;
+import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
+import com.jjoe64.graphview.ValueDependentColor;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
@@ -48,7 +53,7 @@ public class UserView extends ScrollView {
             @Override
             public void run() {
                 if (model.getBreathingScores() != null) {
-                    breathingScoresSeries.appendData(model.getLastStressScore(), false, 5);
+                    breathingScoresSeries.appendData(model.getLastBreathingScore(), false, 5);
                 }
             }
         });
@@ -86,21 +91,19 @@ public class UserView extends ScrollView {
         userName = (TextView) findViewById(R.id.userName);
 
         breathingScoresSeries = new GraphViewSeries(
-                "Stress Scores", new GraphViewSeries.GraphViewSeriesStyle(
-                Color.rgb(20, 20, 255), 5), new GraphView.GraphViewData[] {});
-
-        stressScoresSeries = new GraphViewSeries(
-                "Stress Scores", new GraphViewSeries.GraphViewSeriesStyle(
+                "Breathing Scores", new GraphViewSeries.GraphViewSeriesStyle(
                 Color.rgb(20, 20, 255), 5), new GraphView.GraphViewData[] {});
 
         GraphView breathingGraphView = new BarGraphView(getContext(), "Breathing Scores");
-        breathingGraphView.setScrollable(true);
-        breathingGraphView.setScalable(true);
+        styleGraph(breathingGraphView);
         breathingGraphView.addSeries(breathingScoresSeries);
 
+        GraphViewSeriesStyle stressSeriesStyle = new GraphViewSeriesStyle(R.color.red, 10);
+        stressScoresSeries = new GraphViewSeries(
+                "Stress Scores", stressSeriesStyle, new GraphView.GraphViewData[] {});
+
         GraphView stressGraphView = new BarGraphView(getContext(), "Stress Scores");
-        stressGraphView.setScrollable(true);
-        stressGraphView.setScalable(true);
+        styleGraph(stressGraphView);
         stressGraphView.addSeries(stressScoresSeries);
 
         layout.addView(stressGraphView, setupLayoutParams());
@@ -116,8 +119,28 @@ public class UserView extends ScrollView {
         updateStressScores();
     }
 
+    private void styleGraph(GraphView graphView) {
+        Resources resources = getResources();
+
+        graphView.setScrollable(true);
+        graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) {
+                    return "";
+                }
+                return null;
+            }
+        });
+        graphView.getGraphViewStyle().setGridColor(resources.getColor(R.color.bar_grid));
+        graphView.getGraphViewStyle().setVerticalLabelsColor(resources.getColor(R.color.graph_vertical_labels));
+        graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+        graphView.getGraphViewStyle().setNumVerticalLabels(4);
+        graphView.getGraphViewStyle().setVerticalLabelsWidth(50);
+    }
+
     private ViewGroup.LayoutParams setupLayoutParams() {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
         layoutParams.addRule(RelativeLayout.BELOW, R.id.loginDivider);
 
         return layoutParams;
