@@ -3,7 +3,7 @@
 
     <!-- Section titles -->
     <string-array name="section_titles">
-        <item>@string/login_title</item>
+        <item>@string/user_title</item>
         <item>@string/home_title</item>
         <item>@string/breathing_app_title</item>
         <item>@string/stress_app_title</item>
@@ -14,7 +14,7 @@
         <item>@string/home_title</item>
         <item>@string/breathing_app_title</item>
         <item>@string/stress_app_title</item>
-        <item>@string/login_title</item>
+        <item>@string/user_title</item>
     </string-array>
 
     <!-- Navigation drawer colors -->
