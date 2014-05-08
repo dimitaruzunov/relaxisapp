@@ -2,7 +2,6 @@ package com.relaxisapp.relaxis.views;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.jjoe64.graphview.BarGraphView;
 import com.jjoe64.graphview.CustomLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GraphViewDataInterface;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
-import com.jjoe64.graphview.ValueDependentColor;
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.events.Event;
 import com.relaxisapp.relaxis.events.EventListener;
@@ -79,11 +76,23 @@ public class UserView extends ScrollView {
     }
 
     private void loadBreathingScores() {
-        stressScoresSeries.resetData(model.getBreathingScores());
+        // run it on the UI thread
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                stressScoresSeries.resetData(model.getBreathingScores());
+            }
+        });
     }
 
     private void loadStressScores() {
-        stressScoresSeries.resetData(model.getStressScores());
+        // run it on the UI thread
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                stressScoresSeries.resetData(model.getStressScores());
+            }
+        });
     }
 
     @Override
@@ -122,8 +131,10 @@ public class UserView extends ScrollView {
         layout.addView(stressGraphView, setupStressGraphPosition());
 
         model.addListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
-        model.addListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresListener);
-        model.addListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresListener);
+        model.addListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresAddListener);
+        model.addListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresAddListener);
+        model.addListener(UserModel.ChangeEvent.BREATHING_SCORES_RESET, breathingScoresResetListener);
+        model.addListener(UserModel.ChangeEvent.STRESS_SCORES_RESET, stressScoresResetListener);
 
         loadBreathingScores();
         loadStressScores();
@@ -172,14 +183,28 @@ public class UserView extends ScrollView {
         }
     };
 
-    private EventListener breathingScoresListener = new EventListener() {
+    private EventListener breathingScoresResetListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            loadBreathingScores();
+        }
+    };
+
+    private EventListener stressScoresResetListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            loadStressScores();
+        }
+    };
+
+    private EventListener breathingScoresAddListener = new EventListener() {
         @Override
         public void onEvent(Event event) {
             updateBreathingScores();
         }
     };
 
-    private EventListener stressScoresListener = new EventListener() {
+    private EventListener stressScoresAddListener = new EventListener() {
         @Override
         public void onEvent(Event event) {
             updateStressScores();
@@ -188,7 +213,9 @@ public class UserView extends ScrollView {
 
     public void destroy() {
         model.removeListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
-        model.removeListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresListener);
-        model.removeListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresListener);
+        model.removeListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresAddListener);
+        model.removeListener(UserModel.ChangeEvent.STRESS_SCORE_ADDED, stressScoresAddListener);
+        model.removeListener(UserModel.ChangeEvent.BREATHING_SCORES_RESET, breathingScoresResetListener);
+        model.removeListener(UserModel.ChangeEvent.STRESS_SCORES_RESET, stressScoresResetListener);
     }
 }
