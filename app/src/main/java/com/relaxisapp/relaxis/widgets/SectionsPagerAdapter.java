@@ -2,18 +2,16 @@ package com.relaxisapp.relaxis.widgets;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.SparseArray;
 
 import com.relaxisapp.relaxis.R;
 import com.relaxisapp.relaxis.activities.BreathingFragment;
 import com.relaxisapp.relaxis.activities.HomeFragment;
-import com.relaxisapp.relaxis.activities.LoginFragment;
 import com.relaxisapp.relaxis.activities.StressEstimationFragment;
+import com.relaxisapp.relaxis.activities.UserFragment;
 
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	
@@ -37,7 +35,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		
 		switch (position) {
 		case LOGIN_FRAGMENT:
-			fragment = new LoginFragment();
+			fragment = new UserFragment();
 			break;
 		case HOME_FRAGMENT:
 			fragment = new HomeFragment();

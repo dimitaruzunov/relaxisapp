@@ -25,7 +25,7 @@ import com.relaxisapp.relaxis.models.UserModel;
 import com.relaxisapp.relaxis.views.UserView;
 import com.relaxisapp.relaxis.R;
 
-public class LoginFragment extends Fragment {
+public class UserFragment extends Fragment {
 
     private UiLifecycleHelper uiHelper;
 
@@ -59,7 +59,7 @@ public class LoginFragment extends Fragment {
 
         userModel = UserModel.getInstance();
 
-        view = (UserView) inflater.inflate(R.layout.fragment_login, container, false);
+        view = (UserView) inflater.inflate(R.layout.fragment_user, container, false);
 
         authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
@@ -162,7 +162,7 @@ public class LoginFragment extends Fragment {
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
             // this is necessary because of a double callback one because of
-            // UiLifecycleHelper and second because of LoginFragment.onResume()
+            // UiLifecycleHelper and second because of UserFragment.onResume()
             if (mSession == null || isSessionChanged(session)) {
                 mSession = session;
                 makeMeRequest(session);
