@@ -208,11 +208,13 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        boolean handled = true;
-
         navigationDrawerListAdapter.handleOnOptionsItemSelected(item);
 
-        return handled;
+        if (item.getItemId() == R.id.action_relax) {
+            startActivity(new Intent(MainActivity.this, RelaxActivity.class));
+        }
+
+        return true;
     }
 
     @Override

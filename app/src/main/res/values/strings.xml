@@ -5,6 +5,9 @@
     <string name="app_name">Relaxis</string>
     <string name="app_id">1414231085481831</string>
 
+    <!-- Menu items -->
+    <string name="action_relax">Relax</string>
+
     <!-- Home -->
     <string name="heartRate">Heart Rate</string>
     <string name="instantSpeed">Instant Speed</string>
@@ -27,6 +30,9 @@
     <string name="musicButton">Choose music</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+
+    <!-- Relax app -->
+    <string name="leaf_image">Leaf</string>
 
     <string name="share_score_dialog_message">Share your score with Facebook</string>
     <string name="share">Share</string>

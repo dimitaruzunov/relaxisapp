@@ -30,6 +30,7 @@
     <color name="stress_gradient_end">#99cc00</color>
     <color name="grid">#ddd</color>
     <color name="divider">#80ff6060</color>
+    <color name="breathing_square">#CC33b5e5</color>
 
     <!-- Text colors -->
     <color name="text_dark">#333</color>
