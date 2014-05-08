@@ -90,20 +90,22 @@ public class UserView extends ScrollView {
 
         userName = (TextView) findViewById(R.id.userName);
 
+        Resources resources = getResources();
+
         breathingScoresSeries = new GraphViewSeries(
                 "Breathing Scores", new GraphViewSeries.GraphViewSeriesStyle(
                 Color.rgb(20, 20, 255), 5), new GraphView.GraphViewData[] {});
 
         GraphView breathingGraphView = new BarGraphView(getContext(), "Breathing Scores");
-        styleGraph(breathingGraphView);
+        styleGraph(breathingGraphView, resources);
         breathingGraphView.addSeries(breathingScoresSeries);
 
-        GraphViewSeriesStyle stressSeriesStyle = new GraphViewSeriesStyle(R.color.red, 10);
+        GraphViewSeriesStyle stressSeriesStyle = new GraphViewSeriesStyle(resources.getColor(R.color.red), 1);
         stressScoresSeries = new GraphViewSeries(
                 "Stress Scores", stressSeriesStyle, new GraphView.GraphViewData[] {});
 
         GraphView stressGraphView = new BarGraphView(getContext(), "Stress Scores");
-        styleGraph(stressGraphView);
+        styleGraph(stressGraphView, resources);
         stressGraphView.addSeries(stressScoresSeries);
 
         layout.addView(stressGraphView, setupLayoutParams());
@@ -115,13 +117,11 @@ public class UserView extends ScrollView {
         loadBreathingScores();
         loadStressScores();
         updateFbUserInfo();
-        updateBreathingScores();
-        updateStressScores();
+        //updateBreathingScores();
+        //updateStressScores();
     }
 
-    private void styleGraph(GraphView graphView) {
-        Resources resources = getResources();
-
+    private void styleGraph(GraphView graphView, Resources resources) {
         graphView.setScrollable(true);
         graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
             @Override
@@ -132,9 +132,9 @@ public class UserView extends ScrollView {
                 return null;
             }
         });
-        graphView.getGraphViewStyle().setGridColor(resources.getColor(R.color.bar_grid));
+        graphView.getGraphViewStyle().setGridColor(resources.getColor(R.color.grid));
         graphView.getGraphViewStyle().setVerticalLabelsColor(resources.getColor(R.color.graph_vertical_labels));
-        graphView.getGraphViewStyle().setNumHorizontalLabels(5);
+        graphView.getGraphViewStyle().setNumHorizontalLabels(1);
         graphView.getGraphViewStyle().setNumVerticalLabels(4);
         graphView.getGraphViewStyle().setVerticalLabelsWidth(50);
     }

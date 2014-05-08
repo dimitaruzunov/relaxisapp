@@ -121,7 +121,7 @@ public class BreathingView extends ScrollView {
         graphView.getGraphViewStyle().setNumHorizontalLabels(1);
         graphView.getGraphViewStyle().setNumVerticalLabels(5);
         graphView.getGraphViewStyle().setVerticalLabelsWidth(1);
-        graphView.getGraphViewStyle().setGridColor(getResources().getColor(R.color.bar_grid));
+        graphView.getGraphViewStyle().setGridColor(getResources().getColor(R.color.grid));
         graphView.getGraphViewStyle().setHorizontalLabelsColor(getResources().getColor(R.color.text_dark));
         graphView.getGraphViewStyle().setTextSize(25);
         graphView.addSeries(BtConnection.idealBreathingCycle);
