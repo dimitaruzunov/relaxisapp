@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- App info -->
     <string name="app_name">Relaxis</string>
     <string name="app_id">1414231085481831</string>
-    <string name="action_bluetooth_connect">Connect</string>
-    <string name="action_bluetooth_connecting">Connecting</string>
-    <string name="action_bluetooth_disconnect">Disconnect</string>
+
+    <!-- Home -->
     <string name="heartRate">Heart Rate</string>
     <string name="instantSpeed">Instant Speed</string>
     <string name="rRInterval">R-R Interval</string>
     <string name="instantHeartRate">Instant Heart Rate</string>
+
+    <!-- Breathing app -->
     <string name="score_desc">Score</string>
     <string name="time_left_desc">Time left</string>
-    <string name="breathing">Breathing</string>
-    <string name="stress">Relaxation</string>
+
+    <!-- Navigation drawer -->
     <string name="open_drawer_message">Open navigation menu</string>
     <string name="close_drawer_message">Close navigation menu</string>
     <string name="list_item_icon_desc">Icon</string>
+
+    <!-- Buttons -->
+    <string name="action_bluetooth_connect">Connect</string>
+    <string name="action_bluetooth_connecting">Connecting</string>
+    <string name="action_bluetooth_disconnect">Disconnect</string>
+    <string name="musicButton">Choose music</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+
     <string name="share_score_dialog_message">Share your score with Facebook</string>
     <string name="share">Share</string>
     <string name="cancel">Cancel</string>
-    <string name="breathing_score_list_desc">Your breathing scores:</string>
-    <string name="stress_score_list_desc">Your relaxation scores:</string>
-    <string name="musicButton">Choose music</string>
 
 </resources>
