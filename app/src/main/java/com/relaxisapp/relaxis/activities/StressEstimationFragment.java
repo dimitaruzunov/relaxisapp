@@ -68,7 +68,8 @@ public class StressEstimationFragment extends Fragment {
             MainActivity.dalHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    stressScoresDao.create(new StressScore(userModel.getUserId(), stressModel.getStressLevel() * 10));
+                    stressScoresDao.create(new StressScore(userModel.getUserId(), stressModel.getStressLevel() * 100));
+                    userModel.addStressScore(stressModel.getStressLevel() * 100);
                 }
             });
 

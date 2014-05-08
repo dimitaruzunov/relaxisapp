@@ -217,6 +217,7 @@ public class BreathingFragment extends Fragment {
                     @Override
                     public void run() {
                         breathingScoresDao.create(new BreathingScore(userModel.getUserId() ,breathingModel.getScore()));
+                        userModel.addBreathingScore(breathingModel.getScore());
                     }
                 });
 

@@ -67,11 +67,11 @@ public class UserModel extends EventDispatcher {
         GraphView.GraphViewData[] data = breathingScores.toArray(new GraphView.GraphViewData[0]);
         return data;
     }
-    public synchronized void addBreathingScore(GraphView.GraphViewData data) {
+    public synchronized void addBreathingScore(int score) {
 //        if (breathingScores.size() > Const.VIEWPORT_WIDTH + 1) {
 //            breathingScores.remove(0);
 //        }
-        breathingScores.add(data);
+        breathingScores.add(new GraphView.GraphViewData(breathingScores.size(), score));
         notifyChange(ChangeEvent.BREATHING_SCORE_ADDED);
     }
     public synchronized void setBreathingScores(BreathingScore[] breathingScores) {
@@ -93,11 +93,11 @@ public class UserModel extends EventDispatcher {
         GraphView.GraphViewData[] data = stressScores.toArray(new GraphView.GraphViewData[0]);
         return data;
     }
-    public synchronized void addStressScore(GraphView.GraphViewData data) {
+    public synchronized void addStressScore(double score) {
 //        if (stressScores.size() > Const.VIEWPORT_WIDTH + 1) {
 //            stressScores.remove(0);
 //        }
-        stressScores.add(data);
+        stressScores.add(new GraphView.GraphViewData(stressScores.size(), score));
         notifyChange(ChangeEvent.STRESS_SCORE_ADDED);
     }
     public synchronized void setStressScores(StressScore[] stressScores) {
