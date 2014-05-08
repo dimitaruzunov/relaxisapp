@@ -44,8 +44,6 @@ public class StressEstimationFragment extends Fragment {
         userModel = UserModel.getInstance();
 
 		view = (StressView) inflater.inflate(R.layout.fragment_stress_estimation, container, false);
-
-        homeModel.addListener(HomeModel.ChangeEvent.NN_COUNT_CHANGED, nnCountListener);
 		
 		// TODO check if the timer is cleared when the back button is pressed
 		// and then the activity is started again
@@ -53,33 +51,6 @@ public class StressEstimationFragment extends Fragment {
 		
 		return view;
 	}
-
-    private EventListener nnCountListener = new EventListener() {
-        @Override
-        public void onEvent(Event event) {
-            if (homeModel.getNnCount() % Const.TIME_STRESS_SECONDS == 0 && homeModel.getConnectionState() == 2) {
-                saveStressScore();
-            }
-        }
-    };
-
-    private boolean saveStressScore() {
-        if (userModel.getUserId() > 0) {
-            MainActivity.dalHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    stressScoresDao.create(new StressScore(userModel.getUserId(), stressModel.getStressLevel() * 100));
-                    userModel.addStressScore(stressModel.getStressLevel() * 100);
-                }
-            });
-
-            Toast.makeText(getActivity(), "Stress level saved: " +
-                    stressModel.getStressLevel() * 10, Toast.LENGTH_SHORT).show();
-        }
-
-        // TODO return whether the save is successful
-        return true;
-    }
 
     @Override
     public void onDestroy() {

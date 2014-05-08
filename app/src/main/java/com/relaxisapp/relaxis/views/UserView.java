@@ -26,8 +26,8 @@ public class UserView extends ScrollView {
     private TextView userName;
     private View loginDivider;
 
-    private GraphViewSeries breathingScoresSeries;
-    private GraphViewSeries stressScoresSeries;
+    private static GraphViewSeries breathingScoresSeries;
+    private static GraphViewSeries stressScoresSeries;
     private GraphView breathingGraphView;
     private GraphView stressGraphView;
 
@@ -57,7 +57,7 @@ public class UserView extends ScrollView {
             @Override
             public void run() {
                 if (model.getBreathingScores() != null) {
-                    breathingScoresSeries.appendData(model.getLastBreathingScore(), false, 5);
+                    breathingScoresSeries.appendData(model.getLastBreathingScore(), false, 10);
                 }
             }
         });
@@ -69,7 +69,7 @@ public class UserView extends ScrollView {
             @Override
             public void run() {
                 if (model.getStressScores() != null) {
-                    stressScoresSeries.appendData(model.getLastStressScore(), false, 5);
+                    stressScoresSeries.appendData(model.getLastStressScore(), false, 10);
                 };
             }
         });
@@ -80,7 +80,7 @@ public class UserView extends ScrollView {
         this.post(new Runnable() {
             @Override
             public void run() {
-                stressScoresSeries.resetData(model.getBreathingScores());
+                breathingScoresSeries.resetData(model.getBreathingScores());
             }
         });
     }
@@ -113,7 +113,6 @@ public class UserView extends ScrollView {
         GraphViewSeriesStyle breathingSeriesStyle = new GraphViewSeriesStyle(resources.getColor(R.color.red), 1);
         breathingScoresSeries = new GraphViewSeries(
                 "Breathing Scores", breathingSeriesStyle, new GraphView.GraphViewData[] {});
-
         breathingGraphView = new BarGraphView(getContext(), "Breathing Scores");
         breathingGraphView.setId(1);
         styleGraph(breathingGraphView, resources);
@@ -122,7 +121,6 @@ public class UserView extends ScrollView {
         GraphViewSeriesStyle stressSeriesStyle = new GraphViewSeriesStyle(resources.getColor(R.color.red), 1);
         stressScoresSeries = new GraphViewSeries(
                 "Stress Scores", stressSeriesStyle, new GraphView.GraphViewData[] {});
-
         stressGraphView = new BarGraphView(getContext(), "Stress Scores");
         styleGraph(stressGraphView, resources);
         stressGraphView.addSeries(stressScoresSeries);
@@ -200,14 +198,16 @@ public class UserView extends ScrollView {
     private EventListener breathingScoresAddListener = new EventListener() {
         @Override
         public void onEvent(Event event) {
-            updateBreathingScores();
+//            updateBreathingScores();
+            loadBreathingScores();
         }
     };
 
     private EventListener stressScoresAddListener = new EventListener() {
         @Override
         public void onEvent(Event event) {
-            updateStressScores();
+//            updateStressScores();
+            loadStressScores();
         }
     };
 

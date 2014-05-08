@@ -211,18 +211,24 @@ public class BreathingFragment extends Fragment {
 	}
 
 	private void updateTimeLeft() {
-		if (breathingModel.getTimeLeft() <= 0) {
-			if (userModel.getUserId() > 0) {
+		if (breathingModel.getTimeLeft() == 0) {
+            final int scoreToSave = breathingModel.getScore();
+			if (userModel.getUserId() > 0 && scoreToSave > 0) {
                 MainActivity.dalHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        breathingScoresDao.create(new BreathingScore(userModel.getUserId() ,breathingModel.getScore()));
-                        userModel.addBreathingScore(breathingModel.getScore());
+                        breathingScoresDao.create(new BreathingScore(userModel.getUserId(), scoreToSave));
+                        userModel.addBreathingScore(scoreToSave);
                     }
                 });
 
-				Toast.makeText(getActivity(), "Breathing score saved: " +
-						breathingModel.getScore(), Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(getActivity(), "Breathing score saved: " +
+                            breathingModel.getScore(), Toast.LENGTH_SHORT).show();
+                }
+                catch (NullPointerException e) {
+                    // fragment is not initialized and getActivity() is not valid
+                }
 			}
             stop();
 			return;
