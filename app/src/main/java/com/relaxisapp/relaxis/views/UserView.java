@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -26,9 +27,12 @@ public class UserView extends ScrollView {
 
     private ProfilePictureView profilePictureView;
     private TextView userName;
+    private View loginDivider;
 
     private GraphViewSeries breathingScoresSeries;
     private GraphViewSeries stressScoresSeries;
+    private GraphView breathingGraphView;
+    private GraphView stressGraphView;
 
     private UserModel model;
 
@@ -40,6 +44,9 @@ public class UserView extends ScrollView {
     public void toggleViewsVisibility(int visibility) {
         userName.setVisibility(visibility);
         profilePictureView.setVisibility(visibility);
+        loginDivider.setVisibility(visibility);
+        breathingGraphView.setVisibility(visibility);
+        stressGraphView.setVisibility(visibility);
     }
 
     private void updateFbUserInfo() {
@@ -90,13 +97,16 @@ public class UserView extends ScrollView {
 
         userName = (TextView) findViewById(R.id.userName);
 
+        loginDivider = findViewById(R.id.loginDivider);
+
         Resources resources = getResources();
 
+        GraphViewSeriesStyle breathingSeriesStyle = new GraphViewSeriesStyle(resources.getColor(R.color.red), 1);
         breathingScoresSeries = new GraphViewSeries(
-                "Breathing Scores", new GraphViewSeries.GraphViewSeriesStyle(
-                Color.rgb(20, 20, 255), 5), new GraphView.GraphViewData[] {});
+                "Breathing Scores", breathingSeriesStyle, new GraphView.GraphViewData[] {});
 
-        GraphView breathingGraphView = new BarGraphView(getContext(), "Breathing Scores");
+        breathingGraphView = new BarGraphView(getContext(), "Breathing Scores");
+        breathingGraphView.setId(1);
         styleGraph(breathingGraphView, resources);
         breathingGraphView.addSeries(breathingScoresSeries);
 
@@ -104,11 +114,12 @@ public class UserView extends ScrollView {
         stressScoresSeries = new GraphViewSeries(
                 "Stress Scores", stressSeriesStyle, new GraphView.GraphViewData[] {});
 
-        GraphView stressGraphView = new BarGraphView(getContext(), "Stress Scores");
+        stressGraphView = new BarGraphView(getContext(), "Stress Scores");
         styleGraph(stressGraphView, resources);
         stressGraphView.addSeries(stressScoresSeries);
 
-        layout.addView(stressGraphView, setupLayoutParams());
+        layout.addView(breathingGraphView, setupBreathingGraphPosition());
+        layout.addView(stressGraphView, setupStressGraphPosition());
 
         model.addListener(UserModel.ChangeEvent.FB_USER_NAME_CHANGE, fbUserInfoListener);
         model.addListener(UserModel.ChangeEvent.BREATHING_SCORE_ADDED, breathingScoresListener);
@@ -133,15 +144,23 @@ public class UserView extends ScrollView {
             }
         });
         graphView.getGraphViewStyle().setGridColor(resources.getColor(R.color.grid));
-        graphView.getGraphViewStyle().setVerticalLabelsColor(resources.getColor(R.color.graph_vertical_labels));
+        graphView.getGraphViewStyle().setVerticalLabelsColor(resources.getColor(R.color.text_dark));
+        graphView.getGraphViewStyle().setHorizontalLabelsColor(resources.getColor(R.color.text_dark));
         graphView.getGraphViewStyle().setNumHorizontalLabels(1);
         graphView.getGraphViewStyle().setNumVerticalLabels(4);
         graphView.getGraphViewStyle().setVerticalLabelsWidth(50);
     }
 
-    private ViewGroup.LayoutParams setupLayoutParams() {
+    private ViewGroup.LayoutParams setupBreathingGraphPosition() {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
         layoutParams.addRule(RelativeLayout.BELOW, R.id.loginDivider);
+
+        return layoutParams;
+    }
+
+    private ViewGroup.LayoutParams setupStressGraphPosition() {
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
+        layoutParams.addRule(RelativeLayout.BELOW, breathingGraphView.getId());
 
         return layoutParams;
     }

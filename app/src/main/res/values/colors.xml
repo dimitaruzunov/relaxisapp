@@ -28,13 +28,12 @@
     <color name="stress_gradient_start">#ff4444</color>
     <color name="stress_gradient_center">#ffbb33</color>
     <color name="stress_gradient_end">#99cc00</color>
-    <color name="grid">#80dddddd</color>
+    <color name="grid">#ddd</color>
     <color name="divider">#80ff6060</color>
 
     <!-- Text colors -->
     <color name="text_dark">#333</color>
     <color name="text_light">#aaa</color>
-    <color name="graph_vertical_labels">#B399cc00</color>
 
     <!-- Buttons -->
     <color name="action_button">#9933b5e5</color>
