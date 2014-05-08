@@ -24,7 +24,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.relaxisapp.relaxis.daos.StressScoresDao;
+import com.relaxisapp.relaxis.events.Event;
+import com.relaxisapp.relaxis.events.EventListener;
 import com.relaxisapp.relaxis.models.StressModel;
+import com.relaxisapp.relaxis.models.StressScore;
+import com.relaxisapp.relaxis.models.UserModel;
 import com.relaxisapp.relaxis.utils.BTBondReceiver;
 import com.relaxisapp.relaxis.utils.BTBroadcastReceiver;
 import com.relaxisapp.relaxis.utils.ConnectionListener;
@@ -47,6 +52,9 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
     private HomeModel homeModel;
     private BreathingModel breathingModel;
     private StressModel stressModel;
+    private UserModel userModel;
+
+    private StressScoresDao stressScoresDao;
 
     private NavigationDrawerListAdapter navigationDrawerListAdapter;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -64,8 +72,12 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
         }
 
         homeModel = HomeModel.getInstance();
+        homeModel.addListener(HomeModel.ChangeEvent.NN_COUNT_CHANGED, nnCountListener);
         breathingModel = BreathingModel.getInstance();
         stressModel = StressModel.getInstance();
+        userModel = UserModel.getInstance();
+
+        stressScoresDao = new StressScoresDao();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -85,6 +97,35 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
         viewPager.setCurrentItem(SectionsPagerAdapter.HOME_FRAGMENT);
 
         setupIntentFiltersForConnection();
+    }
+
+    private EventListener nnCountListener = new EventListener() {
+        @Override
+        public void onEvent(Event event) {
+            if (homeModel.getNnCount() > 0
+                    && homeModel.getNnCount() % Const.TIME_STRESS_SECONDS == 0
+                    && homeModel.getConnectionState() == 2) {
+                saveStressScore();
+            }
+        }
+    };
+
+    private boolean saveStressScore() {
+        if (userModel.getUserId() > 0 && stressModel.getStressLevel() > 0) {
+            MainActivity.dalHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    stressScoresDao.create(new StressScore(userModel.getUserId(), stressModel.getStressLevel() * 100));
+                    userModel.addStressScore(stressModel.getStressLevel() * 100);
+                }
+            });
+
+            Toast.makeText(this, "Stress level saved: " +
+                    stressModel.getStressLevel() * 10, Toast.LENGTH_SHORT).show();
+        }
+
+        // TODO return whether the save is successful
+        return true;
     }
 
     private void setupPager() {
@@ -229,6 +270,12 @@ public class MainActivity extends ActionBarActivity implements ListView.OnItemCl
                 handleBluetoothConnectResult(resultCode, resultIntent);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        homeModel.removeListener(HomeModel.ChangeEvent.NN_COUNT_CHANGED, nnCountListener);
     }
 
     // TODO remove all toasts from the activities and place them into the views

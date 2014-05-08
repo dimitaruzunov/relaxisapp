@@ -68,16 +68,17 @@ public class UserModel extends EventDispatcher {
         return data;
     }
     public synchronized void addBreathingScore(int score) {
-//        if (breathingScores.size() > Const.VIEWPORT_WIDTH + 1) {
-//            breathingScores.remove(0);
-//        }
+        if (breathingScores.size() > 10) {
+            breathingScores.remove(0);
+        }
         breathingScores.add(new GraphView.GraphViewData(breathingScores.size(), score));
         notifyChange(ChangeEvent.BREATHING_SCORE_ADDED);
     }
     public synchronized void setBreathingScores(BreathingScore[] breathingScores) {
         this.breathingScores = new ArrayList<GraphView.GraphViewData>();
-        for (BreathingScore score : breathingScores) {
-            this.breathingScores.add(new GraphView.GraphViewData(breathingScores.length, score.getScore()));
+        int itemsToAddCount = (breathingScores.length > 10) ? 10 : breathingScores.length;
+        for (int i = itemsToAddCount - 1; i >= 0; i--) {
+            this.breathingScores.add(new GraphView.GraphViewData(breathingScores.length, breathingScores[i].getScore()));
         }
         notifyChange(ChangeEvent.BREATHING_SCORES_RESET);
     }
@@ -94,16 +95,17 @@ public class UserModel extends EventDispatcher {
         return data;
     }
     public synchronized void addStressScore(double score) {
-//        if (stressScores.size() > Const.VIEWPORT_WIDTH + 1) {
-//            stressScores.remove(0);
-//        }
+        if (stressScores.size() > 10) {
+            stressScores.remove(0);
+        }
         stressScores.add(new GraphView.GraphViewData(stressScores.size(), score));
         notifyChange(ChangeEvent.STRESS_SCORE_ADDED);
     }
     public synchronized void setStressScores(StressScore[] stressScores) {
         this.stressScores = new ArrayList<GraphView.GraphViewData>();
-        for (StressScore score : stressScores) {
-            this.stressScores.add(new GraphView.GraphViewData(stressScores.length, score.getScore()));
+        int itemsToAddCount = (stressScores.length > 10) ? 10 : stressScores.length;
+        for (int i = itemsToAddCount - 1; i >= 0; i--) {
+            this.stressScores.add(new GraphView.GraphViewData(stressScores.length, stressScores[i].getScore()));
         }
         notifyChange(ChangeEvent.STRESS_SCORES_RESET);
     }
